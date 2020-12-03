@@ -1,6 +1,9 @@
 import Phaser from "phaser";
 
-import { Main } from "./scenes";
+import {
+    Boot,
+    Main
+} from "./scenes";
 
 const config = {
     parent: "porthole",
@@ -9,7 +12,7 @@ const config = {
 };
 
 config.type = Phaser.AUTO;
-config.scene = [Main];
+config.scene = [Boot, Main];
 config.scale = {
     mode: Phaser.Scale.FIT,
     parent: 'porthole',
