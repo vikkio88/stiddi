@@ -22,18 +22,17 @@ class Boot extends Phaser.Scene {
             loadingText.destroy();
         });
 
-        /*
-        this.load.image('things', 'assets/things.png');
-        */
+        this.load.image('player', 'assets/player.png');
     }
 
     create() {
         eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
             console.log('[phaser] BURN RECEIVED', payload);
-            //this.scene.start("Battle", payload);
         });
 
         eventBridge.emit(EVENTS.PHASER.READY);
+
+        this.scene.start("Main");
     }
 }
 
