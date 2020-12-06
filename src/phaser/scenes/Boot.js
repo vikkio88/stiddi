@@ -26,10 +26,6 @@ class Boot extends Phaser.Scene {
     }
 
     create() {
-        eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
-            console.log('[phaser] BURN RECEIVED', payload);
-        });
-
         eventBridge.emit(EVENTS.PHASER.READY);
 
         this.scene.start("Main");
