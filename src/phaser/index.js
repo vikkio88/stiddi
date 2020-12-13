@@ -8,7 +8,13 @@ import {
 const config = {
     parent: "porthole",
     pixelArt: true,
-    roundPixels: true
+    roundPixels: true,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true
+        }
+    },
 };
 
 config.type = Phaser.AUTO;

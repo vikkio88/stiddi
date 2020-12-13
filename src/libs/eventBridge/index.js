@@ -2,7 +2,8 @@ export const EVENTS = {
     GAME: {
         ACTIONS: {
             BURN: 'game:action:burn',
-            ROTATE: 'game:action:rotate', 
+            ROTATE: 'game:action:rotate',
+            FULL_STOP: 'game:action:fullstop',
         }
     },
 
