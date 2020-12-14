@@ -11,7 +11,8 @@ class Main extends Phaser.Scene {
         eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
             console.log('[phaser] BURN RECEIVED', payload);
             const heading = this.player.rotation - (Math.PI / 2);
-            this.player.body.setAcceleration(1 * Math.cos(heading), 1 * Math.sin(heading));
+            const ACCELERATION_MULTIPLIER = 5;
+            this.player.body.setAcceleration(ACCELERATION_MULTIPLIER * Math.cos(heading), ACCELERATION_MULTIPLIER * Math.sin(heading));
 
             if (payload.timeout) {
                 setTimeout(() => {
@@ -36,9 +37,10 @@ class Main extends Phaser.Scene {
     create() {
         this.mainCamera = this.cameras.main;
 
+        this.grid = this.add.grid(0, 0, 3000, 3000, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
         this.player = new Player(this, this.cameras.main.centerX, this.cameras.main.centerY);
         this.physics.world.enable(this.player);
-        //this.mainCamera.startFollow(this.player);
+        this.mainCamera.startFollow(this.player);
         this.eventsSubscribe();
     }
 }
