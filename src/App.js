@@ -3,8 +3,8 @@ const burn = () => {
   eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: 2000 });
 };
 
-const rotate = direction => {
-  eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { direction });
+const rotate = angle => {
+  eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
 };
 
 const fullStop = () => {
@@ -15,9 +15,9 @@ const fullStop = () => {
 function App() {
   return (
     <>
-      <button onClick={() => rotate(-1)}>Rotate Left</button>
+      <button onClick={() => rotate(180)}>Rotate 180</button>
       <button onClick={burn}>Burn 2 sec</button>
-      <button onClick={() => rotate(1)}>Rotate Right</button>
+      <button onClick={() => rotate(90)}>Rotate 90</button>
       <button onClick={fullStop}>Full Stop</button>
     </>
   );

@@ -10,25 +10,17 @@ class Main extends Phaser.Scene {
     eventsSubscribe() {
         eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
             console.log('[phaser] BURN RECEIVED', payload);
-            const heading = this.player.rotation - (Math.PI / 2);
-            const ACCELERATION_MULTIPLIER = 5;
-            this.player.body.setAcceleration(ACCELERATION_MULTIPLIER * Math.cos(heading), ACCELERATION_MULTIPLIER * Math.sin(heading));
-
-            if (payload.timeout) {
-                setTimeout(() => {
-                    this.player.body.setAcceleration(0, 0);
-                    console.log('[phaser] burn timeout: turning off', { speed: this.player.body.speed });
-                }, payload.timeout);
-            }
+            this.player.burn(payload.timeout);
         });
 
         eventBridge.on(EVENTS.GAME.ACTIONS.ROTATE, payload => {
-            this.player.angle += (payload.direction) * 10;
-            console.log('[phaser] ROTATE RECEIVED', payload, { angle: this.player.angle });
+            console.log('[phaser] ROTATE RECEIVED', payload);
+            this.player.rotateTo(payload.angle);
         });
 
         eventBridge.on(EVENTS.GAME.ACTIONS.FULL_STOP, payload => {
             console.log('[phaser] fullstop', payload, { angle: this.player.angle, speed: this.player.body.speed, acc: this.player.body.acceleration });
+            const ACCELERATION_MULTIPLIER = 5;
             this.player.body.setAcceleration(0, 0);
             this.player.body.setVelocity(0, 0);
         });
