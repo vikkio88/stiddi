@@ -15,10 +15,18 @@ const fullStop = () => {
 function App() {
   return (
     <>
-      <button onClick={() => rotate(180)}>Rotate 180</button>
-      <button onClick={burn}>Burn 2 sec</button>
-      <button onClick={() => rotate(90)}>Rotate 90</button>
-      <button onClick={fullStop}>Full Stop</button>
+      <div>
+        <button onClick={() => rotate(-45)}>Rotate -45</button>
+        <button onClick={() => rotate(0)}>Rotate 0</button>
+        <button onClick={() => rotate(45)}>Rotate 45</button>
+        <button onClick={() => rotate(90)}>Rotate 90</button>
+        <button onClick={() => rotate(180)}>Rotate 180</button>
+        <button onClick={() => rotate(270)}>Rotate 270</button>
+      </div>
+      <div>
+        <button onClick={burn}>Burn 2 sec</button>
+        <button onClick={fullStop}>Full Stop</button>
+      </div>
     </>
   );
 }
