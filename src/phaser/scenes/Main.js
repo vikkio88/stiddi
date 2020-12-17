@@ -20,7 +20,6 @@ class Main extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.ACTIONS.FULL_STOP, payload => {
             console.log('[phaser] fullstop', payload, { angle: this.player.angle, speed: this.player.body.speed, acc: this.player.body.acceleration });
-            const ACCELERATION_MULTIPLIER = 5;
             this.player.body.setAcceleration(0, 0);
             this.player.body.setVelocity(0, 0);
         });
