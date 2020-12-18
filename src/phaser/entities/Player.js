@@ -32,9 +32,12 @@ export default class extends Phaser.GameObjects.Sprite {
         console.log('[phaser] rotating', { angle });
 
         // duration should be 2 secs per 45 deg
-        const duration = 2000;
         // need to calculate type of rotation if 
         // clockwise or not
+
+        const duration = (Math.abs(this.angle - angle) / 45) * 1000;
+        const newAngle = Math.min(angle, Phaser.Math.Angle.ShortestBetween(angle, this.angle));
+        console.log(`angle: ${angle}, newAngle: ${newAngle}, duration: ${duration}`);
 
         this.scene.tweens.add({
             targets: this,
