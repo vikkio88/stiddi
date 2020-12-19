@@ -26,10 +26,18 @@ export const Angle = {
     shortestRotation(currentAngle, wantedAngle) {
         const currentNegative = currentAngle - ANGLES.DEG_360;
         const negativeAngle = (wantedAngle - ANGLES.DEG_360);
-        const positiveRotation = (currentAngle + wantedAngle + ANGLES.DEG_360) % ANGLES.DEG_360;
-        const negativeRotation = Math.abs((currentNegative + negativeAngle - ANGLES.DEG_360) % ANGLES.DEG_360);
+        const positiveRotation = currentAngle < wantedAngle ?
+            wantedAngle - currentAngle :
+            ANGLES.DEG_360 - currentAngle + wantedAngle;
+        const negativeRotation = currentNegative > negativeAngle ?
+            Math.abs(currentNegative - negativeAngle) :
+            ANGLES.DEG_360 + currentAngle - wantedAngle;
         return {
-            rotation: positiveRotation <= negativeRotation ? positiveRotation : negativeRotation,
+            /*
+            pos: positiveRotation,
+            neg: negativeRotation,
+            */
+            rotation: (positiveRotation <= negativeRotation ? positiveRotation : negativeRotation) % ANGLES.DEG_360,
             angle: positiveRotation <= negativeRotation ? wantedAngle : negativeAngle
         };
     }

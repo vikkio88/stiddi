@@ -49,6 +49,7 @@ export default class extends Phaser.GameObjects.Sprite {
             targets: this,
             angle,
             duration,
+            onComplete: () => this.angle = targetAngle
         });
     }
 }
