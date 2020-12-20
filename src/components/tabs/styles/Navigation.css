@@ -1,4 +1,20 @@
 .NavigationTab-wrapper{
     width: 100%;
+    height: 100%;
     padding:5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.NavigationTab-top{
+    flex: 4;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.NavigationTab-bottom{
+    flex: 1;
+    display: flex;
 }
