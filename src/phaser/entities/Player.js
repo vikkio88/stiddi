@@ -4,7 +4,7 @@ import { Angle, ANGLES } from "libs/math";
 const ACCELERATION_MULTIPLIER = 5;
 const INITIAL_ANGLE = ANGLES.DEG_90;
 const INITIAL_ROTATION = (Math.PI / 2);
-export default class extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "player", 0);
         scene.add.existing(this);
