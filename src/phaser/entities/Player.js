@@ -41,15 +41,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     rotateTo(targetAngle) {
         const currentAngle = this.angle;
-        const { angle, rotation } = Angle.shortestRotation(currentAngle, targetAngle);
-        const duration = (rotation / 45) * 1000;
+        let angle = targetAngle;
+        let duration = (Math.abs(angle - currentAngle) / ANGLES.DEG_45) * 1000;
+        if (currentAngle > ANGLES.DEG_90 || currentAngle <= 0) {
+            const { angle: newAngle, rotation } = Angle.shortestRotation(currentAngle, targetAngle);
+            angle = newAngle;
+            duration = (rotation / 45) * 1000;
+        }
 
-        console.log('[phaser] rotating', { currentAngle, targetAngle, angle, duration });
         this.scene.tweens.add({
             targets: this,
             angle,
             duration,
-            onComplete: () => this.angle = targetAngle
         });
     }
 }
