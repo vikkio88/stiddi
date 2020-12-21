@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.3.0",
+    "csshake": "^1.5.3",
     "nanoevents": "^5.1.10",
     "phaser": "^3.24.1",
     "react": "^17.0.1",

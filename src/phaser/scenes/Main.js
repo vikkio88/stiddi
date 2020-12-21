@@ -8,6 +8,11 @@ class Main extends Phaser.Scene {
     }
 
     eventsSubscribe() {
+        eventBridge.on(EVENTS.GAME.EFFECTS.SHAKE, payload => {
+            console.log('[phaser] SHAKE RECEIVED', payload);
+            this.mainCamera.shake(payload.duration, 0.0009);
+        });
+
         eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
             console.log('[phaser] BURN RECEIVED', payload);
             this.player.burn(payload.timeout);

@@ -7,6 +7,7 @@ import store from './store';
 
 import './phaser';
 
+import 'csshake/dist/csshake.min.css';
 import './index.css';
 import Main from './Main';
 

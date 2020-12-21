@@ -10,7 +10,7 @@ body {
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 
 }
@@ -18,14 +18,13 @@ body {
 div#ui {
   border: solid 1px black;
   width: 48vw;
-  height: 95vh;
+  height: 90vh;
 }
 
 div#porthole {
   border: solid 1px black;
-  height: 95vh;
-  width: 50vw;
-  margin-right: 10px;
+  height: 90vh;
+  width: 48vw;
   border-radius: 50%;
   overflow: hidden;
 }

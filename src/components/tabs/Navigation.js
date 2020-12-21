@@ -1,12 +1,9 @@
+import { useStoreon } from "storeon/react";
 import { Button } from 'components/common';
 import { Heading } from 'components/navigation';
 import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Navigation.css";
-
-const burn = () => {
-    eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: 2000 });
-};
 
 const fullStop = () => {
     eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
@@ -14,6 +11,12 @@ const fullStop = () => {
 
 
 const Navigation = () => {
+    const { dispatch } = useStoreon();
+    const burn = () => {
+        dispatch('effects:shake');
+        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: 2000 });
+    };
+
     return (
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top">

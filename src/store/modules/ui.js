@@ -4,7 +4,6 @@ const initialState = {
     tab: TABS.NAVIGATION
 };
 
-
 const ui = store => {
     store.on('@init', () => {
         return {
