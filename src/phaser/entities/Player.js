@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import eventBridge, { EVENTS } from "libs/eventBridge";
 import { Angle, ANGLES } from "libs/math";
 
 const ACCELERATION_MULTIPLIER = 5;
@@ -9,7 +10,39 @@ export default class Player extends Phaser.GameObjects.Sprite {
         super(scene, x, y, "player", 0);
         scene.add.existing(this);
         //this.setScale(.5);
+        this.heartBeat = {
+            last: null,
+            send: false,
+            timeout: 3000
+        };
     }
+
+    startHeartBeat() {
+        this.heartBeat.send = true;
+        this.beat();
+    }
+
+    beat() {
+        const payload = this.getNavigation();
+        if (this.heartBeat.send && this.heartBeat.last !== payload) {
+            eventBridge.emit(EVENTS.PHASER.HEARTBEAT, payload);
+        }
+
+        setTimeout(() => this.beat(), this.heartBeat.timeout);
+    }
+
+    getNavigation() {
+        const { velocity, speed } = this.body;
+        const direction = Math.atan2(velocity.y, velocity.x) * ANGLES.DEG_180 / Math.PI;
+        const approxSpeed = Math.floor(speed);
+        const heading = Math.floor((this.getAngle() + INITIAL_ANGLE) % ANGLES.DEG_360);
+        return {
+            heading,
+            direction: approxSpeed <= 1 ? heading : Math.floor(direction + INITIAL_ANGLE),
+            speed: approxSpeed
+        };
+    }
+
 
     getAngle() {
         return this.angle - INITIAL_ANGLE;

@@ -39,6 +39,9 @@ class Main extends Phaser.Scene {
         this.grid = this.add.grid(0, 0, 3000, 3000, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
         this.player = new Player(this, this.cameras.main.centerX, this.cameras.main.centerY);
         this.physics.world.enable(this.player);
+        this.player.startHeartBeat();
+        // will move init of physics and HB inside player
+        
         this.mainCamera.startFollow(this.player);
         this.eventsSubscribe();
     }
