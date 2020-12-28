@@ -18,8 +18,8 @@ eventBridge.on(EVENTS.PHASER.READY, () => {
 });
 
 eventBridge.on(EVENTS.PHASER.HEARTBEAT, payload => {
-  console.log('RECEIVED HEARTBEAT', payload);
-  //store.dispatch('phaser:heartbeat', payload);
+  //console.log('RECEIVED HEARTBEAT', payload);
+  store.dispatch('phaser:heartbeat', payload);
 });
 
 ReactDOM.render(

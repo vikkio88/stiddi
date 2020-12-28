@@ -10,7 +10,7 @@ const fullStop = () => {
 
 
 const Navigation = () => {
-    const { dispatch } = useStoreon();
+    const { dispatch, navigation } = useStoreon('navigation');
     const burn = () => {
         dispatch('effects:shake');
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: 2000 });
@@ -20,8 +20,8 @@ const Navigation = () => {
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top">
                 <div className="NavigationTab-top-row">
-                    <Speed />
-                    <Heading />
+                    <Speed speed={navigation.speed} />
+                    <Heading currentHeading={navigation.heading} direction={navigation.direction} />
                 </div>
                 <Engine onBurn={burn} onFullStop={fullStop} />
             </div>

@@ -1,10 +1,7 @@
-import { Navigation } from "components/tabs";
-
 const initialState = {
     heading: 0,
     direction: 0,
     speed: 0,
-    acceleration: 0
 };
 
 const navigation = store => {
