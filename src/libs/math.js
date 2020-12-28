@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 export const ANGLES = {
     DEG_0: 0,
     DEG_45: 45,
@@ -31,6 +33,18 @@ export const Angle = {
             negativeAngle,
             rotation: Math.abs((clockwise ? positiveRotation : negativeRotation) % ANGLES.DEG_360),
             angle: clockwise ? wantedAngle : negativeAngle
+        };
+    }
+};
+
+export const Geom = {
+    pointOnCircumference(center, radius, angle, offset = -90) {
+        angle = Phaser.Math.DegToRad(angle + offset);
+        const { cx, cy } = center;
+
+        return {
+            x: (cx + radius * Math.cos(angle)),
+            y: (cy + radius * Math.sin(angle)),
         };
     }
 };
