@@ -3,6 +3,8 @@ import { Button } from "components/common";
 import { Geom } from "libs/math";
 import eBridge, { EVENTS } from 'libs/eventBridge';
 
+import "./styles/Heading.css";
+
 
 const rotate = angle => {
     eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
@@ -40,18 +42,25 @@ export const Compass = ({ heading = 0, direction = 0 }) => {
 
 };
 
+
+const rotationButtonStyle = {
+    borderTop: '1px solid black',
+    borderLeft: '1px solid black'
+};
 const Heading = () => {
     const [heading, setHeading] = useState(0);
-    const format = e => {
-        const value = e.target.value % 360;
-        setHeading(value);
-    };
     return (
-        <>
+        <div className="NavigationTab-heading">
             <Compass heading={heading} direction={0} />
-            <input type="number" max="360" min="0" step="1" onChange={format} value={heading} />
-            <Button onClick={() => rotate(heading)}>Rotate to {`${heading} °`}</Button>
-        </>
+            <div>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1) % 360)}>-</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % 360)}>+</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 180) % 360)}>-180</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 45) % 360)}>+45</Button>
+            </div>
+            <Button style={{ width: '100%', ...rotationButtonStyle }} onClick={() => rotate(heading)}>Rotate to {`${heading} °`}</Button>
+        </div>
     );
 };
 

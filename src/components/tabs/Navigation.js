@@ -1,6 +1,5 @@
 import { useStoreon } from "storeon/react";
-import { Button } from 'components/common';
-import { Heading } from 'components/navigation';
+import { Heading, Speed, Engine } from 'components/navigation';
 import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Navigation.css";
@@ -21,17 +20,10 @@ const Navigation = () => {
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top">
                 <div className="NavigationTab-top-row">
-                    <div className="NavigationTab-heading">
-                        Speed:
-                    </div>
-                    <div className="NavigationTab-heading">
-                        <Heading />
-                    </div>
+                    <Speed />
+                    <Heading />
                 </div>
-                <div className="NavigationTab-engine">
-                    <Button onClick={burn} variant={Button.Variants.GREEN}>Burn 2 sec</Button>
-                    <Button onClick={fullStop} variant={Button.Variants.RED}>Full Stop</Button>
-                </div>
+                <Engine onBurn={burn} onFullStop={fullStop} />
             </div>
             <div className="NavigationTab-bottom">
                 Fuel
