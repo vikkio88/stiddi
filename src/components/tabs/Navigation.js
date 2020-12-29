@@ -11,9 +11,10 @@ const fullStop = () => {
 
 const Navigation = () => {
     const { dispatch, navigation } = useStoreon('navigation');
-    const burn = () => {
-        dispatch('effects:shake');
-        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: 2000 });
+    const burn = time => {
+        time = time * 1000;
+        dispatch('effects:shake', { duration: time });
+        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: time });
     };
 
     return (

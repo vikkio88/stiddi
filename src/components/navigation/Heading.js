@@ -62,11 +62,11 @@ const Heading = ({ direction, currentHeading }) => {
                 Direction: {normalised(direction)} °
             </div>
             <div>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1) % 360)}>-</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % 360)}>+</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 180) % 360)}>-180</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % ANGLES.DEG_360)}>+</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_180) % ANGLES.DEG_360)}>-180</Button>
                 <Button style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 45) % 360)}>+45</Button>
+                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_45) % ANGLES.DEG_360)}>+45</Button>
             </div>
             <Button
                 style={{ width: '100%', ...rotationButtonStyle }}
