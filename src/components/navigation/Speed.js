@@ -39,10 +39,11 @@ const Speed = ({ speed = 0 }) => {
         <div className="NavigationTab-speed">
             <h2>Speed</h2>
             <h1>
-            <span className="speed">{unit.conversion(speed)}</span> {unit.label}
+                <span className="speed">{unit.conversion(speed)}</span> {unit.label}
             </h1>
             <div className="speed-actions">
-                <Button onClick={toggle}>Unit</Button>
+                <Button style={{ width: '30px', height: '30px' }} onClick={() => setUnit(0)} variant={Button.Variants.GREEN} />
+                <Button style={{ width: '30px', height: '30px' }} onClick={toggle} variant={Button.Variants.RED} />
             </div>
         </div>
     );
