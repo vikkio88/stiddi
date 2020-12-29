@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BLUE, GREEN, DARK_GREEN, RED } from "enums/colours";
 import { Button } from "components/common";
-import { Geom } from "libs/math";
+import { ANGLES, Geom } from "libs/math";
 import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Heading.css";
@@ -50,14 +50,16 @@ const rotationButtonStyle = {
     borderTop: '1px solid black',
     borderLeft: '1px solid black'
 };
+
+const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
 const Heading = ({ direction, currentHeading }) => {
     const [heading, setHeading] = useState(0);
     return (
         <div className="NavigationTab-heading">
             <Compass heading={heading} currentHeading={currentHeading} direction={direction} />
             <div>
-                Heading: {currentHeading} °
-                Direction: {direction} °
+                Heading: {normalised(currentHeading)} °
+                Direction: {normalised(direction)} °
             </div>
             <div>
                 <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1) % 360)}>-</Button>
