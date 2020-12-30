@@ -11,14 +11,14 @@ const rotate = angle => {
     eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
 };
 
-export const Compass = ({ heading = 0, currentHeading = 0, direction = 0 }) => {
+export const Compass = ({ heading = 0, currentHeading = 0, direction = null }) => {
     const stroke = 5;
     const radius = 80;
     const cx = radius;
     const cy = radius;
     const { x: headingX, y: headingY } = Geom.pointOnCircumference({ cx, cy }, radius - 3 * stroke, heading);
     const { x: cHeadingX, y: cHeadingY } = Geom.pointOnCircumference({ cx, cy }, radius - 3 * stroke, currentHeading);
-    const { x: directionX, y: directionY } = Geom.pointOnCircumference({ cx, cy }, radius - 6 * stroke, direction);
+    const { x: directionX, y: directionY } = Geom.pointOnCircumference({ cx, cy }, radius - 6 * stroke, direction === null ? 0 : direction);
     const normalizedRadius = radius - stroke * 2;
     const circumference = normalizedRadius * 2 * Math.PI;
     const strokeDashoffset = 0;
@@ -39,7 +39,7 @@ export const Compass = ({ heading = 0, currentHeading = 0, direction = 0 }) => {
             />
             <line x1={radius} y1={radius} x2={cHeadingX} y2={cHeadingY} stroke={DARK_GREEN} strokeWidth={stroke} />
             <line x1={radius} y1={radius} x2={headingX} y2={headingY} stroke={GREEN} strokeWidth={stroke} />
-            <line x1={radius} y1={radius} x2={directionX} y2={directionY} stroke={RED} strokeWidth={stroke} />
+            {direction !== null && <line x1={radius} y1={radius} x2={directionX} y2={directionY} stroke={RED} strokeWidth={stroke} />}
         </svg>
     );
 
@@ -52,11 +52,12 @@ const rotationButtonStyle = {
 };
 
 const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
-const Heading = ({ direction, currentHeading }) => {
+const Heading = ({ direction, currentHeading, speed }) => {
     const [heading, setHeading] = useState(0);
+    const canRotate = heading !== normalised(currentHeading);
     return (
         <div className="NavigationTab-heading">
-            <Compass heading={heading} currentHeading={currentHeading} direction={direction} />
+            <Compass heading={heading} currentHeading={currentHeading} direction={speed > 0 ? direction : null} />
             <div>
                 Heading: {normalised(currentHeading)} °
                 Direction: {normalised(direction)} °
@@ -71,9 +72,9 @@ const Heading = ({ direction, currentHeading }) => {
             <Button
                 style={{ width: '100%', ...rotationButtonStyle }}
                 onClick={() => rotate(heading)}
-                disabled={heading === currentHeading}
+                disabled={!canRotate}
             >
-                {`${heading === currentHeading ? 'Current Heading' : 'Rotate to'} ${heading} °`}
+                {`${!canRotate ? 'Current Heading' : 'Rotate to'} ${heading} °`}
             </Button>
         </div>
     );

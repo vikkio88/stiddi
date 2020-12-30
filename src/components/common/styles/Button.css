@@ -49,3 +49,17 @@ button.Button-variant-red:hover {background-color: #8e3f3e}
 button.Button-variant-red:active {
   background-color: #8e3f3e;
 }
+
+button.Button-variant-empty_green{
+  color: #4CAF50;
+  background-color: transparent;
+  border: 2px solid #4CAF50;
+}
+button.Button-variant-empty_green:hover {
+  background-color: #262626; color: white;
+}
+
+button.Button-variant-empty_green:active {
+  background-color: #3e8e41;
+  color: white;
+}

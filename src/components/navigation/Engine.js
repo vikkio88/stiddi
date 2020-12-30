@@ -7,7 +7,7 @@ const Engine = ({ onBurn, onFullStop }) => {
     return (
         <div className="NavigationTab-engine">
             <Slider onChange={e => setBurnTime(e.target.value)} value={burnTime} />
-            <Button onClick={() => onBurn(burnTime)} variant={Button.Variants.GREEN}>Burn {burnTime}s</Button>
+            <Button onClick={() => onBurn(burnTime)} variant={Button.Variants.EMPTY_GREEN}>Burn {burnTime}s</Button>
             <Button onClick={onFullStop} variant={Button.Variants.RED}>Full Stop</Button>
         </div>
     );

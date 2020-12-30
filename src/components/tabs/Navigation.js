@@ -17,12 +17,14 @@ const Navigation = () => {
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: time });
     };
 
+    const { speed, heading, direction } = navigation;
+
     return (
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top">
                 <div className="NavigationTab-top-row">
-                    <Speed speed={navigation.speed} />
-                    <Heading currentHeading={navigation.heading} direction={navigation.direction} />
+                    <Speed speed={speed} />
+                    <Heading currentHeading={heading} direction={direction} speed={speed} />
                 </div>
                 <Engine onBurn={burn} onFullStop={fullStop} />
             </div>

@@ -4,6 +4,7 @@ const VARIANTS = {
     RED: 'red',
     BLUE: 'blue',
     GREEN: 'green',
+    EMPTY_GREEN: 'empty_green',
     WHITE: 'white',
     TRANSPARENT: 'transparent'
 };
