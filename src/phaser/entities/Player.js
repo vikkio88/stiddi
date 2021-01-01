@@ -53,11 +53,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     }
 
-    burn(timeout) {
+    burn(timeout, throttle) {
         const heading = this.getRotation();
         this.body.setAcceleration(
-            ACCELERATION_MULTIPLIER * Math.cos(heading),
-            ACCELERATION_MULTIPLIER * Math.sin(heading)
+            ACCELERATION_MULTIPLIER * throttle * Math.cos(heading),
+            ACCELERATION_MULTIPLIER * throttle * Math.sin(heading)
         );
 
         if (timeout) {

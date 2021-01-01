@@ -15,7 +15,7 @@ class Main extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.ACTIONS.BURN, payload => {
             console.log('[phaser] BURN RECEIVED', payload);
-            this.player.burn(payload.timeout);
+            this.player.burn(payload.timeout, payload.throttle);
         });
 
         eventBridge.on(EVENTS.GAME.ACTIONS.ROTATE, payload => {
@@ -41,7 +41,7 @@ class Main extends Phaser.Scene {
         this.physics.world.enable(this.player);
         this.player.startHeartBeat();
         // will move init of physics and HB inside player
-        
+
         this.mainCamera.startFollow(this.player);
         this.eventsSubscribe();
     }

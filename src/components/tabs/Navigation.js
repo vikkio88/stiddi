@@ -11,10 +11,11 @@ const fullStop = () => {
 
 const Navigation = () => {
     const { dispatch, navigation } = useStoreon('navigation');
-    const burn = time => {
+    const burn = (time, throttlePercentage = 25) => {
         time = time * 1000;
+        const throttle = throttlePercentage / 100;
         dispatch('effects:shake', { duration: time });
-        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: time });
+        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: time, throttle });
     };
 
     const { speed, heading, direction } = navigation;
