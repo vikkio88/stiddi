@@ -8,12 +8,12 @@ const VARIANTS = {
     WHITE: 'white',
     TRANSPARENT: 'transparent'
 };
-const Button = ({ onClick = () => { }, style = {}, label, disabled, variant, children }) => {
+const Button = ({ onClick = () => { }, style = {}, label, disabled, variant, className = '', children }) => {
     variant = Object.values(VARIANTS).includes(variant) ? variant : null;
 
     return (
         <button
-            className={`Button ${variant ? `Button-variant-${variant}` : ''}`}
+            className={`Button ${variant ? `Button-variant-${variant}` : ''} ${className}`}
             onClick={onClick}
             disabled={disabled}
             style={style}
