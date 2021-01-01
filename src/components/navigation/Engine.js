@@ -41,7 +41,7 @@ const Engine = ({ onBurn, onFullStop, lock = false }) => {
                     className="w-full"
                 />
             </div>
-            <div className="w-full flex f-row f-ac f-je">
+            <div className="w-full flex f-row f-ac f-je mt-20">
                 <Button
                     onClick={() => onBurn(burnTime, throttle)}
                     variant={Button.Variants.EMPTY_GREEN}
