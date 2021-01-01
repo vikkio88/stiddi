@@ -2,7 +2,6 @@ import { useState } from "react";
 import { BLUE, GREEN, DARK_GREEN, RED } from "enums/colours";
 import { Button } from "components/common";
 import { ANGLES, Geom } from "libs/math";
-import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Heading.css";
 

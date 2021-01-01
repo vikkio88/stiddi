@@ -32,7 +32,12 @@ const Navigation = () => {
                         onRotate={angle => dispatch('commit:rotate', { angle })}
                     />
                 </div>
-                <Engine onBurn={burn} onFullStop={fullStop} lock={navigationLock} />
+                <Engine
+                    onBurn={burn}
+                    onFullStop={fullStop}
+                    lock={navigationLock}
+                    speed={speed}
+                />
             </div>
             <div className="NavigationTab-bottom">
                 Fuel

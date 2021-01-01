@@ -36,7 +36,11 @@ button {
 }
 
 /* Typography */
-
+span.label {
+  font-weight: bold;
+  margin-right: 10px;
+  margin-left: 10px;
+}
 
 /* UTILS */
 .w-full {
@@ -87,6 +91,18 @@ button {
   display: flex;
 }
 
+.f-1 {
+  flex:1;
+}
+
+.f-2 {
+  flex:2;
+}
+
+.f-3 {
+  flex:3;
+}
+
 .f-row {
   flex-direction: row;
 }
@@ -97,6 +113,14 @@ button {
 
 .f-ac {
   align-items: center;
+}
+
+.f-as {
+  align-items: flex-start;
+}
+
+.f-ae {
+  align-items: flex-end;
 }
 
 .f-jc {
