@@ -1,9 +1,4 @@
-input.slider {
-    width: 100%;
-}
-
 input[type=range].slider {
-    width: 100%;
     margin: 11.2px 0;
     background-color: transparent;
     -webkit-appearance: none;
