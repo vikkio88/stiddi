@@ -34,12 +34,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     getNavigation() {
         const { velocity, speed } = this.body;
         const direction = Math.atan2(velocity.y, velocity.x) * ANGLES.DEG_180 / Math.PI;
-        const approxSpeed = Math.floor(speed);
         const heading = Math.floor((this.getAngle() + INITIAL_ANGLE) % ANGLES.DEG_360);
         return {
             heading,
-            direction: approxSpeed <= 1 ? heading : Math.floor(direction + INITIAL_ANGLE),
-            speed: approxSpeed
+            direction: speed <= 1 ? heading : Math.floor(direction + INITIAL_ANGLE),
+            speed
         };
     }
 
