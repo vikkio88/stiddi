@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Button, RoundIndicator, Slider } from "components/common";
 import "./styles/Engine.css";
 
-const Engine = ({ onBurn, onFullStop }) => {
+const Engine = ({ onBurn, onFullStop, lock = false }) => {
     const [burnTime, setBurnTime] = useState(1);
     const [throttle, setThrottle] = useState(25);
 
-    const canBurn = burnTime > 0 && throttle > 0;
+    const canBurn = !lock && (burnTime > 0 && throttle > 0);
     return (
         <div className="NavigationTab-engine">
             <div className="NavigationTab-engine-burn">

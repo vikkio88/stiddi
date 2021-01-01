@@ -14,20 +14,25 @@ const Navigation = () => {
     const burn = (time, throttlePercentage = 25) => {
         time = time * 1000;
         const throttle = throttlePercentage / 100;
-        dispatch('effects:shake', { duration: time });
-        eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout: time, throttle });
+        dispatch('commit:burn', { timeout: time, throttle });
     };
 
-    const { speed, heading, direction } = navigation;
+    const { speed, heading, direction, navigationLock } = navigation;
 
     return (
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top">
                 <div className="NavigationTab-top-row">
                     <Speed speed={speed} />
-                    <Heading currentHeading={heading} direction={direction} speed={speed} />
+                    <Heading
+                        currentHeading={heading}
+                        direction={direction}
+                        speed={speed}
+                        lock={navigationLock}
+                        onRotate={angle => dispatch('commit:rotate', { angle })}
+                    />
                 </div>
-                <Engine onBurn={burn} onFullStop={fullStop} />
+                <Engine onBurn={burn} onFullStop={fullStop} lock={navigationLock} />
             </div>
             <div className="NavigationTab-bottom">
                 Fuel

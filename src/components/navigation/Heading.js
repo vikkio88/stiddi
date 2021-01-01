@@ -7,10 +7,6 @@ import eBridge, { EVENTS } from 'libs/eventBridge';
 import "./styles/Heading.css";
 
 
-const rotate = angle => {
-    eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
-};
-
 export const Compass = ({ heading = 0, currentHeading = 0, direction = null }) => {
     const stroke = 5;
     const radius = 80;
@@ -52,9 +48,9 @@ const rotationButtonStyle = {
 };
 
 const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
-const Heading = ({ direction, currentHeading, speed }) => {
+const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock = false }) => {
     const [heading, setHeading] = useState(0);
-    const canRotate = heading !== normalised(currentHeading);
+    const canRotate = !lock && heading !== normalised(currentHeading);
     return (
         <div className="NavigationTab-heading">
             <Compass heading={heading} currentHeading={currentHeading} direction={speed > 0 ? direction : null} />
@@ -71,7 +67,7 @@ const Heading = ({ direction, currentHeading, speed }) => {
             </div>
             <Button
                 style={{ width: '100%', ...rotationButtonStyle }}
-                onClick={() => rotate(heading)}
+                onClick={() => onRotate(heading)}
                 disabled={!canRotate}
             >
                 {`${!canRotate ? 'Current Heading' : 'Rotate to'} ${heading} °`}
