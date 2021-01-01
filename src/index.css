@@ -18,7 +18,9 @@ div#ui {
   width: 49vw;
   height: 95vh;
   background: #1B1B1B;
+
   color: white;
+  font-size: 14px;
 }
 
 div#porthole {
@@ -32,4 +34,49 @@ div#porthole {
 button {
   font-family: 'Orbitron', sans-serif;
 }
+
+/* Typography */
+
+
+/* UTILS */
+.w-full {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.f-row {
+  flex-direction: row;
+}
+
+.f-col {
+  flex-direction: column;
+}
+
+.f-ac {
+  align-items: center;
+}
+
+.f-jc {
+  justify-content: center;
+}
+
+.f-js {
+  justify-content:  flex-start;
+}
+
+.f-je {
+  justify-content:  flex-end;
+}
+
+.f-jsa {
+  justify-content: space-around;
+}
+
+.f-jsb {
+  justify-content: space-between;
+}
+
 
