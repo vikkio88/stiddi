@@ -1,0 +1,7 @@
+.Progress {
+    border: 2px solid white;
+}
+
+.Progress-bar {
+    font-weight: bold;
+}

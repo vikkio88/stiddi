@@ -69,9 +69,16 @@ span.label {
   margin-left: 10px;
 }
 
+h3.valueHeader span{ font-size: 1.3em;}
+h3.valueHeader { font-size: 1.4em;}
+
 /* UTILS */
 .w-full {
   width: 100%;
+}
+
+.p-5 {
+  padding: 5px;
 }
 
 .pr-5 {

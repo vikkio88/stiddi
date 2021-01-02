@@ -1,5 +1,5 @@
 import { useStoreon } from "storeon/react";
-import { Heading, Speed, Engine } from 'components/navigation';
+import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 
 import "./styles/Navigation.css";
 
@@ -34,7 +34,7 @@ const Navigation = () => {
                 />
             </div>
             <div className="NavigationTab-bottom ui-section">
-                Fuel
+                <Fuel value={78} max={80}/>
             </div>
         </div>
     );
