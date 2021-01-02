@@ -1,6 +1,5 @@
 import { useStoreon } from "storeon/react";
 import { Heading, Speed, Engine } from 'components/navigation';
-import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Navigation.css";
 
