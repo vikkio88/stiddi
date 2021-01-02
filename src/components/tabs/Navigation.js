@@ -4,11 +4,6 @@ import eBridge, { EVENTS } from 'libs/eventBridge';
 
 import "./styles/Navigation.css";
 
-const fullStop = () => {
-    eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
-};
-
-
 const Navigation = () => {
     const { dispatch, navigation } = useStoreon('navigation');
     const burn = (time, throttlePercentage = 25) => {
@@ -34,7 +29,7 @@ const Navigation = () => {
                 </div>
                 <Engine
                     onBurn={burn}
-                    onFullStop={fullStop}
+                    onFullStop={() => dispatch('commit:fullstop')}
                     lock={navigationLock}
                     speed={speed}
                 />

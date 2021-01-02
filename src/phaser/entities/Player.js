@@ -42,14 +42,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
         };
     }
 
-
     getAngle() {
         return this.angle - INITIAL_ANGLE;
     }
 
     getRotation() {
         return this.rotation - INITIAL_ROTATION;
-
     }
 
     burn(timeout, throttle) {

@@ -36,6 +36,21 @@ const navigation = store => {
         eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
     });
 
+    store.on('commit:fullstop', ({ navigation }) => {
+        store.dispatch('lock:navigation');
+        // here we need to calculate fuel usage related to current speed
+        // and also the timeout
+        const { speed } = navigation;
+        console.log('stopping from', speed);
+        const timeout = 3000;
+        store.dispatch('effects:shake', { duration: timeout });
+        setTimeout(() => {
+            eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
+            store.dispatch('unlock:navigation');
+        }, timeout);
+
+    });
+
     store.on('lock:navigation', ({ navigation }) => {
         return {
             navigation: {
