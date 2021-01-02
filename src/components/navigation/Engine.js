@@ -12,7 +12,7 @@ const Engine = ({ onBurn, onFullStop, speed = 0, lock = false }) => {
     const canBurn = !lock && (burnTime > 0 && throttle > 0);
     const canFullStop = speed > 0 && speed < 3;
     return (
-        <div className="NavigationTab-engine">
+        <div className="NavigationTab-engine ui-section-t">
             <div className="w-full flex f-col">
                 <div className="w-full flex f-row f-ac f-jsb pr-5 pl-5">
                     <h4>Burn Time</h4>

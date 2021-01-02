@@ -21,7 +21,7 @@ const Navigation = () => {
 
     return (
         <div className="NavigationTab-wrapper">
-            <div className="NavigationTab-top">
+            <div className="NavigationTab-top ui-section">
                 <div className="NavigationTab-top-row">
                     <Speed speed={speed} />
                     <Heading
@@ -39,7 +39,7 @@ const Navigation = () => {
                     speed={speed}
                 />
             </div>
-            <div className="NavigationTab-bottom">
+            <div className="NavigationTab-bottom ui-section">
                 Fuel
             </div>
         </div>

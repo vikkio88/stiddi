@@ -14,9 +14,10 @@ body {
 }
 
 div#ui {
+  display: flex;
   border-radius: 5px;
-  width: 49vw;
-  height: 95vh;
+  min-width: 49vw;
+  min-height: 95vh;
   background: #1B1B1B;
 
   color: white;
@@ -33,6 +34,32 @@ div#porthole {
 
 button {
   font-family: 'Orbitron', sans-serif;
+}
+
+/* Layout */
+.ui-section {
+  border: solid 3px white;
+  border-radius: 5px;
+}
+
+.ui-section-t {
+  border-top: solid 3px white;
+  border-radius: 5px;
+}
+
+.ui-section-b {
+  border-bottom: solid 3px white;
+  border-radius: 5px;
+}
+
+.ui-section-r {
+  border-right: solid 3px white;
+  border-radius: 5px;
+}
+
+.ui-section-l {
+  border-left: solid 3px white;
+  border-radius: 5px;
 }
 
 /* Typography */
