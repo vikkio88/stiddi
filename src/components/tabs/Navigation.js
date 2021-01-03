@@ -4,7 +4,7 @@ import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 import "./styles/Navigation.css";
 
 const Navigation = () => {
-    const { dispatch, navigation } = useStoreon('navigation');
+    const { dispatch, navigation, player: { fuel } } = useStoreon('navigation', 'player');
     const burn = (time, throttlePercentage = 25) => {
         time = time * 1000;
         const throttle = throttlePercentage / 100;
@@ -34,7 +34,7 @@ const Navigation = () => {
                 />
             </div>
             <div className="NavigationTab-bottom ui-section">
-                <Fuel value={78} max={80}/>
+                <Fuel value={fuel.current} max={fuel.max} />
             </div>
         </div>
     );

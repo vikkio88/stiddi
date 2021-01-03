@@ -1,9 +1,11 @@
 import eBridge, { EVENTS } from 'libs/eventBridge';
+import { calculateFuelCost, calculateFullStopTimeout } from 'libs/game/navigation';
 
 const initialState = {
     heading: 0,
     direction: 0,
     speed: 0,
+    position: { x: 0, y: 0 },
     navigationLock: false
 };
 
@@ -28,6 +30,8 @@ const navigation = store => {
     store.on('commit:burn', (_, { timeout, throttle }) => {
         store.dispatch('lock:navigation');
         store.dispatch('effects:shake', { duration: timeout });
+        const fuel = calculateFuelCost(timeout, throttle);
+        store.dispatch('player:burnFuel', { fuel });
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout, throttle });
     });
 
@@ -38,12 +42,11 @@ const navigation = store => {
 
     store.on('commit:fullstop', ({ navigation }) => {
         store.dispatch('lock:navigation');
-        // here we need to calculate fuel usage related to current speed
-        // and also the timeout
         const { speed } = navigation;
-        console.log('stopping from', speed);
-        const timeout = 3000;
+        const timeout = calculateFullStopTimeout(speed);
+        const fuel = calculateFuelCost(timeout, .10);
         store.dispatch('effects:shake', { duration: timeout });
+        store.dispatch('player:burnFuel', { fuel });
         setTimeout(() => {
             eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
             store.dispatch('unlock:navigation');

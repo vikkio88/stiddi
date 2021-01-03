@@ -1,8 +1,9 @@
+import { FUEL_MULTIPLIER } from "libs/game/navigation";
 import "./styles/Calculations.css";
 
 // this might need to be a setup config if you change ship
 const ACCELERATION_MULTIPLIER = 5;
-const FUEL_MULTIPLIER = .2;
+
 
 const Calculations = ({ burnTime = 0, throttle = 0 }) => {
     const dV = (ACCELERATION_MULTIPLIER * burnTime * throttle).toFixed(2);

@@ -12,14 +12,6 @@ const ui = store => {
             }
         };
     });
-
-    store.on('transition', ({ ui }) => {
-        return {
-            ui: {
-                ...ui,
-            }
-        };
-    });
 };
 
 export default ui;
