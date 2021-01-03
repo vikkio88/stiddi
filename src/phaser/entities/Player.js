@@ -3,17 +3,20 @@ import eventBridge, { EVENTS } from "libs/eventBridge";
 import { Angle, ANGLES } from "libs/math";
 
 const ACCELERATION_MULTIPLIER = 5;
+const HEARTBEAT_TIMEOUT = 1500;
+
 const INITIAL_ANGLE = ANGLES.DEG_90;
 const INITIAL_ROTATION = (Math.PI / 2);
+
+
 export default class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "player", 0);
         scene.add.existing(this);
-        //this.setScale(.5);
         this.heartBeat = {
             last: null,
             send: false,
-            timeout: 3000
+            timeout: HEARTBEAT_TIMEOUT
         };
     }
 
@@ -24,7 +27,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     beat() {
         const payload = this.getNavigation();
-        if (this.heartBeat.send && this.heartBeat.last !== payload) {
+        if (
+            this.heartBeat.send
+            && this.isBeatPayloadChanged(this.heartBeat.last, payload)
+        ) {
+            this.heartBeat.last = payload;
             eventBridge.emit(EVENTS.PHASER.HEARTBEAT, payload);
         }
 
@@ -38,8 +45,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
         return {
             heading,
             direction: speed <= 1 ? heading : Math.floor(direction + INITIAL_ANGLE),
-            speed
+            speed,
+            position: { x: Math.floor(this.x), y: Math.floor(this.y) }
         };
+    }
+
+    isBeatPayloadChanged(last, current) {
+        if (!last) return true;
+        const { heading, direction, speed, position } = current;
+        const { heading: lHeading, direction: lDirection, speed: lSpeed, position: lPosition = {} } = last;
+        return (
+            (heading !== lHeading) ||
+            (direction !== lDirection) ||
+            (speed !== lSpeed) ||
+            (position.x !== lPosition.x || position.y !== lPosition.y)
+        );
     }
 
     getAngle() {
