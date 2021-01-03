@@ -27,8 +27,6 @@ class Boot extends Phaser.Scene {
 
     create() {
         eventBridge.emit(EVENTS.PHASER.READY);
-
-        this.scene.start("Main");
     }
 }
 

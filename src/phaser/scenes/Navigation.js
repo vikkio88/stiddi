@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import { Player } from "../entities";
 
-class Main extends Phaser.Scene {
+class Navigation extends Phaser.Scene {
     constructor() {
-        super({ key: "Main" });
+        super({ key: "Navigation" });
     }
 
     eventsSubscribe() {
@@ -47,4 +47,4 @@ class Main extends Phaser.Scene {
     }
 }
 
-export default Main;
+export default Navigation;

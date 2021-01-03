@@ -12,6 +12,7 @@ export const EVENTS = {
 
     PHASER: {
         READY: 'phaser:ready',
+        SET_SCENE: 'phaser:set_scene',
         HEARTBEAT: 'phaser:heartbeat',
         EVENT: 'phaser:event'
     }

@@ -1,8 +1,14 @@
 import Phaser from "phaser";
+import eventBridge, { EVENTS } from "libs/eventBridge";
+
 
 import {
     Boot,
-    Main
+    Navigation,
+
+    // maps
+    SystemMap,
+    GalaxyMap
 } from "./scenes";
 
 const config = {
@@ -18,7 +24,12 @@ const config = {
 };
 
 config.type = Phaser.AUTO;
-config.scene = [Boot, Main];
+config.scene = [
+    Boot, Navigation,
+
+    //maps
+    SystemMap, GalaxyMap
+];
 config.scale = {
     mode: Phaser.Scale.FIT,
     parent: 'porthole',
@@ -28,4 +39,13 @@ config.scale = {
 };
 
 
-const game = new Phaser.Game(config); // eslint-disable-line no-unused-vars
+
+const phaserInit = () => {
+    const game = new Phaser.Game(config);
+
+    eventBridge.on(EVENTS.PHASER.SET_SCENE, payload => {
+        game.scene.start(payload.scene);
+    });
+};
+
+export default phaserInit;
