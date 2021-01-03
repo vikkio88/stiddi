@@ -1,0 +1,19 @@
+div.TabLink {
+    cursor: pointer;
+    font-size: 14px;
+    padding:5px;
+    border: solid 1px white;
+    border-radius: 5px;
+}
+
+div.TabLink:hover {
+    background-color: white;
+    color: black;
+}
+
+
+
+div.TabLink.active-tab-link {
+    cursor: not-allowed;
+    opacity: .5;
+}
