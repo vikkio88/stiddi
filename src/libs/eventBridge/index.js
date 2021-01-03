@@ -31,7 +31,7 @@ const eventBridge = {
         window.eBridge.on(event, callback);
         return true;
     },
-    emitFromPhaser(type, payload = null) {
+    dispatchFromPhaser(type, payload = null) {
         this.emit(EVENTS.PHASER.EVENT, { type, payload });
     },
 };

@@ -87,7 +87,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     stopBurn() {
         this.body.setAcceleration(0, 0);
-        eventBridge.emitFromPhaser('unlock:navigation');
+        eventBridge.dispatchFromPhaser('unlock:navigation');
     }
 
     rotateTo(targetAngle) {
@@ -104,7 +104,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             targets: this,
             angle,
             duration,
-            onComplete: () => eventBridge.emitFromPhaser('unlock:navigation')
+            onComplete: () => eventBridge.dispatchFromPhaser('unlock:navigation')
         });
     }
 }
