@@ -1,3 +1,4 @@
+import { TABS } from "enums/ui";
 import "./styles/Navbar.css";
 
 const TabLink = ({ onClick, children, isActive }) => {
@@ -11,12 +12,18 @@ const TabLink = ({ onClick, children, isActive }) => {
     );
 };
 
-
-const Navbar = ({ onChange }) => {
+const Navbar = ({ current, onChange }) => {
     return (
-        <div className="flex ui-section mb-5 p-5">
-            <TabLink isActive>Navigation</TabLink>
-            <TabLink>Maps</TabLink>
+        <div className="Navbar flex ui-section mb-5 p-5">
+            {Object.values(TABS).map(t => (
+                <TabLink
+                    key={t}
+                    isActive={current === t}
+                    onClick={() => onChange(t)}
+                >
+                    {t}
+                </TabLink>
+            ))}
         </div>
     );
 };

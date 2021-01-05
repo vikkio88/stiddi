@@ -7,6 +7,10 @@ class Navigation extends Phaser.Scene {
         super({ key: "Navigation" });
     }
 
+    init(params) {
+        console.log('Nav.Init', params);
+    }
+
     eventsSubscribe() {
         eventBridge.on(EVENTS.GAME.EFFECTS.SHAKE, payload => {
             console.log('[phaser] SHAKE RECEIVED', payload);
@@ -35,9 +39,10 @@ class Navigation extends Phaser.Scene {
 
     create() {
         this.mainCamera = this.cameras.main;
+        this.mainCamera.setBackgroundColor(0x000000);
 
         this.grid = this.add.grid(0, 0, 3000, 3000, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
-        this.player = new Player(this, this.cameras.main.centerX, this.cameras.main.centerY);
+        this.player = new Player(this, this.mainCamera.centerX, this.mainCamera.centerY);
         this.physics.world.enable(this.player);
         this.player.startHeartBeat();
         // will move init of physics and HB inside player

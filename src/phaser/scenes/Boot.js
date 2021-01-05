@@ -1,16 +1,16 @@
-
-import Phaser from "phaser";
+import { Scene } from "phaser";
+import sceneHelper from "phaser/helpers/sceneHelper";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 
-class Boot extends Phaser.Scene {
+class Boot extends Scene {
     constructor() {
-        super({ key: "Boot" });
+        super({ key: "Boot", active: true });
     }
 
     preload() {
-        const centerX = this.cameras.main.worldView.x + this.cameras.main.width / 2;
-        const centerY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
-        const loadingText = this.add.text(centerX, centerY, 'Booting...', {
+        sceneHelper.setBackground(this);
+        const { x, y } = sceneHelper.getCenter(this);
+        const loadingText = this.add.text(x, y, 'Booting up systems...', {
             font: '40px monospace',
             stroke: '#cbd5e0',
             fontStyle: 'strong',
@@ -22,7 +22,7 @@ class Boot extends Phaser.Scene {
             loadingText.destroy();
         });
 
-        this.load.image('player', 'assets/player.png');
+        this.load.image('ship', 'assets/player.png');
     }
 
     create() {

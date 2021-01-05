@@ -25,10 +25,14 @@ const config = {
 
 config.type = Phaser.AUTO;
 config.scene = [
-    Boot, Navigation,
-
     //maps
-    SystemMap, GalaxyMap
+    SystemMap, GalaxyMap,
+
+    // boot/preload
+    Boot,
+
+    // not active scene
+    Navigation,
 ];
 config.scale = {
     mode: Phaser.Scale.FIT,
@@ -42,9 +46,14 @@ config.scale = {
 
 const phaserInit = () => {
     const game = new Phaser.Game(config);
+    eventBridge.on(EVENTS.PHASER.SET_SCENE, ({ scene, params }) => {
+        game.scene.start(scene, params);
+        game.scene.bringToTop(scene);
 
-    eventBridge.on(EVENTS.PHASER.SET_SCENE, payload => {
-        game.scene.start(payload.scene);
+    });
+
+    eventBridge.on(EVENTS.PHASER.SWAP_SCENE, ({ scene }) => {
+        game.scene.bringToTop(scene);
     });
 };
 

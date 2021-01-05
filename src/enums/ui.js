@@ -4,7 +4,14 @@ export const SCENES = {
     GALAXY_MAP: 'GalaxyMap',
 };
 
+
 export const TABS = {
     NAVIGATION: 'navigation',
     MAPS: 'maps',
+};
+
+export const SCENES_MAP = {
+    [TABS.NAVIGATION]: SCENES.NAVIGATION,
+    // initial scene for Maps is System
+    [TABS.MAPS]: SCENES.SYSTEM_MAP
 };

@@ -11,7 +11,7 @@ const INITIAL_ROTATION = (Math.PI / 2);
 
 export default class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, "player", 0);
+        super(scene, x, y, "ship", 0);
         scene.add.existing(this);
         this.heartBeat = {
             last: null,
@@ -23,6 +23,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     startHeartBeat() {
         this.heartBeat.send = true;
         this.beat();
+    }
+
+    stopHeartBeat() {
+        this.heartBeat.send = false;
     }
 
     beat() {

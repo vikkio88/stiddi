@@ -1,12 +1,14 @@
 import Phaser from "phaser";
+import sceneHelper from "phaser/helpers/sceneHelper";
 
 class SystemMap extends Phaser.Scene {
     constructor() {
-        super({ key: "SystemMap" });
+        super({ key: "SystemMap", active: true });
     }
-
     create() {
-        this.add.text(400, 400, "SYSTEM MAP");
+        sceneHelper.setBackground(this);
+        const { x, y } = sceneHelper.getCenter(this);
+        this.add.text(x, y, "SYSTEM MAP").setOrigin(.5);
     }
 }
 

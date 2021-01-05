@@ -9,10 +9,13 @@ const TABS_MAPPING = {
 };
 
 function Main() {
-  const { ui: { tab } } = useStoreon("ui");
+  const { dispatch, ui: { tab } } = useStoreon("ui");
   return (
     <div className="flex f-col p-5 w-full">
-      <Navbar onChange={tab => console.log(`switching to ${tab}`)} />
+      <Navbar
+        current={tab}
+        onChange={tab => dispatch('ui:tabChange', { tab })}
+      />
       {TABS_MAPPING[tab]}
     </div>
   );
