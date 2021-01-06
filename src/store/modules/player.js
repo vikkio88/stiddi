@@ -4,9 +4,14 @@ const initialState = {
         current: 80
     },
     position: {
+        system: {
+            name: "",
+            x: 0,
+            y: 0
+        },
         galaxy: {
-            i: 0,
-            j: 0
+            x: 0,
+            y: 0
         }
     }
 
@@ -22,9 +27,8 @@ const player = store => {
     });
 
     store.on('player:burnFuel', ({ player }, { fuel }) => {
-        console.log(`burning from ${player.fuel.current}, burning ${fuel}`);
         const current = Math.max((player.fuel.current - fuel), 0);
-        console.log(`result burn ${current}`);
+        console.log(`burned ${current} units`);
         return {
             player: {
                 ...player,
