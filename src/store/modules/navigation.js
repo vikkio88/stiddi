@@ -6,7 +6,12 @@ const initialState = {
     direction: 0,
     speed: 0,
     position: { x: 0, y: 0 },
-    navigationLock: false
+    navigationLock: false,
+    settings: {
+        heading: 0,
+        throttle: 25,
+        burnTime: 1
+    }
 };
 
 const navigation = store => {
@@ -68,6 +73,18 @@ const navigation = store => {
             navigation: {
                 ...navigation,
                 navigationLock: false
+            }
+        };
+    });
+
+    store.on('navigation:storeSetting', ({ navigation }, settings) => {
+        return {
+            navigation: {
+                ...navigation,
+                settings: {
+                    ...navigation.settings,
+                    ...settings
+                }
             }
         };
     });

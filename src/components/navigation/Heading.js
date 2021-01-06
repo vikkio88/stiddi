@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BLUE, GREEN, DARK_GREEN, RED } from "enums/colours";
 import { Button } from "components/common";
 import { ANGLES, Geom } from "libs/math";
@@ -47,8 +46,11 @@ const rotationButtonStyle = {
 };
 
 const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
-const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock = false }) => {
-    const [heading, setHeading] = useState(0);
+const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock = false, settings = {} }) => {
+    const { heading = 0, set } = settings;
+    const setHeading = heading => set({ heading });
+
+
     const canRotate = !lock && heading !== normalised(currentHeading);
     return (
         <div className="NavigationTab-heading">

@@ -12,7 +12,10 @@ const Navigation = () => {
     };
 
     const { speed, heading, direction, navigationLock } = navigation;
-
+    const settings = {
+        ...navigation.settings,
+        set: settings => dispatch('navigation:storeSetting', settings)
+    };
     return (
         <div className="NavigationTab-wrapper">
             <div className="NavigationTab-top ui-section">
@@ -24,6 +27,7 @@ const Navigation = () => {
                         speed={speed}
                         lock={navigationLock}
                         onRotate={angle => dispatch('commit:rotate', { angle })}
+                        settings={settings}
                     />
                 </div>
                 <Engine
@@ -31,6 +35,7 @@ const Navigation = () => {
                     onFullStop={() => dispatch('commit:fullstop')}
                     lock={navigationLock}
                     speed={speed}
+                    settings={settings}
                 />
             </div>
             <div className="NavigationTab-bottom ui-section">

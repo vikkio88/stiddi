@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { Button, RoundIndicator, Slider } from "components/common";
 import Calculations from "./Calculations";
 
 import "./styles/Engine.css";
 
 
-const Engine = ({ onBurn, onFullStop, speed = 0, lock = false }) => {
-    const [burnTime, setBurnTime] = useState(1);
-    const [throttle, setThrottle] = useState(25);
+const Engine = ({ onBurn, onFullStop, speed = 0, lock = false, settings = {} }) => {
+    const { burnTime = 1, throttle = 25, set } = settings;
+    const setBurnTime = burnTime => set({burnTime});
+    const setThrottle = throttle => set({throttle});
 
     const canBurn = !lock && (burnTime > 0 && throttle > 0);
     const canFullStop = !lock && speed > 0 && speed < 3;
