@@ -36,7 +36,7 @@ const Speed = ({ speed = 0 }) => {
     };
 
     return (
-        <div className="NavigationTab-speed">
+        <div className="NavigationTab-speed f-1">
             <h2>Speed</h2>
             <h1>
                 <span className="speed">{unit.conversion(speed)}</span> {unit.label}
