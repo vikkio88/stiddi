@@ -38,7 +38,7 @@ const Engine = ({ onBurn, onFullStop, speed = 0, lock = false, settings = {} }) 
                     onChange={e => setThrottle(e.target.value)}
                     value={throttle}
                     min={0}
-                    step={25}
+                    step={5}
                     max={100}
                     className="w-full"
                 />

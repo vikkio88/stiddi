@@ -9,8 +9,8 @@ const initialState = {
     navigationLock: false,
     settings: {
         heading: 0,
-        throttle: 25,
-        burnTime: 1
+        throttle: 20,
+        burnTime: 3
     }
 };
 
