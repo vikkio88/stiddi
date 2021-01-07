@@ -46,18 +46,22 @@ const rotationButtonStyle = {
 };
 
 const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
+
 const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock = false, settings = {} }) => {
     const { heading = 0, set } = settings;
     const setHeading = heading => set({ heading });
+    direction = normalised(direction);
+    currentHeading = normalised(currentHeading);
 
 
-    const canRotate = !lock && heading !== normalised(currentHeading);
+    const canRotate = !lock && heading !== currentHeading;
+    const canMatchDirection = !lock && heading !== direction && speed > 0;
     return (
         <div className="NavigationTab-heading">
             <Compass heading={heading} currentHeading={currentHeading} direction={speed > 0 ? direction : null} />
             <div>
-                Heading: {normalised(currentHeading)} °
-                Direction: {normalised(direction)} °
+                Heading: {currentHeading} °
+                Direction: {direction} °
             </div>
             <div>
                 <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
@@ -66,13 +70,24 @@ const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock 
                 <Button style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
                 <Button style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_45) % ANGLES.DEG_360)}>+45</Button>
             </div>
-            <Button
-                style={{ width: '100%', ...rotationButtonStyle }}
-                onClick={() => onRotate(heading)}
-                disabled={!canRotate}
-            >
-                {`${!canRotate ? 'Current Heading' : 'Rotate to'} ${heading} °`}
-            </Button>
+            <div className="w-full flex">
+                <Button
+                    className="f-3"
+                    style={{ ...rotationButtonStyle }}
+                    onClick={() => onRotate(heading)}
+                    disabled={!canRotate}
+                >
+                    {`${!canRotate ? 'Current Heading' : 'Rotate to'} ${heading} °`}
+                </Button>
+                <Button
+                    className="f-1"
+                    style={{ ...rotationButtonStyle }}
+                    onClick={() => setHeading(direction)}
+                    disabled={!canMatchDirection}
+                >
+                    Match Direction
+                </Button>
+            </div>
         </div>
     );
 };
