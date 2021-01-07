@@ -9,7 +9,7 @@ const INITIAL_ANGLE = ANGLES.DEG_90;
 const INITIAL_ROTATION = (Math.PI / 2);
 
 
-export default class Player extends Phaser.GameObjects.Sprite {
+export default class Ship extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "ship", 0);
         scene.add.existing(this);
@@ -18,6 +18,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             send: false,
             timeout: HEARTBEAT_TIMEOUT
         };
+        this.depth = 100;
     }
 
     startHeartBeat() {
