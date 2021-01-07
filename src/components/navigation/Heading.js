@@ -57,18 +57,19 @@ const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock 
     const canRotate = !lock && heading !== currentHeading;
     const canMatchDirection = !lock && heading !== direction && speed > 0;
     return (
-        <div className="NavigationTab-heading">
+        <div className="NavigationTab-heading f-1">
             <Compass heading={heading} currentHeading={currentHeading} direction={speed > 0 ? direction : null} />
             <div>
                 Heading: {currentHeading} °
                 Direction: {direction} °
             </div>
-            <div>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % ANGLES.DEG_360)}>+</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_180) % ANGLES.DEG_360)}>-180</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
-                <Button style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_45) % ANGLES.DEG_360)}>+45</Button>
+            <div className="flex w-full">
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - ANGLES.DEG_45 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-45</Button>
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % ANGLES.DEG_360)}>+</Button>
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_180) % ANGLES.DEG_360)}>-180</Button>
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
+                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_45) % ANGLES.DEG_360)}>+45</Button>
             </div>
             <div className="w-full flex">
                 <Button

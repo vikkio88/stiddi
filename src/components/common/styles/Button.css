@@ -11,7 +11,7 @@ button.Button {
     background-color: #fff;
     border: none;
     box-shadow: 3px 3px #999;
-    width: 100px;
+    /*width: 100px;*/
     height: 50px;
 }
 
