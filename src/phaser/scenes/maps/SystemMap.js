@@ -51,15 +51,15 @@ class SystemMap extends Phaser.Scene {
         });
     }
 
-    addStar({ id, radius, colour }) {
+    addStar(params) {
         const star = new Star(this);
-        star.add({ id, radius, colour });
+        star.add(params);
         this.objects.stars.push(star);
     }
 
-    addPlanet({ id, radius, colour, offset }) {
+    addPlanet(params) {
         const planet = new Planet(this);
-        planet.add({ id, radius, colour, offset });
+        planet.add(params);
         this.objects.planets.push(planet);
     }
 
@@ -71,7 +71,7 @@ class SystemMap extends Phaser.Scene {
     create() {
         sceneHelper.setBackground(this);
         const { x, y } = sceneHelper.getCenter(this);
-        const text = this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
+        this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
         this.eventsSubscribe();
     }
 }

@@ -5,6 +5,26 @@ class SystemObject {
         this.scene = scene;
         this.objects = [];
         this.shape = null;
+
+        this.info = {};
+    }
+
+    getInfo() {
+        return this.info;
+    }
+
+    setType(type) {
+        this.info = {
+            ...this.info,
+            type
+        };
+    }
+    
+    setId(id) {
+        this.info = {
+            ...this.info,
+            id
+        };
     }
 
     add(params) {

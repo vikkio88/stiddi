@@ -1,4 +1,106 @@
+import { ANGLES } from "libs/math";
 import { randomizer } from "libs/random";
+const COLOURS = {
+    // Planets
+    PALE_BLUE: 0x8CB1DE,
+    GREY: 0x945B47,
+    WHITE: 0xFBFCFF,
+    YELLOW: 0xC5AB6E,
+    DARK: 0x343E47,
+    DARK_BLUE: 0x6081FF,
+    REDISH: 0xE27B58,
+
+    // Stars
+    RED: 0xff0000,
+    PALE_ORANGE: 0xFFCC33,
+    DARK_ORANGE: 0xFC9601,
+    WHITE_BLUE: 0xEEFEFF,
+};
+
+const PLANET_TYPES = {
+    METAL: 'metal',
+    ROCKY: 'rocky',
+    HABITABLE: 'habitable',
+    ICY: 'icy',
+    GAS_GIANT: 'gas_giant',
+};
+
+const PLANET = {
+    TYPES: {
+        [PLANET_TYPES.METAL]: {
+            name: "metal",
+            colours: [COLOURS.DARK, COLOURS.GREY],
+            sizes: [4, 5],
+        },
+        [PLANET_TYPES.ROCKY]: {
+            name: "rocky",
+            colours: [COLOURS.DARK, COLOURS.GREY, COLOURS.REDISH],
+            sizes: [4, 9],
+        },
+        [PLANET_TYPES.HABITABLE]: {
+            name: "habitable",
+            colours: [COLOURS.PALE_BLUE],
+            sizes: [4, 10],
+        },
+        [PLANET_TYPES.ICY]: {
+            name: "icy",
+            colours: [COLOURS.WHITE],
+            sizes: [5, 10],
+        },
+        [PLANET_TYPES.GAS_GIANT]: {
+            name: "gas giant",
+            colours: [COLOURS.YELLOW, COLOURS.DARK_BLUE],
+            sizes: [7, 20],
+        },
+    },
+};
+
+const PLANET_CONFIG = {
+    RANGE: {
+        0: [
+            [80, PLANET_TYPES.METAL],
+            PLANET_TYPES.ROCKY
+        ],
+        1: [
+            [60, PLANET_TYPES.ROCKY],
+            PLANET_TYPES.METAL
+        ],
+        2: [
+            [90, PLANET_TYPES.ROCKY],
+            PLANET_TYPES.HABITABLE
+        ],
+        3: [
+            [70, PLANET_TYPES.ROCKY],
+            PLANET_TYPES.ICY
+        ],
+        4: [
+            [70, PLANET_TYPES.ICY],
+            PLANET_TYPES.GAS_GIANT
+        ],
+        5: [
+            [90, PLANET_TYPES.GAS_GIANT],
+            PLANET_TYPES.ICY
+        ],
+        6: [
+            [30, PLANET_TYPES.GAS_GIANT],
+            PLANET_TYPES.METAL
+        ],
+        7: [
+            [50, PLANET_TYPES.ICY],
+            PLANET_TYPES.METAL
+        ],
+        default: [
+            [50, PLANET_TYPES.METAL],
+            PLANET_TYPES.ICY
+        ]
+    }
+};
+
+const getPlanetTypeByIndex = index => {
+    const rangeConfig = PLANET_CONFIG.RANGE[index] || PLANET_CONFIG.RANGE.default;
+    const [[percentage, mainType], fallback] = rangeConfig;
+    return randomizer.chance(percentage) ? mainType : fallback;
+};
 
 export const systemGenerator = {
     getRadius(min, max) {
@@ -15,7 +117,12 @@ export const systemGenerator = {
         return {
             id: `star${id}`,
             name: `Start Name ${id}`,
-            colour: 0xff0000,
+            colour: randomizer.pickOne([
+                COLOURS.RED,
+                COLOURS.PALE_ORANGE,
+                COLOURS.DARK_ORANGE,
+                COLOURS.WHITE_BLUE,
+            ]),
             radius: this.getRadius(10, 40),
         };
     },
@@ -31,12 +138,18 @@ export const systemGenerator = {
 
         return generatedPlanets;
     },
+
     getPlanet({ id, offset }) {
+        const typeName = getPlanetTypeByIndex(id);
+
+        const type = PLANET.TYPES[typeName];
         return {
             id: `planet${id}`,
             name: `Planet Name ${id}`,
-            colour: 0x0000ff,
-            radius: this.getRadius(5, 20),
+            colour: randomizer.pickOne(Object.values(type.colours)),
+            radius: this.getRadius(type.sizes[0], type.sizes[1]),
+            type: { name: typeName, description: type.name },
+            angle: randomizer.int(0, ANGLES.DEG_360),
             offset,
             moons: []
         };
