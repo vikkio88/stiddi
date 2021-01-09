@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { randomizer } from "libs/random";
+import { Geom } from "libs/math";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
 
@@ -7,7 +9,8 @@ class SystemMap extends Phaser.Scene {
         super({ key: "SystemMap", active: true });
         this.objects = {
             stars: [],
-            planets: []
+            planets: [],
+            orbits: []
         };
     }
 
@@ -39,35 +42,61 @@ class SystemMap extends Phaser.Scene {
         });
     }
 
-    addStar({ radius, colour }) {
+    addStar({ id, radius, colour }) {
         const { x, y } = this.getCenter();
         const starShape = new Phaser.Geom.Circle(x, y, radius);
         const star = this.add.graphics();
         star.fillStyle(colour, 2);
         star.fillCircleShape(starShape);
 
+        star.setInteractive(starShape, Phaser.Geom.Circle.Contains);
+
+        star.on("pointerdown", () => {
+            console.log(`clicked on star ${id}`);
+            this.cameras.main.centerOn(starShape.x, starShape.y);
+        });
+
         this.objects.stars.push(star);
     }
 
-    addPlanet({ radius, colour, offset }) {
-        const { x, y } = this.getCenter();
-        const planetShape = new Phaser.Geom.Circle(x + offset, y, radius);
+    addPlanet({ id, radius, colour, offset }) {
+        const { x: cx, y: cy } = this.getCenter();
+
+
+        const orbitShape = new Phaser.Geom.Circle(cx, cy, offset);
+        const orbit = this.add.graphics();
+        orbit.lineStyle(1, 0xffffff, .5);
+        orbit.strokeCircleShape(orbitShape);
+
+        const angle = randomizer.int(0, 360);
+        const { x, y } = Geom.pointOnCircumference({ cx, cy }, offset, angle);
+        const planetShape = new Phaser.Geom.Circle(x, y, radius);
         const planet = this.add.graphics();
         planet.fillStyle(colour, 2);
         planet.fillCircleShape(planetShape);
 
+        planet.setInteractive(planetShape, Phaser.Geom.Circle.Contains);
+        planet.on("pointerdown", () => {
+            console.log(`clicked planet ${id}`);
+            this.cameras.main.centerOn(planetShape.x, planetShape.y);
+        });
+
         this.objects.planets.push(planet);
+        this.objects.orbits.push(orbit);
     }
 
     clear() {
         this.objects.stars.forEach(s => s.destroy());
         this.objects.planets.forEach(p => p.destroy());
+        this.objects.orbits.forEach(o => o.destroy());
     }
 
     create() {
         sceneHelper.setBackground(this);
         const { x, y } = sceneHelper.getCenter(this);
-        this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
+        const text = this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
+        text.setInteractive();
+        text.on("pointerdown", () => console.log("clicked text"));
         this.eventsSubscribe();
     }
 }

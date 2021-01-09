@@ -8,7 +8,7 @@ export const systemGenerator = {
         return {
             name: "",
             stars: [...Array(randomizer.int(1, maxStars)).keys()].map(id => this.getStar({ id })),
-            planets: [...Array(randomizer.int(1, planets)).keys()].map(id => this.getPlanet({ id }))
+            planets: this.getPlanets({ planets })
         };
     },
     getStar({ id }) {
@@ -19,13 +19,25 @@ export const systemGenerator = {
             radius: this.getRadius(10, 40),
         };
     },
-    getPlanet({ id }) {
+
+    getPlanets({ planets }) {
+        const generatedPlanets = [];
+        let previousOffset = 0;
+        for (let i = 0; i < planets; i++) {
+            const offset = previousOffset + randomizer.int(80, 450);
+            previousOffset = offset;
+            generatedPlanets.push(this.getPlanet({ id: i, offset }));
+        }
+
+        return generatedPlanets;
+    },
+    getPlanet({ id, offset }) {
         return {
             id: `planet${id}`,
             name: `Planet Name ${id}`,
             colour: 0x0000ff,
             radius: this.getRadius(5, 20),
-            offset: id + 100 + ((id + 1) * randomizer.int(20, 60)),
+            offset,
             moons: []
         };
     }
