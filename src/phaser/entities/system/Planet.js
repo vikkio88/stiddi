@@ -3,10 +3,10 @@ import { Geom } from "libs/math";
 import SystemObject from "./SystemObject";
 
 class Planet extends SystemObject {
-    add({ offset, type, radius, colour, id, angle = 0 }) {
-        this.info.body = 'planet';
-        this.setId(id);
-        this.setType(type);
+    add({ offset, name, type, radius, colour, id, index, angle = 0 }) {
+        // maybe body can be a enum
+        this.setInfo({ id, name, type, body: 'planet', index, offset, radius });
+
 
         const { cx, cy } = this.getSceneCenter();
 

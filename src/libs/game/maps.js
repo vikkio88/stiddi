@@ -1,5 +1,16 @@
+import { ulid } from 'ulid';
 import { ANGLES } from "libs/math";
 import { randomizer } from "libs/random";
+
+const letterFromIndex = index => String.fromCharCode((index + 1) + 64);
+const generateSystemName = () => {
+    const a = letterFromIndex(randomizer.int(1, 26));
+    const b = letterFromIndex(randomizer.int(1, 26));
+    const c = letterFromIndex(randomizer.int(1, 26));
+    const d = letterFromIndex(randomizer.int(1, 26));
+    return `${a}${b}${c}-${randomizer.int(1, 800)}${d}`;
+};
+
 const COLOURS = {
     // Planets
     PALE_BLUE: 0x8CB1DE,
@@ -106,17 +117,21 @@ export const systemGenerator = {
     getRadius(min, max) {
         return randomizer.int(min, max);
     },
-    generate({ seed = 1, maxStars = 1, name = "Sol", planets = 8 } = {}) {
+    generate({ seed = 1, maxStars = 1, name = null, planetsNumber = 8 } = {}) {
+        name = name ? name : generateSystemName();
+        const stars = [...Array(randomizer.int(1, maxStars)).keys()].map(index => this.getStar({ index, name }));
+        const planets = this.getPlanets({ planetsNumber, stars });
         return {
-            name: "",
-            stars: [...Array(randomizer.int(1, maxStars)).keys()].map(id => this.getStar({ id })),
-            planets: this.getPlanets({ planets })
+            name,
+            stars,
+            planets
         };
     },
-    getStar({ id }) {
+    getStar({ index, name }) {
         return {
-            id: `star${id}`,
-            name: `Start Name ${id}`,
+            id: `s_${ulid()}`,
+            index: index,
+            name: `${name} ${letterFromIndex(index)}`,
             colour: randomizer.pickOne([
                 COLOURS.RED,
                 COLOURS.PALE_ORANGE,
@@ -127,25 +142,28 @@ export const systemGenerator = {
         };
     },
 
-    getPlanets({ planets }) {
+    getPlanets({ planetsNumber, stars }) {
         const generatedPlanets = [];
         let previousOffset = 0;
-        for (let i = 0; i < planets; i++) {
+        const star = stars[0];
+        for (let i = 0; i < planetsNumber; i++) {
             const offset = previousOffset + randomizer.int(80, 450);
             previousOffset = offset;
-            generatedPlanets.push(this.getPlanet({ id: i, offset }));
+            generatedPlanets.push(this.getPlanet({ index: i, offset, star }));
         }
 
         return generatedPlanets;
     },
 
-    getPlanet({ id, offset }) {
-        const typeName = getPlanetTypeByIndex(id);
+    getPlanet({ index, offset, star }) {
+        const typeName = getPlanetTypeByIndex(index);
 
         const type = PLANET.TYPES[typeName];
         return {
-            id: `planet${id}`,
-            name: `Planet Name ${id}`,
+            id: `p_${ulid()}`,
+            index: index,
+            // remember the naming when you make multiple stars
+            name: `${star.name} ${letterFromIndex(star.index + 1 + index).toLowerCase()}`,
             colour: randomizer.pickOne(Object.values(type.colours)),
             radius: this.getRadius(type.sizes[0], type.sizes[1]),
             type: { name: typeName, description: type.name },

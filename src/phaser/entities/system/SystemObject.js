@@ -9,17 +9,16 @@ class SystemObject {
         this.info = {};
     }
 
+    setInfo(info) {
+        this.info = {
+            ...this.info,
+            ...info
+        };
+    }
     getInfo() {
         return this.info;
     }
 
-    setType(type) {
-        this.info = {
-            ...this.info,
-            type
-        };
-    }
-    
     setId(id) {
         this.info = {
             ...this.info,
