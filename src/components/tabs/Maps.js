@@ -3,7 +3,7 @@ import { useStoreon } from "storeon/react";
 import { SystemMap } from "components/maps";
 
 const Maps = () => {
-    const { dispatch } = useStoreon();
+    const { dispatch, maps: { system } } = useStoreon('maps');
     useEffect(() => {
         dispatch('maps:drawSystem');
     });
@@ -13,7 +13,7 @@ const Maps = () => {
                 Maps
             </h1>
 
-            <SystemMap dispatch={dispatch} />
+            <SystemMap dispatch={dispatch} system={system} />
         </>
     );
 };

@@ -1,16 +1,31 @@
 import eBridge, { EVENTS } from 'libs/eventBridge';
 import { systemGenerator } from 'libs/game/maps';
 
-const maps = store => {
-    store.on('maps:drawSystem', ({ player }) => {
-        //const { system } = player;
-        const system = systemGenerator.generate();
+const initialState = {
+    system: systemGenerator.generate()
+};
 
+const maps = store => {
+    store.on('@init', () => {
+        return {
+            maps: {
+                ...initialState
+            }
+        };
+    });
+
+    store.on('maps:drawSystem', ({ player, maps }) => {
+        //const { system } = player;
+        const { system } = maps;
         eBridge.emit(EVENTS.GAME.MAPS.DRAW_SYSTEM, { system });
     });
 
-    store.on('maps:zoomSystem', (_, { out = true } = {}) => {
-        eBridge.emit(EVENTS.GAME.MAPS.ZOOM_SYSTEM, { out });
+    store.on('maps:zoomSystem', (_, { out = true, reset = false } = {}) => {
+        eBridge.emit(EVENTS.GAME.MAPS.ZOOM_SYSTEM, { out, reset });
+    });
+
+    store.on('maps:focusSystem', (_, { object = 'stars', index = 0 } = {}) => {
+        eBridge.emit(EVENTS.GAME.MAPS.FOCUS_SYSTEM, { object, index });
     });
 
     store.on('maps:clearSystem', () => {

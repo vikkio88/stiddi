@@ -11,6 +11,7 @@ export const EVENTS = {
         MAPS: {
             DRAW_SYSTEM: 'game:maps:draw_system',
             ZOOM_SYSTEM: 'game:maps:zoom_system',
+            FOCUS_SYSTEM: 'game:maps:focus_system',
             CLEAR_SYSTEM: 'game:maps:clear_system',
             UPDATE_SELF: 'game:maps:update_self'
         }
