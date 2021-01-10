@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
 import { Planet, Star } from "phaser/entities/system";
+import Ship from "phaser/entities/system/Ship";
 
 class SystemMap extends Phaser.Scene {
     constructor() {
@@ -9,6 +10,7 @@ class SystemMap extends Phaser.Scene {
         this.objects = {
             stars: [],
             planets: [],
+            player: null
         };
     }
 
@@ -22,6 +24,7 @@ class SystemMap extends Phaser.Scene {
 
             payload.system.stars.forEach(s => this.addStar(s));
             payload.system.planets.forEach(p => this.addPlanet(p));
+            this.addPlayer(payload.player);
         });
 
 
@@ -31,6 +34,12 @@ class SystemMap extends Phaser.Scene {
                 this.cameras.main.setZoom(1);
                 return;
             }
+
+            if (payload.level) {
+                this.cameras.main.zoomTo(payload.level, 1500);
+                return;
+            }
+
             this.cameras.main.setZoom(this.cameras.main.zoom + ((payload.out ? -1 : 1) / 10));
         });
 
@@ -51,6 +60,12 @@ class SystemMap extends Phaser.Scene {
         });
     }
 
+    addPlayer(params) {
+        const { x, y } = params;
+        const { x: cx, y: cy } = this.getCenter();
+        this.objects.player = new Ship(this, cx + x, cy + y);
+    }
+
     addStar(params) {
         const star = new Star(this);
         star.add(params);
@@ -66,6 +81,9 @@ class SystemMap extends Phaser.Scene {
     clear() {
         this.objects.stars.forEach(s => s.destroy());
         this.objects.planets.forEach(p => p.destroy());
+        if (this.objects.player) {
+            this.objects.player.destroy();
+        }
     }
 
     create() {

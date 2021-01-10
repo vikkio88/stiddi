@@ -12,25 +12,50 @@ const SystemMap = ({ dispatch, system }) => {
                 SystemMap
             </h2>
             <h3>Zoom</h3>
-            <div className="w-full flex f-row f-ac f-jc">
-                <Button
-                    className="f-1"
-                    onClick={() => dispatch('maps:zoomSystem')}
-                >
-                    -
+            <div className="w-full flex f-col f-ac f-jc">
+                <div className="w-full flex f-row f-ac f-jc">
+
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem')}
+                    >
+                        -
                 </Button>
-                <Button
-                    className="f-1"
-                    onClick={() => dispatch('maps:zoomSystem', { out: false })}
-                >
-                    +
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { out: false })}
+                    >
+                        +
                 </Button>
-                <Button
-                    className="f-1"
-                    onClick={() => dispatch('maps:zoomSystem', { reset: true })}
-                >
-                    Reset
+                </div>
+                <div className="w-full flex f-row f-ac f-jc">
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { level: 3 })}
+                    >
+                        Level 3
                 </Button>
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { level: .9 })}
+                    >
+                        Level 2
+                </Button>
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { level: .3 })}
+                    >
+                        Level 1
+                </Button>
+                </div>
+                <div className="w-full flex f-row f-ac f-jc">
+                    <Button
+                        className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { reset: true })}
+                    >
+                        Reset
+                </Button>
+                </div>
             </div>
 
             <h3 className="mt-10">Objects</h3>

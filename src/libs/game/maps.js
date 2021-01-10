@@ -147,7 +147,7 @@ export const systemGenerator = {
         let previousOffset = 0;
         const star = stars[0];
         for (let i = 0; i < planetsNumber; i++) {
-            const offset = previousOffset + randomizer.int(80, 450);
+            const offset = (previousOffset + randomizer.int(80, 450)) + (randomizer.chance(i * 10) ? randomizer.int(100, 300) : 0);
             previousOffset = offset;
             generatedPlanets.push(this.getPlanet({ index: i, offset, star }));
         }

@@ -5,8 +5,7 @@ const initialState = {
     },
     position: {
         system: {
-            name: "",
-            x: 0,
+            x: 50,
             y: 0
         },
         galaxy: {
