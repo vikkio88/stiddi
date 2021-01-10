@@ -40,7 +40,7 @@ class SystemMap extends Phaser.Scene {
                 return;
             }
 
-            this.cameras.main.setZoom(this.cameras.main.zoom + ((payload.out ? -1 : 1) / 10));
+            this.cameras.main.zoomTo(this.cameras.main.zoom + ((payload.out ? -1 : 1) / 10), 500);
         });
 
 
@@ -53,10 +53,16 @@ class SystemMap extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.MAPS.FOCUS_SYSTEM, payload => {
             console.log('[phaser] FOCUS SYSTEM', { payload });
+
+            if (payload.object === 'player') {
+                const { x, y } = this.objects.player.getPosition();
+                this.cameras.main.centerOn(x, y);
+                return;
+            }
+
             const focusing = this.objects[payload.object][payload.index];
             const { x, y } = focusing.getPosition();
             this.cameras.main.centerOn(x, y);
-
         });
     }
 
@@ -91,6 +97,7 @@ class SystemMap extends Phaser.Scene {
         const { x, y } = sceneHelper.getCenter(this);
         this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
         this.eventsSubscribe();
+        this.input.on('pointerdown', ({ worldX: x, worldY: y }) => console.log(`clicked on map ${x}, ${y}`));
     }
 }
 

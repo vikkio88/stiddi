@@ -14,7 +14,8 @@ class Star extends SystemObject {
 
         star.setInteractive(starShape, Phaser.Geom.Circle.Contains);
 
-        star.on("pointerdown", () => {
+        star.on("pointerdown", (pointer, x, y, event) => {
+            event.stopPropagation();
             console.log(`clicked on star ${name}`, this.getInfo());
             this.scene.cameras.main.centerOn(starShape.x, starShape.y);
         });

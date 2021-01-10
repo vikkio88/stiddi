@@ -16,7 +16,10 @@ class SystemObject {
         };
     }
     getInfo() {
-        return this.info;
+        return {
+            ...this.info,
+            position: this.getPosition()
+        };
     }
 
     setId(id) {

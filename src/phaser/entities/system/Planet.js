@@ -12,7 +12,7 @@ class Planet extends SystemObject {
 
         const orbitShape = new Phaser.Geom.Circle(cx, cy, offset);
         const orbit = this.scene.add.graphics();
-        orbit.lineStyle(1, 0xffffff, .5);
+        orbit.lineStyle(1, 0xffffff, .3);
         orbit.strokeCircleShape(orbitShape);
 
         const { x, y } = Geom.pointOnCircumference({ cx, cy }, offset, angle);
@@ -22,7 +22,8 @@ class Planet extends SystemObject {
         planet.fillCircleShape(planetShape);
 
         planet.setInteractive(planetShape, Phaser.Geom.Circle.Contains);
-        planet.on("pointerdown", () => {
+        planet.on("pointerdown", (pointer, x, y, event) => {
+            event.stopPropagation();
             console.log(`clicked planet ${id}`, this.getInfo());
             this.scene.cameras.main.centerOn(planetShape.x, planetShape.y);
         });

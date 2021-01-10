@@ -33,19 +33,19 @@ const SystemMap = ({ dispatch, system }) => {
                         className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: 3 })}
                     >
-                        Level 3
+                        x3
                 </Button>
                     <Button
                         className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: .9 })}
                     >
-                        Level 2
+                        x2
                 </Button>
                     <Button
                         className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: .3 })}
                     >
-                        Level 1
+                        x1
                 </Button>
                 </div>
                 <div className="w-full flex f-row f-ac f-jc">
@@ -60,6 +60,12 @@ const SystemMap = ({ dispatch, system }) => {
 
             <h3 className="mt-10">Objects</h3>
             <div className="w-full flex f-col f-ac f-jc">
+                <Button
+                    className="f-1"
+                    onClick={() => dispatch('maps:focusSystem', { object: 'player' })}
+                >
+                    {`SHIP`}
+                </Button>
                 {system.stars.map((s, i) => (
                     <Button
                         key={`star_${i}`} className="f-1"
