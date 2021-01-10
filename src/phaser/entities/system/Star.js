@@ -17,7 +17,8 @@ class Star extends SystemObject {
         star.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
             console.log(`clicked on star ${name}`, this.getInfo());
-            this.scene.cameras.main.centerOn(starShape.x, starShape.y);
+            // move the timeout to a function given difference
+            this.scene.cameras.main.pan(starShape.x, starShape.y, 1500);
         });
 
         this.shape = starShape;

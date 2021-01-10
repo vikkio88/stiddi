@@ -31,22 +31,28 @@ const SystemMap = ({ dispatch, system }) => {
                 <div className="w-full flex f-row f-ac f-jc">
                     <Button
                         className="f-1"
+                        onClick={() => dispatch('maps:zoomSystem', { level: 4 })}
+                    >
+                        x4
+                    </Button>
+                    <Button
+                        className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: 3 })}
                     >
                         x3
-                </Button>
+                    </Button>
                     <Button
                         className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: .9 })}
                     >
                         x2
-                </Button>
+                    </Button>
                     <Button
                         className="f-1"
                         onClick={() => dispatch('maps:zoomSystem', { level: .3 })}
                     >
                         x1
-                </Button>
+                    </Button>
                 </div>
                 <div className="w-full flex f-row f-ac f-jc">
                     <Button
@@ -54,7 +60,7 @@ const SystemMap = ({ dispatch, system }) => {
                         onClick={() => dispatch('maps:zoomSystem', { reset: true })}
                     >
                         Reset
-                </Button>
+                    </Button>
                 </div>
             </div>
 

@@ -4,6 +4,8 @@ import sceneHelper from "phaser/helpers/sceneHelper";
 import { Planet, Star } from "phaser/entities/system";
 import Ship from "phaser/entities/system/Ship";
 
+const CAMERA_ANIMATION_DURATION = 1500;
+
 class SystemMap extends Phaser.Scene {
     constructor() {
         super({ key: "SystemMap", active: true });
@@ -31,12 +33,12 @@ class SystemMap extends Phaser.Scene {
         eventBridge.on(EVENTS.GAME.MAPS.ZOOM_SYSTEM, payload => {
             console.log('[phaser] ZOOM', { payload, zoom: this.cameras.main.zoom });
             if (payload.reset) {
-                this.cameras.main.setZoom(1);
+                this.cameras.main.zoomTo(1, CAMERA_ANIMATION_DURATION);
                 return;
             }
 
             if (payload.level) {
-                this.cameras.main.zoomTo(payload.level, 1500);
+                this.cameras.main.zoomTo(payload.level, CAMERA_ANIMATION_DURATION);
                 return;
             }
 
@@ -56,13 +58,13 @@ class SystemMap extends Phaser.Scene {
 
             if (payload.object === 'player') {
                 const { x, y } = this.objects.player.getPosition();
-                this.cameras.main.centerOn(x, y);
+                this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
                 return;
             }
 
             const focusing = this.objects[payload.object][payload.index];
             const { x, y } = focusing.getPosition();
-            this.cameras.main.centerOn(x, y);
+            this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
         });
     }
 

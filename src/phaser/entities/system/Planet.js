@@ -25,7 +25,8 @@ class Planet extends SystemObject {
         planet.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
             console.log(`clicked planet ${id}`, this.getInfo());
-            this.scene.cameras.main.centerOn(planetShape.x, planetShape.y);
+            // move the timeout to a function given difference
+            this.scene.cameras.main.pan(planetShape.x, planetShape.y, 1500);
         });
 
         this.shape = planetShape;
