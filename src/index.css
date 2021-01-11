@@ -136,6 +136,18 @@ h3.valueHeader { font-size: 1.4em;}
   display: flex;
 }
 
+.as-c {
+  align-self: center;
+}
+
+.as-e {
+  align-self: flex-end;
+}
+
+.as-s {
+  align-self: flex-start;
+}
+
 .f-1 {
   flex:1;
 }
@@ -186,6 +198,10 @@ h3.valueHeader { font-size: 1.4em;}
 
 .f-jsb {
   justify-content: space-between;
+}
+
+.f-fw {
+  flex-flow: wrap;
 }
 
 

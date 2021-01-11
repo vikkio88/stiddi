@@ -1,0 +1,9 @@
+div.Bodies-Row {
+    border: solid 2px white;
+    border-radius: 5px;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}

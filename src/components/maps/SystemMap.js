@@ -8,9 +8,8 @@ const SystemMap = ({ dispatch, system }) => {
     });
     return (
         <>
-            <h2>
-                SystemMap
-            </h2>
+            <h2>System Map</h2>
+            <h1>{`${system.name}`}</h1>
             <Zoom onZoom={config => dispatch('maps:zoomSystem', config)} />
             <Bodies system={system} onFocus={config => dispatch('maps:focusSystem', config)} />
         </>
