@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Zoom } from "./system";
 import { Button } from "components/common";
 
 const SystemMap = ({ dispatch, system }) => {
@@ -11,59 +12,7 @@ const SystemMap = ({ dispatch, system }) => {
             <h2>
                 SystemMap
             </h2>
-            <h3>Zoom</h3>
-            <div className="w-full flex f-col f-ac f-jc">
-                <div className="w-full flex f-row f-ac f-jc">
-
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem')}
-                    >
-                        -
-                </Button>
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { out: false })}
-                    >
-                        +
-                </Button>
-                </div>
-                <div className="w-full flex f-row f-ac f-jc">
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { level: 4 })}
-                    >
-                        x4
-                    </Button>
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { level: 3 })}
-                    >
-                        x3
-                    </Button>
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { level: .9 })}
-                    >
-                        x2
-                    </Button>
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { level: .3 })}
-                    >
-                        x1
-                    </Button>
-                </div>
-                <div className="w-full flex f-row f-ac f-jc">
-                    <Button
-                        className="f-1"
-                        onClick={() => dispatch('maps:zoomSystem', { reset: true })}
-                    >
-                        Reset
-                    </Button>
-                </div>
-            </div>
-
+            <Zoom onZoom={config => dispatch('maps:zoomSystem', config)} />
             <h3 className="mt-10">Objects</h3>
             <div className="w-full flex f-col f-ac f-jc">
                 <Button

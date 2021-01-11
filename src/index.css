@@ -84,6 +84,10 @@ h3.valueHeader { font-size: 1.4em;}
   padding: 5px;
 }
 
+.p-10 {
+  padding: 10px;
+}
+
 .pr-5 {
   padding-right: 5px;
 }
@@ -98,6 +102,10 @@ h3.valueHeader { font-size: 1.4em;}
 
 .pb-5 {
   padding-bottom: 5px;
+}
+
+.m-5 {
+  margin: 5px;
 }
 
 .mr-5 {
