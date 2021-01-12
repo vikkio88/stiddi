@@ -1,3 +1,16 @@
+div.Bodies-List {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    flex: 0 1 auto;
+
+    padding-right: 15px;
+}
+div.Bodies-List:hover {
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+
 div.Bodies-Row {
     border: solid 2px white;
     border-radius: 5px;

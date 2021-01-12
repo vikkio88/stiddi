@@ -17,7 +17,7 @@ div#ui {
   display: flex;
   border-radius: 5px;
   min-width: 49vw;
-  min-height: 95vh;
+  height: 95vh;
   background: #1B1B1B;
 
   color: white;
@@ -31,6 +31,27 @@ div#porthole {
   border-radius: 50%;
   overflow: hidden;
 }
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: white;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  z-index: 10;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: 5px solid white;
+}
+/* EO Scrollbar */
 
 button {
   font-family: 'Orbitron', sans-serif;

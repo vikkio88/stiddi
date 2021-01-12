@@ -3,7 +3,8 @@ import { systemGenerator } from 'libs/game/maps';
 import { randomizer } from 'libs/random';
 
 const initialState = {
-    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
+    // system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
+    system: systemGenerator.generate({ planetsNumber: randomizer.int(10, 12) })
 };
 
 const maps = store => {
