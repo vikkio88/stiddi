@@ -1,14 +1,26 @@
-export const randomizer = {
-    pickOne(array) {
-        return array[randomizer.int(0, array.length - 1)];
-    },
-    int(low, high) {
-        return Math.round(Math.random() * (high - low) + low);
-    },
-    chance(percentage) {
-        return randomizer.int(0, 99) < percentage;
-    },
-    dice(faces = 6) {
-        return randomizer.int(1, 6);
+import seedrandom from "seedrandom";
+
+export const getSeededRandomizer = seed => {
+    let random = Math.random;
+    if (seed) {
+        random = seedrandom(seed);
     }
+
+    return getRandomizer(random);
 };
+
+export const getRandomizer = (random = Math.random) => {
+    return {
+        pickOne(array) {
+            return array[this.int(0, array.length - 1)];
+        },
+        int(low, high) {
+            return Math.round(random() * (high - low) + low);
+        },
+        chance(percentage) {
+            return this.int(0, 99) < percentage;
+        }
+    };
+};
+
+export const randomizer = getRandomizer();

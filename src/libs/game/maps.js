@@ -1,15 +1,7 @@
-import { ulid } from 'ulid';
 import { ANGLES } from "libs/math";
-import { randomizer } from "libs/random";
+import { getSeededRandomizer } from "libs/random";
 
 const letterFromIndex = index => String.fromCharCode((index + 1) + 64);
-const generateSystemName = () => {
-    const a = letterFromIndex(randomizer.int(1, 26));
-    const b = letterFromIndex(randomizer.int(1, 26));
-    const c = letterFromIndex(randomizer.int(1, 26));
-    const d = letterFromIndex(randomizer.int(1, 26));
-    return `${a}${b}${c}-${randomizer.int(1, 800)}${d}`;
-};
 
 const COLOURS = {
     // Planets
@@ -106,33 +98,43 @@ const PLANET_CONFIG = {
         ]
     }
 };
+export class SystemGenerator {
+    constructor(seed) {
+        this.randomizer = getSeededRandomizer(seed);
+    }
 
-const getPlanetTypeByIndex = index => {
-    const rangeConfig = PLANET_CONFIG.RANGE[index] || PLANET_CONFIG.RANGE.default;
-    const [[percentage, mainType], fallback] = rangeConfig;
-    return randomizer.chance(percentage) ? mainType : fallback;
-};
+    generateSystemName() {
+        const a = letterFromIndex(this.randomizer.int(1, 26));
+        const b = letterFromIndex(this.randomizer.int(1, 26));
+        const c = letterFromIndex(this.randomizer.int(1, 26));
+        const d = letterFromIndex(this.randomizer.int(1, 26));
+        return `${a}${b}${c}-${this.randomizer.int(1, 800)}${d}`;
+    };
 
-export const systemGenerator = {
+
+
     getRadius(min, max) {
-        return randomizer.int(min, max);
-    },
-    generate({ seed = 1, maxStars = 1, name = null, planetsNumber = 8 } = {}) {
-        name = name ? name : generateSystemName();
-        const stars = [...Array(randomizer.int(1, maxStars)).keys()].map(index => this.getStar({ index, name }));
+        return this.randomizer.int(min, max);
+    }
+
+    generate({ maxStars = 1, name = null, planetsNumber = 8 } = {}) {
+        name = name ? name : this.generateSystemName();
+        const stars = [...Array(this.randomizer.int(1, maxStars)).keys()].map(index => this.getStar({ index, name }));
         const planets = this.getPlanets({ planetsNumber, stars });
         return {
             name,
             stars,
             planets
         };
-    },
+    }
+
     getStar({ index, name }) {
+        const starName = `${name} ${letterFromIndex(index)}`;
         return {
-            id: `s_${ulid()}`,
+            id: `s_${starName.replace(/\s/g, '')}_${index}`,
             index: index,
-            name: `${name} ${letterFromIndex(index)}`,
-            colour: randomizer.pickOne([
+            name: starName,
+            colour: this.randomizer.pickOne([
                 COLOURS.RED,
                 COLOURS.PALE_ORANGE,
                 COLOURS.DARK_ORANGE,
@@ -140,36 +142,49 @@ export const systemGenerator = {
             ]),
             radius: this.getRadius(10, 40),
         };
-    },
+    }
 
     getPlanets({ planetsNumber, stars }) {
         const generatedPlanets = [];
         let previousOffset = 0;
         const star = stars[0];
         for (let i = 0; i < planetsNumber; i++) {
-            const offset = (previousOffset + randomizer.int(80, 450)) + (randomizer.chance(i * 10) ? randomizer.int(100, 300) : 0);
+            const offset = (previousOffset + this.randomizer.int(80, 450))
+                + (
+                    this.randomizer.chance(i * 10) ?
+                        this.randomizer.int(100, 300) : 0
+                );
             previousOffset = offset;
             generatedPlanets.push(this.getPlanet({ index: i, offset, star }));
         }
 
         return generatedPlanets;
-    },
+    }
 
     getPlanet({ index, offset, star }) {
-        const typeName = getPlanetTypeByIndex(index);
-
+        const typeName = this.getPlanetTypeByIndex(index);
         const type = PLANET.TYPES[typeName];
+        const planetName = `${star.name} ${letterFromIndex(star.index + 1 + index).toLowerCase()}`;
         return {
-            id: `p_${ulid()}`,
+            // ulid needs to be within seeded value
+            id: `p_${planetName.replace(/\s/g, '')}_${index}`,
             index: index,
             // remember the naming when you make multiple stars
-            name: `${star.name} ${letterFromIndex(star.index + 1 + index).toLowerCase()}`,
-            colour: randomizer.pickOne(Object.values(type.colours)),
+            name: planetName,
+            colour: this.randomizer.pickOne(Object.values(type.colours)),
             radius: this.getRadius(type.sizes[0], type.sizes[1]),
             type: { name: typeName, description: type.name },
-            angle: randomizer.int(0, ANGLES.DEG_360),
+
+            // angle can variate because it is the position
+            angle: this.randomizer.int(0, ANGLES.DEG_360),
             offset,
             moons: []
         };
     }
-};
+
+    getPlanetTypeByIndex(index) {
+        const rangeConfig = PLANET_CONFIG.RANGE[index] || PLANET_CONFIG.RANGE.default;
+        const [[percentage, mainType], fallback] = rangeConfig;
+        return this.randomizer.chance(percentage) ? mainType : fallback;
+    }
+}

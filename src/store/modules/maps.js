@@ -1,10 +1,13 @@
 import eBridge, { EVENTS } from 'libs/eventBridge';
-import { systemGenerator } from 'libs/game/maps';
-import { randomizer } from 'libs/random';
+import { SystemGenerator } from 'libs/game/maps';
+import { getSeededRandomizer } from 'libs/random';
+
+const TEST_SEED = 'test';
+const randomizer = getSeededRandomizer(TEST_SEED);
+const systemGenerator = new SystemGenerator(TEST_SEED);
 
 const initialState = {
-    // system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
-    system: systemGenerator.generate({ planetsNumber: randomizer.int(10, 12) })
+    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
 };
 
 const maps = store => {
