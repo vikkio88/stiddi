@@ -3,12 +3,30 @@ div.Bodies-List {
     overflow-y: hidden;
     flex: 0 1 auto;
 
+    /* 
+    could remove if I knew how to target
+    stuff that is not overflowing
+    */
     padding-right: 15px;
 }
+
+/* same as above :overflowing wont work */
 div.Bodies-List:hover {
     overflow-y: auto;
     padding-right: 10px;
 }
+
+/*
+this does not work 
+div.Bodies-List:overflowing {
+    padding-right: 15px;
+}
+
+div.Bodies-List:overflowing:hover {
+    overflow-y: auto;
+    padding-right: 10px;
+}
+*/
 
 
 div.Bodies-Row {

@@ -30,7 +30,7 @@ const Bodies = ({ system = {}, onFocus }) => {
     return (
         <>
             <div className="ui-section p-5 mt-10 mb-5 flex f-col">
-                <h3 style={{ alignSelf: "flex-start", marginTop: "5px" }}>Objects</h3>
+                <h3 style={{ alignSelf: "flex-start", marginTop: "5px" }}>Bodies</h3>
                 <Button
                     className="mb-5"
                     style={{ alignSelf: "flex-end", height: "100px" }}
@@ -39,11 +39,7 @@ const Bodies = ({ system = {}, onFocus }) => {
                     Ship
                 </Button>
             </div>
-            <div
-                className="Bodies-List"
-            // style={{ overflowY: "auto", overflowX: "hidden", flex: "0 1 auto" }}
-            // className="flex ui-section mt-10 f-col f-ac f-jc p-5"
-            >
+            <div className="Bodies-List">
                 {system.stars.map((s, i) => (
                     <Row key={`star_${i}`} {...s} body="stars" onFocus={onFocus} />
                 ))}
