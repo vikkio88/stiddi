@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import SystemObject from "./SystemObject";
 
 class Star extends SystemObject {
-    add({ id, name, radius, colour }) {
+    add({ id, name, radius, colour, type }) {
         this.setInfo({
-            id, body: 'star', name, radius
+            id, body: 'star', name, radius, type
         });
         const { cx, cy } = this.getSceneCenter();
         const starShape = new Phaser.Geom.Circle(cx, cy, radius);
