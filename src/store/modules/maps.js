@@ -2,9 +2,9 @@ import eBridge, { EVENTS } from 'libs/eventBridge';
 import { SystemGenerator } from 'libs/game/maps';
 import { getSeededRandomizer } from 'libs/random';
 
-const TEST_SEED = 'test';
-const randomizer = getSeededRandomizer(TEST_SEED);
-const systemGenerator = new SystemGenerator(TEST_SEED);
+//const TEST_SEED = 'test';
+const randomizer = getSeededRandomizer();
+const systemGenerator = new SystemGenerator();
 
 const initialState = {
     system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
