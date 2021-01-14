@@ -212,7 +212,7 @@ export class SystemGenerator {
             id: `s_${starName.replace(/\s/g, '')}_${index}`,
             index: index,
             name: starName,
-            type: typeName,
+            type: { description: typeName },
             colour: this.randomizer.pickOne(colours),
             radius: this.getRadius(sizes[0], sizes[1]),
         };

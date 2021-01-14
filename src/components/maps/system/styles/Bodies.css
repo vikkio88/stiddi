@@ -2,34 +2,23 @@ div.Bodies-List {
     overflow-x: hidden;
     overflow-y: hidden;
     flex: 0 1 auto;
+}
 
-    /* 
-    could remove if I knew how to target
-    stuff that is not overflowing
-    */
+div.List-overflowing {
     padding-right: 15px;
 }
 
-/* same as above :overflowing wont work */
 div.Bodies-List:hover {
     overflow-y: auto;
+}
+
+div.List-overflowing:hover{
     padding-right: 10px;
 }
-
-/*
-this does not work 
-div.Bodies-List:overflowing {
-    padding-right: 15px;
-}
-
-div.Bodies-List:overflowing:hover {
-    overflow-y: auto;
-    padding-right: 10px;
-}
-*/
-
 
 div.Bodies-Row {
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: solid 2px white;
     border-radius: 5px;
     
@@ -37,4 +26,9 @@ div.Bodies-Row {
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+}
+
+div.Bodies-info-row {
+    padding: 5px;
+    border-bottom: solid 2px white;
 }

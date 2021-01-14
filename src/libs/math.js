@@ -48,5 +48,11 @@ export const Geom = {
             x: (cx + radius * Math.cos(angle)),
             y: (cy + radius * Math.sin(angle)),
         };
+    },
+    distance(angle, radius, p2) {
+        console.log('calculating', { angle, radius, p2 });
+        const point = this.pointOnCircumference({ cx: 0, cy: 0 }, radius, angle);
+        console.log('calculating1', { point, p2 });
+        return Phaser.Math.Distance.BetweenPoints(p2, point);
     }
 };
