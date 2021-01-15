@@ -7,7 +7,7 @@ const randomizer = getSeededRandomizer(TEST_SEED);
 const systemGenerator = new SystemGenerator(TEST_SEED);
 
 const initialState = {
-    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 12) })
+    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 16) })
 };
 
 const maps = store => {
