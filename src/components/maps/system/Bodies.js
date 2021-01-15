@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStoreon } from "storeon/react";
-import { Button, Circle } from "components/common";
+import { Button, Circle, Star } from "components/common";
 import { Geom } from "libs/math";
 
 import "./styles/Bodies.css";
@@ -14,11 +14,14 @@ const BODY_TYPES = {
 };
 
 
-const Row = ({ index, name, offset = 0, body, onFocus, showInfo }) => {
+const Row = ({ index, name, colour, offset = 0, body, showInfo }) => {
+    const hashedCoulour = hashHex(colour);
+    const isPlanet = body === BODY_TYPES.PLANET;
     return (
         <div className="Bodies-Row w-full">
-            <div className="f-1 ml-5">
-                {`#${index + 1 + (body === BODY_TYPES.PLANET ? 1 : 0)}`}
+            <div className="f-1 ml-5 flex f-jsa f-ac">
+                {`#${index + 1 + (isPlanet ? 1 : 0)}`}
+                {isPlanet ? <Circle radius={15} colour={hashedCoulour} /> : <Star size={30} colour={hashedCoulour} />}
             </div>
 
             <div className="f-3 ml-5">
@@ -47,6 +50,7 @@ function hashHex(hex) {
 }
 
 const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus = () => { } }) => {
+    const isShipSelected = object === BODY_TYPES.PLAYER;
     let name = "Ship";
     let type = "-";
     let radius = "-";
@@ -54,7 +58,7 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
     let colour = 0x000000;
     let bodyName = '-';
 
-    if (object !== BODY_TYPES.PLAYER) {
+    if (!isShipSelected) {
         const selectedBody = system[object][index];
         name = selectedBody.name;
         bodyName = object.replace(/s$/, '');
@@ -87,8 +91,17 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
             </div>
 
             <div className="f-1 flex f-ac f-jc">
-                <Button onClick={() => onFocus({ object, index })}>Focus</Button>
-                <Button>Target</Button>
+                <Button
+                    disabled={isShipSelected}
+                    onClick={() => onFocus({ object, index })}
+                >
+                    Focus
+                </Button>
+                <Button
+                    disabled={isShipSelected}
+                >
+                    Target
+                </Button>
             </div>
         </div>
     );
