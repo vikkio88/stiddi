@@ -5,11 +5,20 @@ import { Geom } from "libs/math";
 
 import "./styles/Bodies.css";
 
+const BODY_TYPES = {
+    // plural as they define an array of them
+    STAR: 'stars',
+    PLANET: 'planets',
+
+    PLAYER: 'player'
+};
+
+
 const Row = ({ index, name, offset = 0, body, onFocus, showInfo }) => {
     return (
         <div className="Bodies-Row w-full">
             <div className="f-1 ml-5">
-                {`#${index + 1 + (body === 'planets' ? 1 : 0)}`}
+                {`#${index + 1 + (body === BODY_TYPES.PLANET ? 1 : 0)}`}
             </div>
 
             <div className="f-3 ml-5">
@@ -27,12 +36,6 @@ const Row = ({ index, name, offset = 0, body, onFocus, showInfo }) => {
                 >
                     Info
                 </Button>
-                <Button
-                    style={{ height: "30px" }}
-                    onClick={() => onFocus({ object: body, index })}
-                >
-                    F
-                </Button>
             </div>
 
         </div>
@@ -43,7 +46,7 @@ function hashHex(hex) {
     return `#${hex.toString(16).padStart(6, '0')}`;
 }
 
-const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 } }) => {
+const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus = () => { } }) => {
     let name = "Ship";
     let type = "-";
     let radius = "-";
@@ -51,7 +54,7 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 } }) => {
     let colour = 0x000000;
     let bodyName = '-';
 
-    if (object != 'ship') {
+    if (object !== BODY_TYPES.PLAYER) {
         const selectedBody = system[object][index];
         name = selectedBody.name;
         bodyName = object.replace(/s$/, '');
@@ -82,6 +85,11 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 } }) => {
             <div className="f-1 flex f-ac f-jc">
                 <Circle colour={hashHex(colour)} />
             </div>
+
+            <div className="f-1 flex f-ac f-jc">
+                <Button onClick={() => onFocus({ object, index })}>Focus</Button>
+                <Button>Target</Button>
+            </div>
         </div>
     );
 };
@@ -90,18 +98,19 @@ const Bodies = ({ system = {}, onFocus }) => {
 
     const { player: { position } } = useStoreon('player');
 
-    const [selected, setSelected] = useState({ object: "stars", index: 0 });
+    // the preselected body on a given system is a star, the main one
+    const [selected, setSelected] = useState({ object: BODY_TYPES.STAR, index: 0 });
     const bodiesCount = system.stars.length + system.planets.length;
     return (
         <>
             <div className="ui-section p-5 mt-10 mb-5 flex f-col">
                 <h3 style={{ alignSelf: "flex-start", marginTop: "5px" }}>Bodies</h3>
                 <div className="flex f-1">
-                    <BodyInfo {...selected} system={system} player={position.system} />
+                    <BodyInfo {...selected} system={system} player={position.system} onFocus={onFocus} />
                     <Button
                         className="mb-5"
                         style={{ alignSelf: "flex-end", height: "50px" }}
-                        onClick={() => { onFocus({ object: 'player' }); setSelected({ object: "ship" }); }}
+                        onClick={() => { onFocus({ object: BODY_TYPES.PLAYER }); setSelected({ object: BODY_TYPES.PLAYER }); }}
                     >
                         Ship
                 </Button>
@@ -109,10 +118,10 @@ const Bodies = ({ system = {}, onFocus }) => {
             </div>
             <div className={`Bodies-List${bodiesCount > 6 ? ' List-overflowing' : ''}`}>
                 {system.stars.map((s, i) => (
-                    <Row key={`star_${i}`} {...s} body="stars" onFocus={onFocus} showInfo={setSelected} />
+                    <Row key={`star_${i}`} {...s} body={BODY_TYPES.STAR} showInfo={setSelected} />
                 ))}
                 {system.planets.map((p, i) => (
-                    <Row key={`planet_${i}`} {...p} body="planets" onFocus={onFocus} showInfo={setSelected} />
+                    <Row key={`planet_${i}`} {...p} body={BODY_TYPES.PLANET} showInfo={setSelected} />
                 ))}
             </div>
         </>
