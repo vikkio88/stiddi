@@ -33,6 +33,10 @@ const maps = store => {
         eBridge.emit(EVENTS.GAME.MAPS.FOCUS_SYSTEM, { object, index });
     });
 
+    store.on('maps:plotSystem', (_, payload) => {
+        eBridge.emit(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, payload);
+    });
+
     store.on('maps:clearSystem', () => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_SYSTEM);
     });

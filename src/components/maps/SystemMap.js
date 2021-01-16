@@ -6,6 +6,7 @@ const SystemMap = ({ dispatch, system }) => {
         console.log(system);
         return () => dispatch('maps:clearSystem');
     });
+
     return (
         <>
             <h2>System Map</h2>
@@ -14,6 +15,7 @@ const SystemMap = ({ dispatch, system }) => {
             <Bodies
                 system={system}
                 onFocus={config => dispatch('maps:focusSystem', config)}
+                onPlot={config => dispatch('maps:plotSystem', config)}
             />
         </>
     );

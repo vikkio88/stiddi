@@ -1,31 +1,11 @@
 import { useState } from "react";
 import { useStoreon } from "storeon/react";
+import { hashHex } from "libs/colours";
+import { BODY_TYPES } from "enums/systemMap";
+import BodyInfo from "./BodyInfo";
 import { Button, Circle, Star } from "components/common";
-import { Geom } from "libs/math";
 
 import "./styles/Bodies.css";
-
-const BODY_TYPES = {
-    // plural as they define an array of them
-    STAR: 'stars',
-    PLANET: 'planets',
-
-    OPEN_SPACE: 'open_space',
-
-    PLAYER: 'player'
-};
-
-const getRelativeRadius = (radius, type) => {
-    const SUN_RADIUS = 50;
-    if (type === BODY_TYPES.STAR) {
-        return `${(radius / SUN_RADIUS).toFixed(2)} Sr (Sol radii)`;
-    }
-
-    // otherwise is a planet
-    const EARTH_RADIUS = 7;
-    return `${(radius / EARTH_RADIUS).toFixed(2)} Er (Earth radii)`;
-};
-
 
 const Row = ({ index, name, colour, offset = 0, body, showInfo }) => {
     const hashedCoulour = hashHex(colour);
@@ -58,72 +38,7 @@ const Row = ({ index, name, colour, offset = 0, body, showInfo }) => {
     );
 };
 
-function hashHex(hex) {
-    return `#${hex.toString(16).padStart(6, '0')}`;
-}
-
-const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0, target: null }, onFocus = () => { } }) => {
-    const { target } = player;
-    if (target) object = BODY_TYPES.OPEN_SPACE;
-    const isShip = ([BODY_TYPES.PLAYER].includes(object));
-    const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.OPEN_SPACE].includes(object));
-    let name = isShip ? "Ship" : "Open Space";
-    let type = "-";
-    let radius = "-";
-    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(player, target)).toFixed(2))} Ls` : "-";
-    let colour = 0x000000;
-    let bodyName = '-';
-
-    if (isCelestialBody) {
-        const selectedBody = system[object][index];
-        name = selectedBody.name;
-        bodyName = object.replace(/s$/, '');
-        type = selectedBody.type.description;
-        radius = getRelativeRadius(selectedBody.radius, object);
-        distance = selectedBody.offset || 0;
-        const angle = selectedBody.angle || 0;
-        colour = selectedBody.colour;
-        distance = `${(Geom.distance(angle, distance, player)).toFixed(2)} Ls`;
-    }
-
-    return (
-        <div className="m-5 p-5 ui-section f-1 flex f-row f-ac f-jsb">
-            <div className="f-3 flex f-col f-jc">
-                <div className="Bodies-info-row f-1 f-row">
-                    <strong>name:</strong> {name}
-                </div>
-                <div className="Bodies-info-row f-1 f-row">
-                    <strong>type:</strong> {type} ({bodyName})
-                </div>
-                <div className="Bodies-info-row f-1 f-row">
-                    <strong>radius:</strong> {radius}
-                </div>
-                <div className="Bodies-info-row f-1 f-row">
-                    <strong>distance:</strong> {distance}
-                </div>
-            </div>
-            <div className="f-1 flex f-ac f-jc">
-                <Circle colour={hashHex(colour)} />
-            </div>
-
-            <div className="f-1 flex f-ac f-jc">
-                <Button
-                    disabled={!isCelestialBody}
-                    onClick={() => onFocus({ object, index })}
-                >
-                    Focus
-                </Button>
-                <Button
-                    disabled={isShip}
-                >
-                    Target
-                </Button>
-            </div>
-        </div>
-    );
-};
-
-const Bodies = ({ system = {}, onFocus }) => {
+const Bodies = ({ system = {}, onFocus, onPlot, onLock }) => {
     const { dispatch, player: { position } } = useStoreon('player');
 
     // the preselected body on a given system is a star, the main one
@@ -138,7 +53,14 @@ const Bodies = ({ system = {}, onFocus }) => {
             <div className="ui-section p-5 mt-10 mb-5 flex f-col">
                 <h3 style={{ alignSelf: "flex-start", marginTop: "5px" }}>Bodies</h3>
                 <div className="flex f-1">
-                    <BodyInfo {...selected} system={system} player={position.system} onFocus={onFocus} />
+                    <BodyInfo
+                        {...selected}
+                        system={system}
+                        player={position.system}
+                        onFocus={onFocus}
+                        onPlot={onPlot}
+                        onLock={onLock}
+                    />
                     <Button
                         className="mb-5"
                         style={{ alignSelf: "flex-end", height: "50px" }}

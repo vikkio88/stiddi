@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
-import { Planet, Star, Indicator } from "phaser/entities/system";
+import { Planet, Star, Indicator, Route } from "phaser/entities/system";
 import Ship from "phaser/entities/system/Ship";
+import { BODY_TYPES } from "enums/systemMap";
 
 const CAMERA_ANIMATION_DURATION = 1500;
 
@@ -60,13 +61,42 @@ class SystemMap extends Phaser.Scene {
 
             if (payload.object === 'player') {
                 const { x, y } = this.objects.player.getPosition();
-                this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
+                this.panTo(x, y);
                 return;
             }
 
             const focusing = this.objects[payload.object][payload.index];
             const { x, y } = focusing.getPosition();
-            this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
+            this.panTo(x, y);
+        });
+
+        eventBridge.on(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, ({ object, index }) => {
+            console.log('[phaser] PLOT ROUTE SYSTEM', { object, index });
+            this.clearRoute();
+            const initial = this.objects.player.getPosition();
+
+            if (object === BODY_TYPES.MAP_INDICATOR) {
+                const target = {
+                    x: this.indicator.x,
+                    y: this.indicator.y,
+                };
+                this.route = new Route(this, initial, target);
+                /*
+                const half = this.route.getPoint(.5);
+                this.panTo(half.x, half.y);
+                */
+                return;
+            }
+
+            if ([BODY_TYPES.PLANET, BODY_TYPES.STAR].includes(object)) {
+                const target = this.objects[object][index];
+                this.route = new Route(this, initial, target.getPosition());
+                /*
+                const half = this.route.getPoint(.5);
+                this.panTo(half.x, half.y);
+                */
+                return;
+            }
         });
     }
 
@@ -96,11 +126,14 @@ class SystemMap extends Phaser.Scene {
         }
 
         this.clearIndicator();
+        this.clearRoute();
     }
 
     create() {
         sceneHelper.setBackground(this);
         this.indicator = null;
+        this.route = null;
+
         const { x, y } = sceneHelper.getCenter(this);
         this.center = { x, y };
         this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
@@ -108,8 +141,12 @@ class SystemMap extends Phaser.Scene {
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             this.clearIndicator();
             this.indicator = new Indicator(this, x, y);
-            eventBridge.dispatchFromPhaser('player:targetSystem', { x: x - this.center.x, y: y - this.center.y });
-            this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
+            eventBridge.dispatchFromPhaser(
+                'player:targetSystem',
+                { x: x - this.center.x, y: y - this.center.y }
+            );
+            this.panTo(x, y);
+            console.log(`[PHASER] Indicator`, { x, y });
         });
     }
 
@@ -117,6 +154,17 @@ class SystemMap extends Phaser.Scene {
         if (this.indicator) {
             this.indicator.destroy();
         }
+    }
+
+    clearRoute() {
+        if (this.route) {
+            this.route.destroy();
+        }
+    }
+
+
+    panTo(x, y) {
+        this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
     }
 }
 
