@@ -226,7 +226,7 @@ export class SystemGenerator {
             const offset = (previousOffset + this.randomizer.int(80, 450))
                 + (
                     this.randomizer.chance((i + 10) * 10) ?
-                        this.randomizer.int(100, 300) : 0
+                        this.randomizer.int(100, 300) * i : 0
                 );
             previousOffset = offset;
             generatedPlanets.push(this.getPlanet({ index: i, offset, star }));
