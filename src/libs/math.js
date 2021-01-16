@@ -52,5 +52,8 @@ export const Geom = {
     distance(angle, radius, p2) {
         const point = this.pointOnCircumference({ cx: 0, cy: 0 }, radius, angle);
         return Phaser.Math.Distance.BetweenPoints(p2, point);
+    },
+    distancePoints(p1, p2) {
+        return Phaser.Math.Distance.BetweenPoints(p1, p2);
     }
 };

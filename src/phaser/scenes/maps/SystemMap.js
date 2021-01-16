@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
-import { Planet, Star } from "phaser/entities/system";
+import { Planet, Star, Indicator } from "phaser/entities/system";
 import Ship from "phaser/entities/system/Ship";
 
 const CAMERA_ANIMATION_DURATION = 1500;
@@ -50,11 +50,13 @@ class SystemMap extends Phaser.Scene {
             console.log('[phaser] CLEAR SYSTEM', { payload });
 
             this.cameras.main.setZoom(1);
+            this.cameras.main.centerOn(this.center.x, this.center.y);
             this.clear();
         });
 
         eventBridge.on(EVENTS.GAME.MAPS.FOCUS_SYSTEM, payload => {
             console.log('[phaser] FOCUS SYSTEM', { payload });
+            this.clearIndicator();
 
             if (payload.object === 'player') {
                 const { x, y } = this.objects.player.getPosition();
@@ -92,14 +94,29 @@ class SystemMap extends Phaser.Scene {
         if (this.objects.player) {
             this.objects.player.destroy();
         }
+
+        this.clearIndicator();
     }
 
     create() {
         sceneHelper.setBackground(this);
+        this.indicator = null;
         const { x, y } = sceneHelper.getCenter(this);
+        this.center = { x, y };
         this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
         this.eventsSubscribe();
-        this.input.on('pointerdown', ({ worldX: x, worldY: y }) => console.log(`clicked on map ${x}, ${y}`));
+        this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
+            this.clearIndicator();
+            this.indicator = new Indicator(this, x, y);
+            eventBridge.dispatchFromPhaser('player:targetSystem', { x: x - this.center.x, y: y - this.center.y });
+            this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
+        });
+    }
+
+    clearIndicator() {
+        if (this.indicator) {
+            this.indicator.destroy();
+        }
     }
 }
 

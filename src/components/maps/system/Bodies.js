@@ -62,13 +62,15 @@ function hashHex(hex) {
     return `#${hex.toString(16).padStart(6, '0')}`;
 }
 
-const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus = () => { } }) => {
+const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0, target: null }, onFocus = () => { } }) => {
+    const { target } = player;
+    if (target) object = BODY_TYPES.OPEN_SPACE;
     const isShip = ([BODY_TYPES.PLAYER].includes(object));
     const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.OPEN_SPACE].includes(object));
-    let name = "Ship";
+    let name = isShip ? "Ship" : "Open Space";
     let type = "-";
     let radius = "-";
-    let distance = "-";
+    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(player, target)).toFixed(2))} Ls` : "-";
     let colour = 0x000000;
     let bodyName = '-';
 
@@ -106,7 +108,7 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
 
             <div className="f-1 flex f-ac f-jc">
                 <Button
-                    disabled={isShip}
+                    disabled={!isCelestialBody}
                     onClick={() => onFocus({ object, index })}
                 >
                     Focus
@@ -122,11 +124,14 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
 };
 
 const Bodies = ({ system = {}, onFocus }) => {
-
-    const { player: { position } } = useStoreon('player');
+    const { dispatch, player: { position } } = useStoreon('player');
 
     // the preselected body on a given system is a star, the main one
     const [selected, setSelected] = useState({ object: BODY_TYPES.STAR, index: 0 });
+    const select = body => {
+        dispatch("player:clearTargetSystem");
+        setSelected(body);
+    };
     const bodiesCount = system.stars.length + system.planets.length;
     return (
         <>
@@ -137,7 +142,7 @@ const Bodies = ({ system = {}, onFocus }) => {
                     <Button
                         className="mb-5"
                         style={{ alignSelf: "flex-end", height: "50px" }}
-                        onClick={() => { onFocus({ object: BODY_TYPES.PLAYER }); setSelected({ object: BODY_TYPES.PLAYER }); }}
+                        onClick={() => { onFocus({ object: BODY_TYPES.PLAYER }); select({ object: BODY_TYPES.PLAYER }); }}
                     >
                         Ship
                 </Button>
@@ -145,10 +150,10 @@ const Bodies = ({ system = {}, onFocus }) => {
             </div>
             <div className={`Bodies-List${bodiesCount > 7 ? ' List-overflowing' : ''}`}>
                 {system.stars.map((s, i) => (
-                    <Row key={`star_${i}`} {...s} body={BODY_TYPES.STAR} showInfo={setSelected} />
+                    <Row key={`star_${i}`} {...s} body={BODY_TYPES.STAR} showInfo={select} />
                 ))}
                 {system.planets.map((p, i) => (
-                    <Row key={`planet_${i}`} {...p} body={BODY_TYPES.PLANET} showInfo={setSelected} />
+                    <Row key={`planet_${i}`} {...p} body={BODY_TYPES.PLANET} showInfo={select} />
                 ))}
             </div>
         </>

@@ -6,7 +6,9 @@ const initialState = {
     position: {
         system: {
             x: 95,
-            y: 0
+            y: 0,
+            orbiting: false,
+            target: null
         },
         galaxy: {
             x: 0,
@@ -47,6 +49,37 @@ const player = store => {
                 fuel: {
                     ...player.fuel,
                     current
+                }
+            }
+        };
+    });
+
+
+    store.on('player:targetSystem', ({ player }, { x, y }) => {
+        return {
+            player: {
+                ...player,
+                position: {
+                    ...player.position,
+                    system: {
+                        ...player.position.system,
+                        target: { x, y }
+                    }
+                }
+            }
+        };
+    });
+
+    store.on('player:clearTargetSystem', ({ player }) => {
+        return {
+            player: {
+                ...player,
+                position: {
+                    ...player.position,
+                    system: {
+                        ...player.position.system,
+                        target: null
+                    }
                 }
             }
         };
