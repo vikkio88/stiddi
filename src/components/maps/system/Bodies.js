@@ -13,12 +13,23 @@ const BODY_TYPES = {
     PLAYER: 'player'
 };
 
+const getRelativeRadius = (radius, type) => {
+    const SUN_RADIUS = 50;
+    if (type === BODY_TYPES.STAR) {
+        return `${(radius / SUN_RADIUS).toFixed(2)} Sr (Sol radii)`;
+    }
+
+    // otherwise is a planet
+    const EARTH_RADIUS = 7;
+    return `${(radius / EARTH_RADIUS).toFixed(2)} Er (Earth radii)`;
+};
+
 
 const Row = ({ index, name, colour, offset = 0, body, showInfo }) => {
     const hashedCoulour = hashHex(colour);
     const isPlanet = body === BODY_TYPES.PLANET;
     return (
-        <div className="Bodies-Row w-full">
+        <div className="Bodies-Row">
             <div className="f-1 ml-5 flex f-jsa f-ac">
                 {`#${index + 1 + (isPlanet ? 1 : 0)}`}
                 {isPlanet ? <Circle radius={15} colour={hashedCoulour} /> : <Star size={30} colour={hashedCoulour} />}
@@ -63,7 +74,7 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
         name = selectedBody.name;
         bodyName = object.replace(/s$/, '');
         type = selectedBody.type.description;
-        radius = selectedBody.radius;
+        radius = getRelativeRadius(selectedBody.radius, object);
         distance = selectedBody.offset || 0;
         const angle = selectedBody.angle || 0;
         colour = selectedBody.colour;
@@ -129,7 +140,7 @@ const Bodies = ({ system = {}, onFocus }) => {
                 </Button>
                 </div>
             </div>
-            <div className={`Bodies-List${bodiesCount > 6 ? ' List-overflowing' : ''}`}>
+            <div className={`Bodies-List${bodiesCount > 7 ? ' List-overflowing' : ''}`}>
                 {system.stars.map((s, i) => (
                     <Row key={`star_${i}`} {...s} body={BODY_TYPES.STAR} showInfo={setSelected} />
                 ))}

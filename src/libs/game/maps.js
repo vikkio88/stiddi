@@ -109,27 +109,27 @@ const PLANET = {
         [PLANET_TYPES.METAL]: {
             name: "metal",
             colours: [COLOURS.DARK, COLOURS.GREY],
-            sizes: [4, 5],
+            sizes: [3, 5],
         },
         [PLANET_TYPES.ROCKY]: {
             name: "rocky",
             colours: [COLOURS.DARK, COLOURS.GREY, COLOURS.REDISH],
-            sizes: [4, 9],
+            sizes: [3, 9],
         },
         [PLANET_TYPES.HABITABLE]: {
             name: "habitable",
             colours: [COLOURS.PALE_BLUE],
-            sizes: [4, 10],
+            sizes: [3, 14],
         },
         [PLANET_TYPES.ICY]: {
             name: "icy",
             colours: [COLOURS.WHITE],
-            sizes: [5, 10],
+            sizes: [6, 15],
         },
         [PLANET_TYPES.GAS_GIANT]: {
             name: "gas giant",
             colours: [COLOURS.YELLOW, COLOURS.DARK_BLUE],
-            sizes: [7, 20],
+            sizes: [15, 40],
         },
     },
 };
@@ -225,7 +225,7 @@ export class SystemGenerator {
         for (let i = 0; i < planetsNumber; i++) {
             const offset = (previousOffset + this.randomizer.int(80, 450))
                 + (
-                    this.randomizer.chance(i * 10) ?
+                    this.randomizer.chance((i + 10) * 10) ?
                         this.randomizer.int(100, 300) : 0
                 );
             previousOffset = offset;
