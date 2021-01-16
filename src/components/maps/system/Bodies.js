@@ -10,6 +10,8 @@ const BODY_TYPES = {
     STAR: 'stars',
     PLANET: 'planets',
 
+    OPEN_SPACE: 'open_space',
+
     PLAYER: 'player'
 };
 
@@ -40,7 +42,7 @@ const Row = ({ index, name, colour, offset = 0, body, showInfo }) => {
             </div>
 
             <div className="f-1 flex f-jc f-ac">
-                {`${offset} Ls`}
+                {offset > 0 ? `${offset} Ls` : '-'}
             </div>
 
             <div className="f-2 flex f-je f-ac pr-5">
@@ -61,7 +63,8 @@ function hashHex(hex) {
 }
 
 const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus = () => { } }) => {
-    const isShipSelected = object === BODY_TYPES.PLAYER;
+    const isShip = ([BODY_TYPES.PLAYER].includes(object));
+    const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.OPEN_SPACE].includes(object));
     let name = "Ship";
     let type = "-";
     let radius = "-";
@@ -69,7 +72,7 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
     let colour = 0x000000;
     let bodyName = '-';
 
-    if (!isShipSelected) {
+    if (isCelestialBody) {
         const selectedBody = system[object][index];
         name = selectedBody.name;
         bodyName = object.replace(/s$/, '');
@@ -103,13 +106,13 @@ const BodyInfo = ({ object, index, system = {}, player = { x: 0, y: 0 }, onFocus
 
             <div className="f-1 flex f-ac f-jc">
                 <Button
-                    disabled={isShipSelected}
+                    disabled={isShip}
                     onClick={() => onFocus({ object, index })}
                 >
                     Focus
                 </Button>
                 <Button
-                    disabled={isShipSelected}
+                    disabled={isShip}
                 >
                     Target
                 </Button>
