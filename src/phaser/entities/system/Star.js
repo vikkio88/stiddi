@@ -1,8 +1,11 @@
 import Phaser from "phaser";
+import { Coords } from "libs/math";
 import SystemObject from "./SystemObject";
+import eventBridge from "libs/eventBridge";
+import { BODY_TYPES } from "enums/systemMap";
 
 class Star extends SystemObject {
-    add({ id, name, radius, colour, type }) {
+    add({ id, index,name, radius, colour, type }) {
         this.setInfo({
             id, body: 'star', name, radius, type
         });
@@ -16,8 +19,17 @@ class Star extends SystemObject {
 
         star.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
-            console.log(`clicked on star ${name}`, this.getInfo());
-            // move the timeout to a function given difference
+            const position = Coords.relativeCoords(
+                this.getPosition(),
+                Coords.zerify(
+                    Coords.make(cx, cy)
+                )
+            );
+            eventBridge.dispatchFromPhaser(
+                'player:targetSystem',
+                { target: { object: BODY_TYPES.STAR, index, position } }
+            );
+
             this.scene.cameras.main.pan(starShape.x, starShape.y, 1500);
         });
 
