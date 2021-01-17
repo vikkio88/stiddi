@@ -18,8 +18,15 @@ const BodyInfo = ({
     object, index, system = {},
     player = { x: 0, y: 0, target: null },
     onFocus, onPlot }) => {
+
+    //this shit will be fixed once I move the state to store
     const { target } = player;
-    if (target) object = target.object;
+    if (target) {
+        object = target.object;
+        index = target.index;
+    }
+    //
+
     const isShip = ([BODY_TYPES.PLAYER].includes(object));
     const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.MAP_INDICATOR].includes(object));
     let name = isShip ? "Ship" : "Open Space";

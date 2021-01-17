@@ -1,6 +1,8 @@
 import Phaser from "phaser";
-import { Geom } from "libs/math";
+import { Geom, Coords } from "libs/math";
 import SystemObject from "./SystemObject";
+import eventBridge from "libs/eventBridge";
+import { BODY_TYPES } from "enums/systemMap";
 
 class Planet extends SystemObject {
     add({ offset, name, type, radius, colour, id, index, angle = 0 }) {
@@ -23,7 +25,18 @@ class Planet extends SystemObject {
         planet.setInteractive(planetShape, Phaser.Geom.Circle.Contains);
         planet.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
-            console.log(`clicked planet ${id}`, this.getInfo());
+            const position = Coords.relativeCoords(
+                this.getPosition(),
+                Coords.zerify(
+                    Coords.make(cx, cy)
+                )
+            );
+            eventBridge.dispatchFromPhaser(
+                'player:targetSystem',
+                { target: { object: BODY_TYPES.PLANET, index, position } }
+            );
+
+
             // move the timeout to a function given difference
             this.scene.cameras.main.pan(planetShape.x, planetShape.y, 1500);
         });

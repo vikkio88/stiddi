@@ -19,11 +19,12 @@ const Bodies = ({ system = {}, onFocus, onPlot, onLock }) => {
         setSelected(body);
     };
     const bodiesCount = system.stars.length + system.planets.length;
-    
+    const { target } = position.system;
+
     // this is due to the targeting system could come also from store,
     // maybe I could make it from here too and use just one.
     // as done for the settings on the navigation
-    const selectedId = position.system.target === null ? `${selected.object}${selected.index}` : false;
+    const selectedId = target === null ? `${selected.object}${selected.index}` : `${target.object}${target.index}`;
     //
     return (
         <>
