@@ -14,25 +14,29 @@ const getRelativeRadius = (radius, type) => {
     return `${(radius / EARTH_RADIUS).toFixed(2)} Er (Earth radii)`;
 };
 
-const BodyInfo = ({
-    object, index, system = {},
-    player = { x: 0, y: 0, target: null },
-    onFocus, onPlot }) => {
+const EmptySelection = () => (<div className="m-5 p-5 ui-section f-1 flex f-row f-ac f-jsb">Nothing Selected</div>);
 
-    //this shit will be fixed once I move the state to store
-    const { target } = player;
-    if (target) {
-        object = target.object;
-        index = target.index;
+const BodyInfo = (
+    {
+        //target
+        object,
+        index,
+        system = {},
+        position = {},
+        // end target
+        playerPosition = { x: 0, y: 0 },
+        onFocus,
+        onPlot
     }
-    //
+) => {
+    if (!object) return <EmptySelection />;
 
     const isShip = ([BODY_TYPES.PLAYER].includes(object));
     const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.MAP_INDICATOR].includes(object));
     let name = isShip ? "Ship" : "Open Space";
     let type = "-";
     let radius = "-";
-    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(player, target.position)).toFixed(2))} Ls` : "-";
+    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(playerPosition, position)).toFixed(2))} Ls` : "-";
     let colour = 0x000000;
     let bodyName = '-';
 
@@ -45,7 +49,7 @@ const BodyInfo = ({
         distance = selectedBody.offset || 0;
         const angle = selectedBody.angle || 0;
         colour = selectedBody.colour;
-        distance = `${(Geom.distance(angle, distance, player)).toFixed(2)} Ls`;
+        distance = `${(Geom.distance(angle, distance, playerPosition)).toFixed(2)} Ls`;
     }
 
     return (

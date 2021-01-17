@@ -8,13 +8,16 @@ const initialState = {
             x: 95,
             y: 0,
             orbiting: false,
-            target: null,
-            isPlotted: false
         },
         galaxy: {
             x: 0,
             y: 0
         }
+    },
+    target: null,
+    route: {
+        type: 'system',
+        isPlotted: false
     }
 
 };
@@ -60,13 +63,7 @@ const player = store => {
         return {
             player: {
                 ...player,
-                position: {
-                    ...player.position,
-                    system: {
-                        ...player.position.system,
-                        target
-                    }
-                }
+                target
             }
         };
     });
@@ -75,13 +72,10 @@ const player = store => {
         return {
             player: {
                 ...player,
-                position: {
-                    ...player.position,
-                    system: {
-                        ...player.position.system,
-                        target,
-                        isPlotted: true
-                    }
+                target,
+                route: {
+                    type: 'system',
+                    isPlotted: true
                 }
             }
         };
@@ -91,13 +85,10 @@ const player = store => {
         return {
             player: {
                 ...player,
-                position: {
-                    ...player.position,
-                    system: {
-                        ...player.position.system,
-                        target: null,
-                        isPlotted: false
-                    }
+                target: null,
+                route: {
+                    type: 'system',
+                    isPlotted: false
                 }
             }
         };

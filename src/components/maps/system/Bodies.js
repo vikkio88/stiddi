@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useStoreon } from "storeon/react";
 
 import { BODY_TYPES } from "enums/systemMap";
@@ -10,31 +9,23 @@ import "./styles/Bodies.css";
 
 
 const Bodies = ({ system = {}, onFocus, onPlot, onLock }) => {
-    const { dispatch, player: { position } } = useStoreon('player');
+    const { dispatch, player: { position, target = {} } } = useStoreon('player');
 
-    // the preselected body on a given system is a star, the main one
-    const [selected, setSelected] = useState({ object: BODY_TYPES.STAR, index: 0 });
-    const select = body => {
-        dispatch("player:clearTargetSystem");
-        setSelected(body);
+    const select = target => {
+        dispatch("player:targetSystem", { target });
     };
-    const bodiesCount = system.stars.length + system.planets.length;
-    const { target } = position.system;
 
-    // this is due to the targeting system could come also from store,
-    // maybe I could make it from here too and use just one.
-    // as done for the settings on the navigation
-    const selectedId = target === null ? `${selected.object}${selected.index}` : `${target.object}${target.index}`;
-    //
+    const bodiesCount = system.stars.length + system.planets.length;
+    const selectedId = target === null ? null : `${target.object}${target.index}`;
     return (
         <>
             <div className="ui-section p-5 mt-10 mb-5 flex f-col">
                 <h3 style={{ alignSelf: "flex-start", marginTop: "5px" }}>Bodies</h3>
                 <div className="flex f-1">
                     <BodyInfo
-                        {...selected}
+                        {...target}
                         system={system}
-                        player={position.system}
+                        playerPosition={position.system}
                         onFocus={onFocus}
                         onPlot={onPlot}
                         onLock={onLock}
