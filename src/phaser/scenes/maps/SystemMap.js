@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { Coords } from "libs/math";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
 import { Planet, Star, Indicator, Route } from "phaser/entities/system";
@@ -95,7 +96,7 @@ class SystemMap extends Phaser.Scene {
                 const half = this.route.getPoint(.5);
                 this.panTo(half.x, half.y);
                 */
-                //eventBridge.dispatchFromPhaser('')
+                eventBridge.dispatchFromPhaser('');
                 return;
             }
         });
@@ -142,9 +143,10 @@ class SystemMap extends Phaser.Scene {
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             this.clearIndicator();
             this.indicator = new Indicator(this, x, y);
+            const position = Coords.relativeCoords({ x, y }, Coords.zerify(this.center));
             eventBridge.dispatchFromPhaser(
                 'player:targetSystem',
-                { target: { object: BODY_TYPES.MAP_INDICATOR, position: { x: x - this.center.x, y: y - this.center.y } } }
+                { target: { object: BODY_TYPES.MAP_INDICATOR, position } }
             );
             this.panTo(x, y);
             console.log(`[PHASER] Indicator`, { x, y });

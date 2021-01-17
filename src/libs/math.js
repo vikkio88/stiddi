@@ -55,5 +55,26 @@ export const Geom = {
     },
     distancePoints(p1, p2) {
         return Phaser.Math.Distance.BetweenPoints(p1, p2);
+    },
+};
+
+export const Coords = {
+    make(x, y) {
+        return { x, y };
+    },
+    zerify({ x = 0, y = 0 } = {}) {
+        return { x0: x, y0: y };
+    },
+    centrify({ x = 0, y = 0 } = {}) {
+        return {
+            cx: x,
+            cy: y
+        };
+    },
+    relativeCoords({ x, y }, { x0 = 0, y0 = 0 } = {}) {
+        return {
+            x: x - x0,
+            y: y - y0
+        };
     }
 };
