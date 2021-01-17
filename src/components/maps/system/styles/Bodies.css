@@ -26,6 +26,22 @@ div.Bodies-Row {
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+
+    margin-bottom: 5px;
+}
+
+div.Bodies-Row:hover {
+    background-color: #292828;
+    color: white;
+}
+
+div.Bodies-Row-selected {
+    background-color: white;
+    color: #1B1B1B;
+}
+div.Bodies-Row-selected:hover {
+    background-color: rgb(218, 218, 218);
+    color: #1B1B1B;
 }
 
 div.Bodies-info-row {
