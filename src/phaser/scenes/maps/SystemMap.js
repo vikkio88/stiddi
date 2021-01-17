@@ -95,6 +95,7 @@ class SystemMap extends Phaser.Scene {
                 const half = this.route.getPoint(.5);
                 this.panTo(half.x, half.y);
                 */
+                //eventBridge.dispatchFromPhaser('')
                 return;
             }
         });
@@ -143,7 +144,7 @@ class SystemMap extends Phaser.Scene {
             this.indicator = new Indicator(this, x, y);
             eventBridge.dispatchFromPhaser(
                 'player:targetSystem',
-                { x: x - this.center.x, y: y - this.center.y }
+                { target: { object: BODY_TYPES.MAP_INDICATOR, position: { x: x - this.center.x, y: y - this.center.y } } }
             );
             this.panTo(x, y);
             console.log(`[PHASER] Indicator`, { x, y });

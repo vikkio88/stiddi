@@ -8,7 +8,8 @@ const initialState = {
             x: 95,
             y: 0,
             orbiting: false,
-            target: null
+            target: null,
+            isPlotted: false
         },
         galaxy: {
             x: 0,
@@ -54,8 +55,8 @@ const player = store => {
         };
     });
 
-
-    store.on('player:targetSystem', ({ player }, { x, y }) => {
+    // make sure x,y are relative to 0,0 center of the system
+    store.on('player:targetSystem', ({ player }, { target }) => {
         return {
             player: {
                 ...player,
@@ -63,7 +64,23 @@ const player = store => {
                     ...player.position,
                     system: {
                         ...player.position.system,
-                        target: { x, y }
+                        target
+                    }
+                }
+            }
+        };
+    });
+
+    store.on('player:plotSuccessSystem', ({ player }, { target }) => {
+        return {
+            player: {
+                ...player,
+                position: {
+                    ...player.position,
+                    system: {
+                        ...player.position.system,
+                        target,
+                        isPlotted: true
                     }
                 }
             }
@@ -78,7 +95,8 @@ const player = store => {
                     ...player.position,
                     system: {
                         ...player.position.system,
-                        target: null
+                        target: null,
+                        isPlotted: false
                     }
                 }
             }

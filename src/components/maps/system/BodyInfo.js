@@ -19,13 +19,13 @@ const BodyInfo = ({
     player = { x: 0, y: 0, target: null },
     onFocus, onPlot }) => {
     const { target } = player;
-    if (target) object = BODY_TYPES.MAP_INDICATOR;
+    if (target) object = target.object;
     const isShip = ([BODY_TYPES.PLAYER].includes(object));
     const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.MAP_INDICATOR].includes(object));
     let name = isShip ? "Ship" : "Open Space";
     let type = "-";
     let radius = "-";
-    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(player, target)).toFixed(2))} Ls` : "-";
+    let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(player, target.position)).toFixed(2))} Ls` : "-";
     let colour = 0x000000;
     let bodyName = '-';
 
