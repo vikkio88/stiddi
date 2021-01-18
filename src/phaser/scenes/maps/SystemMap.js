@@ -71,35 +71,68 @@ class SystemMap extends Phaser.Scene {
             this.panTo(x, y);
         });
 
+        eventBridge.on(EVENTS.GAME.MAPS.CLEAR_PLOTROUTE_SYSTEM, () => {
+            this.clearRoute();
+        });
+
         eventBridge.on(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, ({ object, index }) => {
             console.log('[phaser] PLOT ROUTE SYSTEM', { object, index });
             this.clearRoute();
             const initial = this.objects.player.getPosition();
 
+
+            // those two ifs can me moved
             if (object === BODY_TYPES.MAP_INDICATOR) {
-                const target = {
+                const position = {
                     x: this.indicator.x,
                     y: this.indicator.y,
                 };
-                this.route = new Route(this, initial, target);
+                this.route = new Route(this, initial, position);
                 /*
                 const half = this.route.getPoint(.5);
                 this.panTo(half.x, half.y);
                 */
+                eventBridge.dispatchFromPhaser(
+                    'player:plotSuccessSystem',
+                    {
+                        target: {
+                            object, index,
+                            position: this.getRelativeCoords(position)
+                        }
+                    }
+                );
                 return;
             }
 
             if ([BODY_TYPES.PLANET, BODY_TYPES.STAR].includes(object)) {
                 const target = this.objects[object][index];
-                this.route = new Route(this, initial, target.getPosition());
+                const position = target.getPosition();
+                this.route = new Route(this, initial, position);
                 /*
                 const half = this.route.getPoint(.5);
                 this.panTo(half.x, half.y);
                 */
-                eventBridge.dispatchFromPhaser('');
+                eventBridge.dispatchFromPhaser(
+                    'player:plotSuccessSystem',
+                    {
+                        target: {
+                            object, index,
+                            position: this.getRelativeCoords(position)
+                        }
+                    }
+                );
+
                 return;
             }
         });
+    }
+
+    getRelativeCoords({ x, y }) {
+        // need to check if center is it relative to camera
+        return Coords.relativeCoords(
+            { x, y },
+            Coords.zerify(this.getCenter())
+        );
     }
 
     addPlayer(params) {

@@ -14,6 +14,7 @@ const SystemMap = ({ dispatch, system }) => {
             <Zoom onZoom={config => dispatch('maps:zoomSystem', config)} />
             <Bodies
                 system={system}
+                // those two might be moved down as I have dispatch
                 onFocus={config => dispatch('maps:focusSystem', config)}
                 onPlot={config => dispatch('maps:plotSystem', config)}
             />

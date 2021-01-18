@@ -8,8 +8,8 @@ import { Button } from "components/common";
 import "./styles/Bodies.css";
 
 
-const Bodies = ({ system = {}, onFocus, onPlot, onLock }) => {
-    const { dispatch, player: { position, target = {} } } = useStoreon('player');
+const Bodies = ({ system = {}, onFocus, onPlot }) => {
+    const { dispatch, player: { position, target = {}, route } } = useStoreon('player');
 
     const select = target => {
         dispatch("player:targetSystem", { target });
@@ -28,7 +28,9 @@ const Bodies = ({ system = {}, onFocus, onPlot, onLock }) => {
                         playerPosition={position.system}
                         onFocus={onFocus}
                         onPlot={onPlot}
-                        onLock={onLock}
+                        onLock={() => console.log('onLock')}
+                        onClear={() => dispatch('player:clearTargetSystem')}
+                        isPlotted={route.isPlotted}
                     />
                     <Button
                         className="mb-5"

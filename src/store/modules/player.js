@@ -17,7 +17,8 @@ const initialState = {
     target: null,
     route: {
         type: 'system',
-        isPlotted: false
+        isPlotted: false,
+        isLocked: false
     }
 
 };
@@ -69,11 +70,13 @@ const player = store => {
     });
 
     store.on('player:plotSuccessSystem', ({ player }, { target }) => {
+        console.log('PLOT SUCCESS', target);
         return {
             player: {
                 ...player,
                 target,
                 route: {
+                    ...player.route,
                     type: 'system',
                     isPlotted: true
                 }
@@ -82,13 +85,13 @@ const player = store => {
     });
 
     store.on('player:clearTargetSystem', ({ player }) => {
+        store.dispatch('maps:clearPlotSystem');
         return {
             player: {
                 ...player,
                 target: null,
                 route: {
-                    type: 'system',
-                    isPlotted: false
+                    ...initialState.route,
                 }
             }
         };

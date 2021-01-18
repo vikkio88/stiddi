@@ -26,7 +26,10 @@ const BodyInfo = (
         // end target
         playerPosition = { x: 0, y: 0 },
         onFocus,
-        onPlot
+        onPlot,
+        onLock,
+        onClear,
+        isPlotted = false
     }
 ) => {
     if (!object) return <EmptySelection />;
@@ -38,7 +41,7 @@ const BodyInfo = (
     let radius = "-";
     let distance = (!isShip && !isCelestialBody) ? `${((Geom.distancePoints(playerPosition, position)).toFixed(2))} Ls` : "-";
     let colour = 0x000000;
-    let bodyName = '-';
+    let bodyName = null;
 
     if (isCelestialBody) {
         const selectedBody = system[object][index];
@@ -59,7 +62,7 @@ const BodyInfo = (
                     <strong>name:</strong> {name}
                 </div>
                 <div className="Bodies-info-row f-1 f-row">
-                    <strong>type:</strong> {type} ({bodyName})
+                    <strong>type:</strong> {type} {bodyName && `${bodyName}`}
                 </div>
                 <div className="Bodies-info-row f-1 f-row">
                     <strong>radius:</strong> {radius}
@@ -73,18 +76,38 @@ const BodyInfo = (
             </div>
 
             <div className="f-1 flex f-ac f-jc">
-                <Button
-                    disabled={!isCelestialBody}
-                    onClick={() => onFocus({ object, index })}
-                >
-                    Focus
-                </Button>
-                <Button
-                    disabled={isShip}
-                    onClick={() => onPlot({ object, index })}
-                >
-                    Plot
-                </Button>
+                {!isPlotted && (
+                    <>
+                        <Button
+                            disabled={!isCelestialBody}
+                            onClick={() => onFocus({ object, index })}
+                        >
+                            Focus
+                        </Button>
+                        <Button
+                            disabled={isShip}
+                            onClick={() => onPlot({ object, index })}
+                        >
+                            Plot
+                        </Button>
+                    </>
+                )}
+                {isPlotted && (
+                    <>
+                        <Button
+                            variant={Button.Variants.RED}
+                            onClick={onClear}
+                        >
+                            X
+                        </Button>
+                        <Button
+                            variant={Button.Variants.EMPTY_GREEN}
+                            onClick={onLock}
+                        >
+                            LOCK
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     );
