@@ -19,6 +19,9 @@ class Star extends SystemObject {
 
         star.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
+
+            this.scene.clearIndicator &&this.scene.clearIndicator();
+
             const position = Coords.relativeCoords(
                 this.getPosition(),
                 Coords.zerify(

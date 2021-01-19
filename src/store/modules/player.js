@@ -84,12 +84,11 @@ const player = store => {
         };
     });
 
-    store.on('player:clearTargetSystem', ({ player }) => {
+    store.on('player:clearRouteSystem', ({ player }) => {
         store.dispatch('maps:clearPlotSystem');
         return {
             player: {
                 ...player,
-                target: null,
                 route: {
                     ...initialState.route,
                 }

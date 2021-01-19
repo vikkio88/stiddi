@@ -29,7 +29,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         onFocus={onFocus}
                         onPlot={onPlot}
                         onLock={() => console.log('onLock')}
-                        onClear={() => dispatch('player:clearTargetSystem')}
+                        onClear={() => dispatch('player:clearRouteSystem')}
                         isPlotted={route.isPlotted}
                     />
                     <Button

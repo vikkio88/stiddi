@@ -79,51 +79,33 @@ class SystemMap extends Phaser.Scene {
             console.log('[phaser] PLOT ROUTE SYSTEM', { object, index });
             this.clearRoute();
             const initial = this.objects.player.getPosition();
+            let position = null;
 
 
-            // those two ifs can me moved
             if (object === BODY_TYPES.MAP_INDICATOR) {
-                const position = {
+                position = {
                     x: this.indicator.x,
                     y: this.indicator.y,
                 };
-                this.route = new Route(this, initial, position);
-                /*
-                const half = this.route.getPoint(.5);
-                this.panTo(half.x, half.y);
-                */
-                eventBridge.dispatchFromPhaser(
-                    'player:plotSuccessSystem',
-                    {
-                        target: {
-                            object, index,
-                            position: this.getRelativeCoords(position)
-                        }
-                    }
-                );
-                return;
             }
 
             if ([BODY_TYPES.PLANET, BODY_TYPES.STAR].includes(object)) {
                 const target = this.objects[object][index];
-                const position = target.getPosition();
-                this.route = new Route(this, initial, position);
-                /*
-                const half = this.route.getPoint(.5);
-                this.panTo(half.x, half.y);
-                */
-                eventBridge.dispatchFromPhaser(
-                    'player:plotSuccessSystem',
-                    {
-                        target: {
-                            object, index,
-                            position: this.getRelativeCoords(position)
-                        }
-                    }
-                );
-
-                return;
+                position = target.getPosition();
             }
+
+            if (!position) return;
+            
+            this.route = new Route(this, initial, position);
+            eventBridge.dispatchFromPhaser(
+                'player:plotSuccessSystem',
+                {
+                    target: {
+                        object, index,
+                        position: this.getRelativeCoords(position)
+                    }
+                }
+            );
         });
     }
 

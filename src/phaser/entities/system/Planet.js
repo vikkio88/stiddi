@@ -25,6 +25,9 @@ class Planet extends SystemObject {
         planet.setInteractive(planetShape, Phaser.Geom.Circle.Contains);
         planet.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
+            
+            this.scene.clearIndicator &&this.scene.clearIndicator();
+            
             const position = Coords.relativeCoords(
                 this.getPosition(),
                 Coords.zerify(
