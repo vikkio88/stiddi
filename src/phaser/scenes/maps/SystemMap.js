@@ -29,6 +29,11 @@ class SystemMap extends Phaser.Scene {
             payload.system.stars.forEach(s => this.addStar(s));
             payload.system.planets.forEach(p => this.addPlanet(p));
             this.addPlayer(payload.player);
+
+            // check if maybe this should be only if locked
+            if (payload.route.isPlotted) {
+                this.addRoute(payload.target);
+            }
         });
 
 
@@ -77,35 +82,7 @@ class SystemMap extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, ({ object, index }) => {
             console.log('[phaser] PLOT ROUTE SYSTEM', { object, index });
-            this.clearRoute();
-            const initial = this.objects.player.getPosition();
-            let position = null;
-
-
-            if (object === BODY_TYPES.MAP_INDICATOR) {
-                position = {
-                    x: this.indicator.x,
-                    y: this.indicator.y,
-                };
-            }
-
-            if ([BODY_TYPES.PLANET, BODY_TYPES.STAR].includes(object)) {
-                const target = this.objects[object][index];
-                position = target.getPosition();
-            }
-
-            if (!position) return;
-            
-            this.route = new Route(this, initial, position);
-            eventBridge.dispatchFromPhaser(
-                'player:plotSuccessSystem',
-                {
-                    target: {
-                        object, index,
-                        position: this.getRelativeCoords(position)
-                    }
-                }
-            );
+            this.addRoute({ object, index });
         });
     }
 
@@ -133,6 +110,39 @@ class SystemMap extends Phaser.Scene {
         const planet = new Planet(this);
         planet.add(params);
         this.objects.planets.push(planet);
+    }
+
+    addRoute({ object, index }) {
+        this.clearRoute();
+        const initial = this.objects.player.getPosition();
+        let position = null;
+
+
+        if (object === BODY_TYPES.MAP_INDICATOR) {
+            position = {
+                x: this.indicator.x,
+                y: this.indicator.y,
+            };
+        }
+
+        if ([BODY_TYPES.PLANET, BODY_TYPES.STAR].includes(object)) {
+            const target = this.objects[object][index];
+            position = target.getPosition();
+        }
+
+        if (!position) return;
+
+        // might want to add something like Indicator at the end of the route
+        this.route = new Route(this, initial, position);
+        eventBridge.dispatchFromPhaser(
+            'player:plotSuccessSystem',
+            {
+                target: {
+                    object, index,
+                    position: this.getRelativeCoords(position)
+                }
+            }
+        );
     }
 
     clear() {

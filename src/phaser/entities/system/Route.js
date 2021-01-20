@@ -6,7 +6,7 @@ class Route {
 
         this.lineShape = new Phaser.Geom.Line(initial.x, initial.y, target.x, target.y);
         this.route = this.scene.add.graphics();
-        this.route.fillStyle(0xffffff, 1);
+        this.route.fillStyle(0xffffff);
         this.route.strokeLineShape(this.lineShape);
     }
 

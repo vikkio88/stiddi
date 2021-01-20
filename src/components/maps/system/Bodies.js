@@ -28,9 +28,9 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         playerPosition={position.system}
                         onFocus={onFocus}
                         onPlot={onPlot}
-                        onLock={() => console.log('onLock')}
+                        onLock={() => dispatch('player:lockRouteSystem')}
                         onClear={() => dispatch('player:clearRouteSystem')}
-                        isPlotted={route.isPlotted}
+                        route={route}
                     />
                     <Button
                         className="mb-5"
@@ -49,6 +49,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         body={BODY_TYPES.STAR}
                         showInfo={select}
                         isSelected={selectedId === `${BODY_TYPES.STAR}${i}`}
+                        isLocked={route.isLocked}
                     />
                 ))}
                 {system.planets.map((p, i) => (
@@ -58,6 +59,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         body={BODY_TYPES.PLANET}
                         showInfo={select}
                         isSelected={selectedId === `${BODY_TYPES.PLANET}${i}`}
+                        isLocked={route.isLocked}
                     />
                 ))}
             </div>

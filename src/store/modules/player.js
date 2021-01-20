@@ -20,7 +20,6 @@ const initialState = {
         isPlotted: false,
         isLocked: false
     }
-
 };
 
 const player = store => {
@@ -91,6 +90,18 @@ const player = store => {
                 ...player,
                 route: {
                     ...initialState.route,
+                }
+            }
+        };
+    });
+    
+    store.on('player:lockRouteSystem', ({ player }) => {
+        return {
+            player: {
+                ...player,
+                route: {
+                    ...player.route,
+                    isLocked: true
                 }
             }
         };

@@ -2,7 +2,7 @@ import { hashHex } from "libs/colours";
 import { BODY_TYPES } from "enums/systemMap";
 import { Button, Circle, Star } from "components/common";
 
-const Row = ({ index, name, colour, offset = 0, body, showInfo, isSelected = false }) => {
+const Row = ({ index, name, colour, offset = 0, body, showInfo, isSelected = false, isLocked = false }) => {
     const hashedCoulour = hashHex(colour);
     const isPlanet = body === BODY_TYPES.PLANET;
     return (
@@ -24,6 +24,7 @@ const Row = ({ index, name, colour, offset = 0, body, showInfo, isSelected = fal
                 <Button
                     style={{ height: "30px" }}
                     onClick={() => showInfo({ object: body, index })}
+                    disabled={isLocked && !isSelected}
                 >
                     Info
                 </Button>

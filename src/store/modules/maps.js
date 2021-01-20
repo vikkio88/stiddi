@@ -20,9 +20,9 @@ const maps = store => {
     });
 
     store.on('maps:drawSystem', ({ player, maps }) => {
-        const { position: { system: playerPosition } } = player;
+        const { position: { system: playerPosition }, target, route } = player;
         const { system } = maps;
-        eBridge.emit(EVENTS.GAME.MAPS.DRAW_SYSTEM, { system, player: { ...playerPosition } });
+        eBridge.emit(EVENTS.GAME.MAPS.DRAW_SYSTEM, { system, player: { ...playerPosition }, target, route });
     });
 
     store.on('maps:zoomSystem', (_, { out = true, reset = false, level = null } = {}) => {
@@ -36,7 +36,7 @@ const maps = store => {
     store.on('maps:plotSystem', (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, payload);
     });
-    
+
     store.on('maps:clearPlotSystem', (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_PLOTROUTE_SYSTEM, payload);
     });

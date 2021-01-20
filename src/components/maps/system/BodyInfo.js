@@ -29,10 +29,13 @@ const BodyInfo = (
         onPlot,
         onLock,
         onClear,
-        isPlotted = false
+        //
+        route = {}
     }
 ) => {
     if (!object) return <EmptySelection />;
+
+    const { isPlotted, isLocked } = route;
 
     const isShip = ([BODY_TYPES.PLAYER].includes(object));
     const isCelestialBody = !([BODY_TYPES.PLAYER, BODY_TYPES.MAP_INDICATOR].includes(object));
@@ -101,10 +104,11 @@ const BodyInfo = (
                             X
                         </Button>
                         <Button
-                            variant={Button.Variants.EMPTY_GREEN}
+                            variant={isLocked ? Button.Variants.GREEN : Button.Variants.EMPTY_GREEN}
+                            disabled={isLocked}
                             onClick={onLock}
                         >
-                            LOCK
+                            {isLocked ? 'LOCKED' : 'Lock'}
                         </Button>
                     </>
                 )}
