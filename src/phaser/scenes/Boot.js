@@ -24,6 +24,7 @@ class Boot extends Scene {
 
         this.load.image('ship', 'assets/player.png');
         this.load.image('indicator', 'assets/indicator.png');
+        this.load.image('tipCross', 'assets/tip-cross.png');
     }
 
     create() {
