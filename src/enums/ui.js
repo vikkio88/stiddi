@@ -10,6 +10,12 @@ export const TABS = {
     MAPS: 'maps',
 };
 
+export const NAVIGATION_SUB_TABS = {
+    SUBLIGHT: 'sublight',
+    HYPER_DRIVE: 'hyperdrive',
+    WARP_DRIVE: 'warpdrive',
+};
+
 export const SCENES_MAP = {
     [TABS.NAVIGATION]: SCENES.NAVIGATION,
     // initial scene for Maps is System

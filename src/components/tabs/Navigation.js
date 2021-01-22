@@ -4,14 +4,9 @@ import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 import "./styles/Navigation.css";
 
 const Navigation = () => {
-    const { dispatch, navigation, player: { fuel } } = useStoreon('navigation', 'player');
-    const burn = (time, throttlePercentage = 25) => {
-        time = time * 1000;
-        const throttle = throttlePercentage / 100;
-        dispatch('commit:burn', { timeout: time, throttle });
-    };
+    const { dispatch, navigation, player: { position, fuel, route, target } } = useStoreon('navigation', 'player');
 
-    const { speed, heading, direction, navigationLock } = navigation;
+    const { speed, heading, direction, navigationLock, subtab } = navigation;
     const settings = {
         ...navigation.settings,
         set: settings => dispatch('navigation:storeSetting', settings)
@@ -31,8 +26,8 @@ const Navigation = () => {
                     />
                 </div>
                 <Engine
-                    onBurn={burn}
-                    onFullStop={() => dispatch('commit:fullstop')}
+                    dispatch={dispatch}
+                    selectedTab={subtab}
                     lock={navigationLock}
                     speed={speed}
                     settings={settings}

@@ -1,5 +1,6 @@
 import { useStoreon } from "storeon/react";
-import { Navbar, Navigation, Maps } from "components/tabs";
+import { Navigation, Maps } from "components/tabs";
+import { Navbar } from "components/common";
 
 import { TABS } from "enums/ui";
 
@@ -13,6 +14,7 @@ function Main() {
   return (
     <div className="flex f-col p-5 w-full">
       <Navbar
+        tabs={Object.values(TABS)}
         current={tab}
         onChange={tab => dispatch('ui:tabChange', { tab })}
       />

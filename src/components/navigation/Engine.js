@@ -1,22 +1,35 @@
-import { Button, RoundIndicator, Slider } from "components/common";
+import { Button, RoundIndicator, Slider, Navbar } from "components/common";
+import { NAVIGATION_SUB_TABS } from "enums/ui";
 import Calculations from "./Calculations";
 
 import "./styles/Engine.css";
 
 
-const Engine = ({ onBurn, onFullStop, speed = 0, lock = false, settings = {} }) => {
+const Engine = ({ speed = 0, lock = false, selectedTab, settings = {}, dispatch }) => {
     const { burnTime = 1, throttle = 25, set } = settings;
-    const setBurnTime = burnTime => set({burnTime});
-    const setThrottle = throttle => set({throttle});
+    const setBurnTime = burnTime => set({ burnTime });
+    const setThrottle = throttle => set({ throttle });
+    const onBurn = (time, throttlePercentage = 25) => {
+        time = time * 1000;
+        const throttle = throttlePercentage / 100;
+        dispatch('commit:burn', { timeout: time, throttle });
+    };
+    const onFullStop = () => dispatch('commit:fullstop');
 
     const canBurn = !lock && (burnTime > 0 && throttle > 0);
     const canFullStop = !lock && speed > 0 && speed < 3;
     return (
-        <div className="NavigationTab-engine ui-section-t">
+        <div className="NavigationTab-engine">
+            <Navbar
+                className="w-full"
+                current={selectedTab}
+                tabs={Object.values(NAVIGATION_SUB_TABS)}
+                onChange={subtab => dispatch('navigation:subtabChange', { subtab })}
+            />
             <div className="w-full flex f-col">
                 <div className="w-full flex f-row f-ac f-jsb pr-5 pl-5">
                     <h4>Burn Time</h4>
-                    <RoundIndicator value={burnTime} max={10} showRail>
+                    <RoundIndicator value={burnTime} max={10} showRail radius={40}>
                         sec
                     </RoundIndicator>
                 </div>
@@ -30,7 +43,7 @@ const Engine = ({ onBurn, onFullStop, speed = 0, lock = false, settings = {} }) 
             <div className="w-full flex f-col">
                 <div className="w-full flex f-row f-ac f-jsb pr-5 pl-5">
                     <h3>Throttle</h3>
-                    <RoundIndicator value={throttle} max={100} showRail>
+                    <RoundIndicator value={throttle} max={100} showRail radius={40}>
                         %
                     </RoundIndicator>
                 </div>
