@@ -1,12 +1,14 @@
 import { Button, RoundIndicator, Slider, Navbar } from "components/common";
-import { NAVIGATION_SUB_TABS } from "enums/ui";
+import { ENGINE_TYPES } from "enums/navigation";
 import Calculations from "./Calculations";
 
 import "./styles/Engine.css";
 
 
-const Engine = ({ speed = 0, lock = false, selectedTab, settings = {}, dispatch }) => {
-    const { burnTime = 1, throttle = 25, set } = settings;
+const Engine = ({ speed = 0, lock = false, engineType, settings = {}, dispatch }) => {
+    const { set } = settings;
+    //this might need to be passed down to the single engine type subcomp
+    const { burnTime = 1, throttle = 25 } = settings[engineType];
     const setBurnTime = burnTime => set({ burnTime });
     const setThrottle = throttle => set({ throttle });
     const onBurn = (time, throttlePercentage = 25) => {
@@ -15,6 +17,7 @@ const Engine = ({ speed = 0, lock = false, selectedTab, settings = {}, dispatch 
         dispatch('commit:burn', { timeout: time, throttle });
     };
     const onFullStop = () => dispatch('commit:fullstop');
+    //
 
     const canBurn = !lock && (burnTime > 0 && throttle > 0);
     const canFullStop = !lock && speed > 0 && speed < 3;
@@ -22,9 +25,9 @@ const Engine = ({ speed = 0, lock = false, selectedTab, settings = {}, dispatch 
         <div className="NavigationTab-engine">
             <Navbar
                 className="w-full"
-                current={selectedTab}
-                tabs={Object.values(NAVIGATION_SUB_TABS)}
-                onChange={subtab => dispatch('navigation:subtabChange', { subtab })}
+                current={engineType}
+                tabs={Object.values(ENGINE_TYPES)}
+                onChange={type => dispatch('navigation:subtabChange', { type })}
             />
             <div className="w-full flex f-col">
                 <div className="w-full flex f-row f-ac f-jsb pr-5 pl-5">

@@ -1,4 +1,5 @@
 import { useStoreon } from "storeon/react";
+import { ENGINE_TYPES } from 'enums/navigation';
 import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 
 import "./styles/Navigation.css";
@@ -6,10 +7,10 @@ import "./styles/Navigation.css";
 const Navigation = () => {
     const { dispatch, navigation, player: { position, fuel, route, target } } = useStoreon('navigation', 'player');
 
-    const { speed, heading, direction, navigationLock, subtab } = navigation;
+    const { speed, heading, direction, navigationLock, selectedEngineType } = navigation;
     const settings = {
         ...navigation.settings,
-        set: settings => dispatch('navigation:storeSetting', settings)
+        set: (settings, type = ENGINE_TYPES.THERMAL) => dispatch('navigation:storeSetting', { type, settings })
     };
     return (
         <div className="NavigationTab-wrapper">
@@ -27,7 +28,7 @@ const Navigation = () => {
                 </div>
                 <Engine
                     dispatch={dispatch}
-                    selectedTab={subtab}
+                    engineType={selectedEngineType}
                     lock={navigationLock}
                     speed={speed}
                     settings={settings}

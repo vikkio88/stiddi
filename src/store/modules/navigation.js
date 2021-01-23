@@ -1,6 +1,6 @@
-import { NAVIGATION_SUB_TABS } from 'enums/ui';
-import eBridge, { EVENTS } from 'libs/eventBridge';
-import { calculateFuelCost, calculateFullStopTimeout } from 'libs/game/navigation';
+import { ENGINE_TYPES } from "enums/navigation";
+import eBridge, { EVENTS } from "libs/eventBridge";
+import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
 
 const initialState = {
     heading: 0,
@@ -8,11 +8,15 @@ const initialState = {
     speed: 0,
     position: { x: 0, y: 0 },
     navigationLock: false,
-    subtab: NAVIGATION_SUB_TABS.SUBLIGHT,
+    selectedEngineType: ENGINE_TYPES.THERMAL,
     settings: {
-        heading: 0,
-        throttle: 20,
-        burnTime: 3
+        [ENGINE_TYPES.THERMAL]: {
+            heading: 0,
+            throttle: 20,
+            burnTime: 3
+        },
+        [ENGINE_TYPES.HYPER_DRIVE]: {},
+        [ENGINE_TYPES.WARP_DRIVE]: {},
     }
 };
 
@@ -35,11 +39,11 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:subtabChange', ({ navigation }, { subtab }) => {
+    store.on('navigation:subtabChange', ({ navigation }, { type }) => {
         return {
             navigation: {
                 ...navigation,
-                subtab
+                selectedEngineType: type
             }
         };
     });
@@ -89,13 +93,18 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:storeSetting', ({ navigation }, settings) => {
+    store.on('navigation:storeSetting', ({ navigation }, { type, settings }) => {
+        if (!Object.values(ENGINE_TYPES).includes(type)) return;
+
         return {
             navigation: {
                 ...navigation,
                 settings: {
                     ...navigation.settings,
-                    ...settings
+                    [type]: {
+                        ...navigation.settings[type],
+                        ...settings
+                    }
                 }
             }
         };
