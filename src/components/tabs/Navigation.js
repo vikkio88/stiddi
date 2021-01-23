@@ -5,7 +5,19 @@ import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 import "./styles/Navigation.css";
 
 const Navigation = () => {
-    const { dispatch, navigation, player: { position, fuel, route, target } } = useStoreon('navigation', 'player');
+    const {
+        dispatch, navigation,
+        player: {
+            fuel,
+            /*
+            // those will be needed in
+            // the other Engine types
+            position,
+            route,
+            target
+            */
+        }
+    } = useStoreon('navigation', 'player');
 
     const { speed, heading, direction, navigationLock, selectedEngineType } = navigation;
     const settings = {
@@ -34,7 +46,7 @@ const Navigation = () => {
                     settings={settings}
                 />
             </div>
-            <div className="NavigationTab-bottom ui-section">
+            <div className="NavigationTab-fuel-wrapper ui-section">
                 <Fuel value={fuel.current} max={fuel.max} />
             </div>
         </div>
