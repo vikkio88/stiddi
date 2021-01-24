@@ -13,11 +13,13 @@ const Navigation = () => {
             // those will be needed in
             // the other Engine types
             position,
+            */
             route,
             target
-            */
         }
     } = useStoreon('navigation', 'player');
+
+    const routeSetting = route.isLocked ? { route, target } : null;
 
     const { speed, heading, direction, navigationLock, selectedEngineType } = navigation;
     const settings = {
@@ -44,6 +46,7 @@ const Navigation = () => {
                     lock={navigationLock}
                     speed={speed}
                     settings={settings}
+                    route={routeSetting}
                 />
             </div>
             <div className="NavigationTab-fuel-wrapper ui-section">

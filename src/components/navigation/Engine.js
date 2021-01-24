@@ -12,8 +12,12 @@ const ENGINE_CONTROLS_MAP = {
 };
 
 
-const Engine = ({ speed = 0, lock = false, engineType, settings = {}, dispatch }) => {
+const Engine = ({ speed = 0, lock = false, engineType, settings = {}, route = null, dispatch }) => {
     const EngineControl = ENGINE_CONTROLS_MAP[engineType];
+    
+    const disabledEngines = [ENGINE_TYPES.WARP_DRIVE];
+    if (!route) disabledEngines.push(ENGINE_TYPES.HYPER_DRIVE);
+
     return (
         <div className="NavigationTab-engine">
             <Navbar
@@ -21,12 +25,14 @@ const Engine = ({ speed = 0, lock = false, engineType, settings = {}, dispatch }
                 current={engineType}
                 tabs={Object.values(ENGINE_TYPES)}
                 onChange={type => dispatch('navigation:subtabChange', { type })}
+                disabled={disabledEngines}
             />
             <EngineControl
                 speed={speed}
                 lock={lock}
                 settings={settings}
                 dispatch={dispatch}
+                route={route}
             />
         </div>
     );

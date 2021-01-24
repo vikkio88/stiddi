@@ -19,5 +19,15 @@ div.TabLink:hover {
 
 div.TabLink.active-tab-link {
     cursor: not-allowed;
+    color: black;
+    background-color: white;
+}
+div.TabLink.disabled-tab-link {
+    cursor: not-allowed;
     opacity: .5;
+}
+
+div.TabLink.disabled-tab-link:hover {
+    background-color: transparent;
+    color: white;
 }
