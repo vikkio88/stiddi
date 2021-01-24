@@ -22,6 +22,13 @@ class SystemMap extends Phaser.Scene {
         return sceneHelper.getCenter(this);
     }
 
+    getSystemCenter() {
+        return {
+            x: this.center.x,
+            y: this.center.y
+        };
+    }
+
     eventsSubscribe() {
         eventBridge.on(EVENTS.GAME.MAPS.DRAW_SYSTEM, payload => {
             console.log('[phaser] DRAW SYSTEM', payload);
@@ -87,10 +94,9 @@ class SystemMap extends Phaser.Scene {
     }
 
     getRelativeCoords({ x, y }) {
-        // need to check if center is it relative to camera
         return Coords.relativeCoords(
             { x, y },
-            Coords.zerify(this.getCenter())
+            Coords.zerify(this.getSystemCenter())
         );
     }
 
@@ -134,12 +140,13 @@ class SystemMap extends Phaser.Scene {
 
         // might want to add something like Indicator at the end of the route
         this.route = new Route(this, initial, position);
+        const relativeCoords = this.getRelativeCoords(position);
         eventBridge.dispatchFromPhaser(
             'player:plotSuccessSystem',
             {
                 target: {
                     object, index,
-                    position: this.getRelativeCoords(position)
+                    position: relativeCoords
                 }
             }
         );
