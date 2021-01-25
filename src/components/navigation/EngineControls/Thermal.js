@@ -3,8 +3,8 @@ import Calculations from "./Calculations";
 import { ENGINE_TYPES } from "enums/navigation";
 
 
-const Thermal = ({ speed, lock, settings, dispatch }) => {
-    const { set } = settings;
+const Thermal = ({ lock, settings, dispatch }) => {
+    const { set, speed } = settings;
     const { burnTime = 1, throttle = 25 } = settings[ENGINE_TYPES.THERMAL];
     const setBurnTime = burnTime => set({ burnTime });
     const setThrottle = throttle => set({ throttle });

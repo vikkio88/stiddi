@@ -3,6 +3,7 @@ import { Button } from "components/common";
 import { ANGLES, Geom } from "libs/math";
 
 import "./styles/Heading.css";
+import { ENGINE_TYPES } from "enums/navigation";
 
 
 export const Compass = ({ heading = 0, currentHeading = 0, direction = null }) => {
@@ -47,11 +48,12 @@ const rotationButtonStyle = {
 
 const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
 
-const Heading = ({ direction, currentHeading, speed, onRotate = () => { }, lock = false, settings = {} }) => {
-    const { heading = 0, set } = settings;
+const Heading = ({ onRotate = () => { }, lock = false, settings = {} }) => {
+    const { heading: rawHeading, direction: rawDirection, speed, set } = settings;
+    const { heading = 0 } = settings[ENGINE_TYPES.THERMAL];
     const setHeading = heading => set({ heading });
-    direction = normalised(direction);
-    currentHeading = normalised(currentHeading);
+    const direction = normalised(rawDirection);
+    const currentHeading = normalised(rawHeading);
 
 
     const canRotate = !lock && heading !== currentHeading;

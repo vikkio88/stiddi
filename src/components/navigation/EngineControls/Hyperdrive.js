@@ -1,7 +1,9 @@
-const Hyperdrive = ({ lock, settings, dispatch, route }) => {
-    // if the subtab is set to be Hyperdrive and you are unplotting
-    // the subtab should be reverted to Thermal
-    console.log(route);
+const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
+    const {} = settings;
+    const targetPos = route.target.position;
+    // this also has orbiting:bool
+    const playerPos = position.system;
+    console.log('POSITIONS', targetPos, playerPos);
     return (
         <>
             <h3>ROUTE LOCKED</h3>

@@ -9,11 +9,7 @@ const Navigation = () => {
         dispatch, navigation,
         player: {
             fuel,
-            /*
-            // those will be needed in
-            // the other Engine types
             position,
-            */
             route,
             target
         }
@@ -24,6 +20,9 @@ const Navigation = () => {
     const { speed, heading, direction, navigationLock, selectedEngineType } = navigation;
     const settings = {
         ...navigation.settings,
+        heading,
+        direction,
+        speed,
         set: (settings, type = ENGINE_TYPES.THERMAL) => dispatch('navigation:storeSetting', { type, settings })
     };
     return (
@@ -32,9 +31,6 @@ const Navigation = () => {
                 <div className="NavigationTab-top-row">
                     <Speed speed={speed} />
                     <Heading
-                        currentHeading={heading}
-                        direction={direction}
-                        speed={speed}
                         lock={navigationLock}
                         onRotate={angle => dispatch('commit:rotate', { angle })}
                         settings={settings}
@@ -44,9 +40,9 @@ const Navigation = () => {
                     dispatch={dispatch}
                     engineType={selectedEngineType}
                     lock={navigationLock}
-                    speed={speed}
                     settings={settings}
                     route={routeSetting}
+                    position={position}
                 />
             </div>
             <div className="NavigationTab-fuel-wrapper ui-section">

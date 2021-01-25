@@ -12,7 +12,7 @@ const ENGINE_CONTROLS_MAP = {
 };
 
 
-const Engine = ({ speed = 0, lock = false, engineType, settings = {}, route = null, dispatch }) => {
+const Engine = ({ lock = false, engineType, settings = {}, route = null, position = {}, dispatch }) => {
     const EngineControl = ENGINE_CONTROLS_MAP[engineType];
     
     const disabledEngines = [ENGINE_TYPES.WARP_DRIVE];
@@ -28,11 +28,11 @@ const Engine = ({ speed = 0, lock = false, engineType, settings = {}, route = nu
                 disabled={disabledEngines}
             />
             <EngineControl
-                speed={speed}
                 lock={lock}
                 settings={settings}
                 dispatch={dispatch}
                 route={route}
+                position={position}
             />
         </div>
     );
