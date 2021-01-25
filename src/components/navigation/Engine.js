@@ -24,7 +24,7 @@ const Engine = ({ speed = 0, lock = false, engineType, settings = {}, route = nu
                 className="w-full"
                 current={engineType}
                 tabs={Object.values(ENGINE_TYPES)}
-                onChange={type => dispatch('navigation:subtabChange', { type })}
+                onChange={type => dispatch('navigation:engineTabChange', { type })}
                 disabled={disabledEngines}
             />
             <EngineControl

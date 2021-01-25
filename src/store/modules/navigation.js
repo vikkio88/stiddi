@@ -39,7 +39,7 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:subtabChange', ({ navigation }, { type }) => {
+    store.on('navigation:engineTabChange', ({ navigation }, { type }) => {
         return {
             navigation: {
                 ...navigation,

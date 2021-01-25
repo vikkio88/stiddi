@@ -1,3 +1,5 @@
+import { ENGINE_TYPES } from "enums/navigation";
+
 const initialState = {
     fuel: {
         max: 80,
@@ -85,6 +87,7 @@ const player = store => {
 
     store.on('player:clearRouteSystem', ({ player }) => {
         store.dispatch('maps:clearPlotSystem');
+        store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
         return {
             player: {
                 ...player,
@@ -94,7 +97,7 @@ const player = store => {
             }
         };
     });
-    
+
     store.on('player:lockRouteSystem', ({ player }) => {
         return {
             player: {
