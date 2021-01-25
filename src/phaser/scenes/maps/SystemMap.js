@@ -173,6 +173,9 @@ class SystemMap extends Phaser.Scene {
         this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
         this.eventsSubscribe();
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
+            // avoid clicking away if route is plotted
+            if (this.route) return;
+
             this.clearIndicator();
             this.indicator = new Indicator(this, x, y);
             const position = Coords.relativeCoords({ x, y }, Coords.zerify(this.center));
@@ -194,6 +197,7 @@ class SystemMap extends Phaser.Scene {
     clearRoute() {
         if (this.route) {
             this.route.destroy();
+            this.route = null;
         }
     }
 

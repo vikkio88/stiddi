@@ -62,6 +62,7 @@ const player = store => {
 
     // make sure x,y are relative to 0,0 center of the system
     store.on('player:targetSystem', ({ player }, { target }) => {
+        // we need avoiding replacing the route if is locked
         return {
             player: {
                 ...player,

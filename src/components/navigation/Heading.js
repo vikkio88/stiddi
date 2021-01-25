@@ -1,6 +1,6 @@
 import { BLUE, GREEN, DARK_GREEN, RED } from "enums/colours";
 import { Button } from "components/common";
-import { ANGLES, Geom } from "libs/math";
+import { ANGLES, Geom, Angle } from "libs/math";
 
 import "./styles/Heading.css";
 import { ENGINE_TYPES } from "enums/navigation";
@@ -46,14 +46,12 @@ const rotationButtonStyle = {
     borderLeft: '1px solid black'
 };
 
-const normalised = deg => (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
-
 const Heading = ({ onRotate = () => { }, lock = false, settings = {} }) => {
     const { heading: rawHeading, direction: rawDirection, speed, set } = settings;
     const { heading = 0 } = settings[ENGINE_TYPES.THERMAL];
     const setHeading = heading => set({ heading });
-    const direction = normalised(rawDirection);
-    const currentHeading = normalised(rawHeading);
+    const direction = Angle.normalised(rawDirection);
+    const currentHeading = Angle.normalised(rawHeading);
 
 
     const canRotate = !lock && heading !== currentHeading;

@@ -36,7 +36,15 @@ export const Angle = {
             rotation: Math.abs((clockwise ? positiveRotation : negativeRotation) % ANGLES.DEG_360),
             angle: clockwise ? wantedAngle : negativeAngle
         };
+    },
+    headingAngleFromRad(rad) {
+        const angle = this.normalised(Phaser.Math.RadToDeg(rad) + ANGLES.DEG_90);
+        return Math.floor(angle);
+    },
+    normalised(deg) {
+        return (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
     }
+
 };
 
 export const Geom = {
@@ -56,6 +64,9 @@ export const Geom = {
     distancePoints(p1, p2) {
         return Phaser.Math.Distance.BetweenPoints(p1, p2);
     },
+    angleBetween(p1, p2) {
+        return Angle.headingAngleFromRad(Phaser.Math.Angle.BetweenPoints(p1, p2));
+    }
 };
 
 export const Coords = {
