@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "deploy": "mv build/index.html build/200.html && surge --domain stiddi.surge.sh build/",
-    "buildDeploy": "GENERATE_SOURCEMAP=false npm run build && npm run deploy"
+    "version": "VERSION=`git rev-parse --short HEAD` && echo \"\n<!-- $VERSION -->\" >> build/index.html",
+    "buildDeploy": "GENERATE_SOURCEMAP=false npm run build && npm run version && npm run deploy"
   },
   "eslintConfig": {
     "extends": [
