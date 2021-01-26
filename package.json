@@ -21,6 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "deploy": "mv build/index.html build/200.html && surge --domain stiddi.surge.sh build/",
+    "versionPrint": "git rev-parse --short HEAD",
     "version": "VERSION=`git rev-parse --short HEAD` && echo \"\n<!-- $VERSION -->\" >> build/index.html",
     "buildDeploy": "GENERATE_SOURCEMAP=false npm run build && npm run version && npm run deploy"
   },
