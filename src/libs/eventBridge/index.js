@@ -4,6 +4,7 @@ export const EVENTS = {
             BURN: 'game:action:burn',
             ROTATE: 'game:action:rotate',
             FULL_STOP: 'game:action:fullstop',
+            HYPERDRIVE_LOCKED_ROUTE: 'game:action:hyperdrive_locked_route'
         },
         EFFECTS: {
             SHAKE: 'game:effects:shake'

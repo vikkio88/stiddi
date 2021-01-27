@@ -100,6 +100,9 @@ const player = store => {
     });
 
     store.on('player:lockRouteSystem', ({ player }) => {
+        // show in the Radar the direction of the locked plot
+        store.dispatch('navigation:hyperDriveLockedRoute', { player: player.position.system, target: player.target });
+
         return {
             player: {
                 ...player,

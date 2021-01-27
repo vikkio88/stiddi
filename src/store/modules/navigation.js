@@ -1,5 +1,6 @@
 import { ENGINE_TYPES } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
+import { Geom } from "libs/math";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
 
 const initialState = {
@@ -108,6 +109,11 @@ const navigation = store => {
                 }
             }
         };
+    });
+
+    store.on('navigation:hyperDriveLockedRoute', (_, { player, target }) => {
+        const angle = Geom.angleBetween(player, target.position);
+        eBridge.emit(EVENTS.GAME.ACTIONS.HYPERDRIVE_LOCKED_ROUTE, { angle });
     });
 };
 

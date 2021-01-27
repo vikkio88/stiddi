@@ -1,10 +1,14 @@
-import Phaser from "phaser";
+import Phaser, { Geom } from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
-import { Ship } from "../entities";
+import { Ship, LockedRoute } from "phaser/entities/navigation";
 
 class Navigation extends Phaser.Scene {
     constructor() {
         super({ key: "Navigation" });
+
+        this.state = {
+            hasLockedHyperdriveRoute: false
+        };
     }
 
     eventsSubscribe() {
@@ -28,6 +32,13 @@ class Navigation extends Phaser.Scene {
             this.ship.body.setAcceleration(0, 0);
             this.ship.body.setVelocity(0, 0);
         });
+
+        eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE_LOCKED_ROUTE, ({ angle }) => {
+            console.log('[phaser] HYPERDRIVE LOCKED', { angle });
+            const { x, y } = this.ship;
+            this.state.hasLockedHyperdriveRoute = true;
+            this.drawLockedRoute(x, y, angle);
+        });
     }
 
     create() {
@@ -35,7 +46,7 @@ class Navigation extends Phaser.Scene {
         this.mainCamera.setBackgroundColor(0x000000);
         const { centerX, centerY } = this.mainCamera;
 
-        this.grid = this.add.grid(centerX, centerY, 64 * 5, 64 * 5, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
+        //this.grid = this.add.grid(centerX, centerY, 64 * 5, 64 * 5, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
         this.ship = new Ship(this, centerX, centerY);
         this.physics.world.enable(this.ship);
         this.ship.startHeartBeat();
@@ -44,14 +55,13 @@ class Navigation extends Phaser.Scene {
         this.mainCamera.startFollow(this.ship);
         this.eventsSubscribe();
 
+        this.drawLockedRoute(centerX, centerY, 90);
         setInterval(() => {
             if (this.ship.getNavigation().speed > 0) {
-                console.log('casting radar');
-                this.castRadar(
-                    this.ship.x,
-                    this.ship.y,
-                    250
-                );
+                //console.log('casting radar');
+                const { x, y } = this.ship;
+                //this.castRadar(x, y, 250);
+                this.drawLockedRoute(x, y, 90);
             }
         }, 3000);
     }
@@ -62,7 +72,7 @@ class Navigation extends Phaser.Scene {
             this.radar.destroy();
         }
         this.radar = this.add.graphics();
-        this.radar.fillStyle(0xffffff, 2);
+        this.radar.fillStyle(0xffffff);
         this.radar.strokeCircleShape(radarEdge);
         //this.radar.fillCirle(radarEdge);
 
@@ -70,6 +80,13 @@ class Navigation extends Phaser.Scene {
         //this.grid.setPosition(x,y);
         //this.grid.setMask(this.radar);
 
+    }
+
+    drawLockedRoute(x, y, angle) {
+        if (this.arc) this.arc.destroy();
+        if (!this.state.hasLockedHyperdriveRoute) return;
+        
+        this.arc = LockedRoute.draw(this, { x, y }, angle);
     }
 }
 
