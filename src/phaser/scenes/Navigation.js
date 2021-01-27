@@ -7,7 +7,10 @@ class Navigation extends Phaser.Scene {
         super({ key: "Navigation" });
 
         this.state = {
-            hasLockedHyperdriveRoute: false
+            hyperdrive: {
+                locked: false,
+                angle: 0
+            }
         };
     }
 
@@ -25,6 +28,9 @@ class Navigation extends Phaser.Scene {
         eventBridge.on(EVENTS.GAME.ACTIONS.ROTATE, ({ angle }) => {
             console.log('[phaser] ROTATE RECEIVED', angle);
             this.ship.rotateTo(angle);
+            // here might need to update the drawLockedRoute
+            // if the angle is the correct one and maybe we 
+            // want to colour it differently
         });
 
         eventBridge.on(EVENTS.GAME.ACTIONS.FULL_STOP, () => {
@@ -36,8 +42,9 @@ class Navigation extends Phaser.Scene {
         eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE_LOCKED_ROUTE, ({ angle }) => {
             console.log('[phaser] HYPERDRIVE LOCKED', { angle });
             const { x, y } = this.ship;
-            this.state.hasLockedHyperdriveRoute = true;
-            this.drawLockedRoute(x, y, angle);
+            this.state.hyperdrive.locked = true;
+            this.state.hyperdrive.angle = angle;
+            this.drawLockedRoute(x, y);
         });
     }
 
@@ -82,11 +89,11 @@ class Navigation extends Phaser.Scene {
 
     }
 
-    drawLockedRoute(x, y, angle) {
+    drawLockedRoute(x, y,) {
         if (this.arc) this.arc.destroy();
-        if (!this.state.hasLockedHyperdriveRoute) return;
-        
-        this.arc = LockedRoute.draw(this, { x, y }, angle);
+        if (!this.state.hyperdrive.locked) return;
+
+        this.arc = LockedRoute.draw(this, { x, y }, this.state.hyperdrive.angle);
     }
 }
 
