@@ -63,7 +63,7 @@ class Navigation extends Phaser.Scene {
         this.mainCamera.startFollow(this.ship);
         this.eventsSubscribe();
 
-        this.drawLockedRoute(centerX, centerY);
+        this.updateLockedRoute(centerX, centerY);
 
         // using a small loop that can be react based on speed
         this.uiUpdate();
@@ -74,7 +74,7 @@ class Navigation extends Phaser.Scene {
         //console.log('[PHASER] uiUpdateLoop', { speed });
 
         if (speed > 0) {
-            this.drawLockedRoute(position.x, position.y);
+            this.updateLockedRoute(position.x, position.y);
             //this.castRadar(position.x, position.y, 250);
         }
         const timeout = speed < 50 ? 3000 : 1500;
@@ -97,7 +97,7 @@ class Navigation extends Phaser.Scene {
 
     }
 
-    drawLockedRoute(x, y) {
+    updateLockedRoute(x, y) {
         if (this.arc) this.arc.destroy();
         if (!this.state.hyperdrive.locked) return;
 
@@ -109,22 +109,20 @@ class Navigation extends Phaser.Scene {
         if (action === HYPERDRIVE_ACTIONS.LOCKED) {
             this.state.hyperdrive.locked = true;
             this.state.hyperdrive.angle = payload.angle;
-            this.drawLockedRoute(x, y);
+            this.updateLockedRoute(x, y);
             return;
         }
 
         if (action === HYPERDRIVE_ACTIONS.UNLOCKED) {
             this.state.hyperdrive.locked = false;
-            // this will clear it
-            this.drawLockedRoute();
+            this.updateLockedRoute();
             return;
         }
 
         if (action === HYPERDRIVE_ACTIONS.ENGAGED) {
             this.state.hyperdrive.locked = false;
             this.state.hyperdrive.engaged = true;
-            // this will clear it
-            this.drawLockedRoute();
+            this.updateLockedRoute();
 
             this.engageHyperdrive();
             return;
