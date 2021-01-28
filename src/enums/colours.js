@@ -10,3 +10,5 @@ export const LIGHT_BLUE = '';
 export const BLUE = '#4ca7af';
 export const DARK_BLUE = '#3e8a8e';
 
+export const YELLOW = '#E7E446';
+

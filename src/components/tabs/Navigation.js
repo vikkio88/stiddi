@@ -34,6 +34,7 @@ const Navigation = () => {
                         lock={navigationLock}
                         onRotate={angle => dispatch('commit:rotate', { angle })}
                         settings={settings}
+                        routeSetting={routeSetting}
                     />
                 </div>
                 <Engine

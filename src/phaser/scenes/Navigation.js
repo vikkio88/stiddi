@@ -62,9 +62,6 @@ class Navigation extends Phaser.Scene {
 
         this.mainCamera.startFollow(this.ship);
         this.eventsSubscribe();
-
-        this.updateLockedRoute(centerX, centerY);
-
         // using a small loop that can be react based on speed
         this.uiUpdate();
     }

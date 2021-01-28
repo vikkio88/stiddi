@@ -1,4 +1,4 @@
-import { ENGINE_TYPES } from "enums/navigation";
+import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
 
@@ -108,6 +108,12 @@ const navigation = store => {
                 }
             }
         };
+    });
+
+    store.on('navigation:engageHyperdrive', ({ navigation }) => {
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
+        // here we need to report that it is engaged
+        // and lock navigation so we cannot turn/burn
     });
 
     store.on('navigation:hyperdriveAction', (_, { action, payload }) => {

@@ -74,10 +74,17 @@ const player = store => {
 
     store.on('player:plotSuccessSystem', ({ player }, { target }) => {
         console.log('PLOT SUCCESS', target);
+        const playerPos = player.position.system;
+        const targetPos = player.target.position;
+        const angle = Geom.angleBetween(playerPos, targetPos);
+
         return {
             player: {
                 ...player,
-                target,
+                target: {
+                    ...target,
+                    angle
+                },
                 route: {
                     ...player.route,
                     type: 'system',
@@ -103,10 +110,7 @@ const player = store => {
 
     store.on('player:lockRouteSystem', ({ player }) => {
         // show in the Radar the direction of the locked plot
-        const playerPos = player.position.system;
-        const targetPos = player.target.position;
-        const angle = Geom.angleBetween(playerPos, targetPos);
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle } });
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle: player.target.angle } });
         //
 
         return {
