@@ -11,6 +11,8 @@ class Navigation extends Phaser.Scene {
         this.state = {
             hyperdrive: {
                 locked: false,
+                engaged: false,
+                // engaging angle
                 angle: 0
             }
         };
@@ -43,19 +45,7 @@ class Navigation extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE, ({ action, payload }) => {
             console.log('[phaser] HYPERDRIVE Action', { action, payload });
-            const { x, y } = this.ship;
-            if (action === HYPERDRIVE_ACTIONS.LOCKED) {
-                this.state.hyperdrive.locked = true;
-                this.state.hyperdrive.angle = payload.angle;
-                this.drawLockedRoute(x, y);
-            }
-
-            if (action === HYPERDRIVE_ACTIONS.UNLOCKED) {
-                this.state.hyperdrive.locked = false;
-                // this will clear it
-                this.drawLockedRoute();
-            }
-
+            this.handleHyperdrive(action, payload);
         });
     }
 
@@ -73,15 +63,22 @@ class Navigation extends Phaser.Scene {
         this.mainCamera.startFollow(this.ship);
         this.eventsSubscribe();
 
-        this.drawLockedRoute(centerX, centerY, 90);
-        setInterval(() => {
-            if (this.ship.getNavigation().speed > 0) {
-                //console.log('casting radar');
-                const { x, y } = this.ship;
-                //this.castRadar(x, y, 250);
-                this.drawLockedRoute(x, y, 90);
-            }
-        }, 3000);
+        this.drawLockedRoute(centerX, centerY);
+
+        // using a small loop that can be react based on speed
+        this.uiUpdate();
+    }
+
+    uiUpdate() {
+        const { speed, position } = this.ship.getNavigation();
+        //console.log('[PHASER] uiUpdateLoop', { speed });
+
+        if (speed > 0) {
+            this.drawLockedRoute(position.x, position.y);
+            //this.castRadar(position.x, position.y, 250);
+        }
+        const timeout = speed < 50 ? 3000 : 1500;
+        setTimeout(() => this.uiUpdate(), timeout);
     }
 
     castRadar(x, y, range) {
@@ -100,11 +97,42 @@ class Navigation extends Phaser.Scene {
 
     }
 
-    drawLockedRoute(x, y,) {
+    drawLockedRoute(x, y) {
         if (this.arc) this.arc.destroy();
         if (!this.state.hyperdrive.locked) return;
 
         this.arc = LockedRoute.draw(this, { x, y }, this.state.hyperdrive.angle);
+    }
+
+    handleHyperdrive(action, payload) {
+        const { x, y } = this.ship;
+        if (action === HYPERDRIVE_ACTIONS.LOCKED) {
+            this.state.hyperdrive.locked = true;
+            this.state.hyperdrive.angle = payload.angle;
+            this.drawLockedRoute(x, y);
+            return;
+        }
+
+        if (action === HYPERDRIVE_ACTIONS.UNLOCKED) {
+            this.state.hyperdrive.locked = false;
+            // this will clear it
+            this.drawLockedRoute();
+            return;
+        }
+
+        if (action === HYPERDRIVE_ACTIONS.ENGAGED) {
+            this.state.hyperdrive.locked = false;
+            this.state.hyperdrive.engaged = true;
+            // this will clear it
+            this.drawLockedRoute();
+
+            this.engageHyperdrive();
+            return;
+        }
+    }
+
+    engageHyperdrive() {
+        console.log('[PHASER] ENGAGED ANIMATION');
     }
 }
 
