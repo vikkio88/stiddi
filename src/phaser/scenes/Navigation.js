@@ -1,6 +1,8 @@
-import Phaser, { Geom } from "phaser";
+import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import { Ship, LockedRoute } from "phaser/entities/navigation";
+
+import { HYPERDRIVE_ACTIONS } from "enums/navigation";
 
 class Navigation extends Phaser.Scene {
     constructor() {
@@ -39,12 +41,21 @@ class Navigation extends Phaser.Scene {
             this.ship.body.setVelocity(0, 0);
         });
 
-        eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE_LOCKED_ROUTE, ({ angle }) => {
-            console.log('[phaser] HYPERDRIVE LOCKED', { angle });
+        eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE, ({ action, payload }) => {
+            console.log('[phaser] HYPERDRIVE Action', { action, payload });
             const { x, y } = this.ship;
-            this.state.hyperdrive.locked = true;
-            this.state.hyperdrive.angle = angle;
-            this.drawLockedRoute(x, y);
+            if (action === HYPERDRIVE_ACTIONS.LOCKED) {
+                this.state.hyperdrive.locked = true;
+                this.state.hyperdrive.angle = payload.angle;
+                this.drawLockedRoute(x, y);
+            }
+
+            if (action === HYPERDRIVE_ACTIONS.UNLOCKED) {
+                this.state.hyperdrive.locked = false;
+                // this will clear it
+                this.drawLockedRoute();
+            }
+
         });
     }
 

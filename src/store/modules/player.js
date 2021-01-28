@@ -1,4 +1,5 @@
-import { ENGINE_TYPES } from "enums/navigation";
+import { Geom } from "libs/math";
+import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 
 const initialState = {
     fuel: {
@@ -89,6 +90,7 @@ const player = store => {
     store.on('player:clearRouteSystem', ({ player }) => {
         store.dispatch('maps:clearPlotSystem');
         store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.UNLOCKED });
         return {
             player: {
                 ...player,
@@ -101,7 +103,11 @@ const player = store => {
 
     store.on('player:lockRouteSystem', ({ player }) => {
         // show in the Radar the direction of the locked plot
-        store.dispatch('navigation:hyperDriveLockedRoute', { player: player.position.system, target: player.target });
+        const playerPos = player.position.system;
+        const targetPos = player.target.position;
+        const angle = Geom.angleBetween(playerPos, targetPos);
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle } });
+        //
 
         return {
             player: {
