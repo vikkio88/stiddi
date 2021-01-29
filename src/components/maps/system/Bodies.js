@@ -41,7 +41,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                 </Button>
                 </div>
             </div>
-            <div className={`Bodies-List${bodiesCount > 7 ? ' List-overflowing' : ''}`}>
+            <div className={`Bodies-List${bodiesCount > 6 ? ' List-overflowing' : ''}`}>
                 {system.stars.map((s, i) => (
                     <Row
                         key={`star_${i}`}
