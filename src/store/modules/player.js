@@ -75,7 +75,7 @@ const player = store => {
     store.on('player:plotSuccessSystem', ({ player }, { target }) => {
         console.log('PLOT SUCCESS', target);
         const playerPos = player.position.system;
-        const targetPos = player.target.position;
+        const targetPos = target.position;
         const angle = Geom.angleBetween(playerPos, targetPos);
 
         return {
