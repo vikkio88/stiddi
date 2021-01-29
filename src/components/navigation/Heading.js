@@ -59,26 +59,26 @@ const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetti
 
     const canRotate = !lock && heading !== currentHeading;
     const canMatchDirection = !lock && heading !== direction && speed > 0;
-    const canMatchTarget = !lock && target !== heading;
+    const canMatchTarget = !lock && target !== null && target !== heading;
     return (
         <div className="NavigationTab-heading f-1">
+            <div className="f-1 flex f-row f-ae f-jsa">
+                <div className="angleSpacer">
+                    Heading: {currentHeading} °
+                </div>
+                <div className="angleSpacer">
+                    Direction: {direction} °
+                </div>
+                <div className="angleSpacer" style={{ color: YELLOW }}>
+                    {routeSetting && `Target: ${routeSetting.target.angle} °`}
+                </div>
+            </div>
             <Compass
                 heading={heading}
                 currentHeading={currentHeading}
                 direction={speed > 0 ? direction : null}
                 target={target}
             />
-            <div className="flex w-full f-row f-ac f-jsb">
-                <div>
-                    Heading: {currentHeading} °
-                </div>
-                <div>
-                    Direction: {direction} °
-                </div>
-                <div>
-                    {routeSetting && `Target: ${routeSetting.target.angle} °`}
-                </div>
-            </div>
             <div className="flex w-full">
                 <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - ANGLES.DEG_45 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-45</Button>
                 <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
