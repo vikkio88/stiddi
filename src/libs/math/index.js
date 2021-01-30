@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-export const C = 299_792_458;
+export * from "./physics";
 
 export const ANGLES = {
     DEG_0: 0,

@@ -1,4 +1,4 @@
-import { ANGLES, Geom } from "libs/math";
+import { ANGLES, Physics, Geom } from "libs/math";
 import { Button } from "components/common";
 
 const ANGLE_SENSITIVITY = 5;
@@ -11,10 +11,19 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
     const playerPos = position.system;
     const distance = Geom.distancePoints(playerPos, targetPos);
 
-    const canEngage = !lock && (speed >= 50 && ((Math.abs(direction - target.angle + ANGLES.DEG_360) % ANGLES.DEG_360) <= ANGLE_SENSITIVITY));
+    const canEngage = !lock
+        && (
+            speed >= 50
+            && (
+                (Math.abs(direction - target.angle + ANGLES.DEG_360) % ANGLES.DEG_360)
+                <= ANGLE_SENSITIVITY
+            )
+        );
+
     return (
         <>
-            <h2>Disance: {distance.toFixed(2)} Ls</h2>
+            <h2>Distance: {distance.toFixed(2)} Ls</h2>
+            <h2>ETA: {Physics.calculateETA(distance, speed).toFixed(2)} s</h2>
             <h1>Engage Heading: {direction === null ? '-' : direction} / {target.angle} °</h1>
             <h1>Engage speed: {speed.toFixed(2)} / 50 m/s</h1>
             <Button
