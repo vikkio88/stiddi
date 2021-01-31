@@ -1,5 +1,7 @@
-import { ANGLES, Physics, Geom, Scalar, METRICS, METRICS_SYMBOLS } from "libs/math";
-import { Button } from "components/common";
+import { ANGLES, Physics, Geom, Scalar, METRICS } from "libs/math";
+
+import ETA from "./ETA";
+import EngageControls from "./EngageControls";
 
 const ANGLE_SENSITIVITY = 5;
 
@@ -30,17 +32,12 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
 
     return (
         <>
-            <h2>Distance: {distance.toFixed(2)} Ls</h2>
-            <h2>ETA: {eta && <>{eta.value.toFixed(2)} {METRICS_SYMBOLS[eta.unit]}</>}</h2>
-            <h1>Engage Heading: {direction === null ? '-' : direction} / {target.angle} °</h1>
-            <h1>Engage speed: {speed.toFixed(2)} / 50 m/s</h1>
-            <Button
-                disabled={!canEngage}
-                onClick={() => dispatch('navigation:engageHyperdrive')}
-                variant={Button.Variants.EMPTY_GREEN}
-            >
-                ENGAGE
-            </Button>
+            <ETA distance={distance} eta={eta} />
+            <EngageControls
+                status={{ speed, direction, target }}
+                canEngage={canEngage}
+                onEngage={() => dispatch('navigation:engageHyperdrive')}
+            />
         </>
     );
 };

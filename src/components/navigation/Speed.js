@@ -16,10 +16,6 @@ const UNITS = {
         label: 'Mm/h',
         conversion: speed => (speed * .0036).toFixed(2)
     },
-    PC: {
-        label: '%c',
-        conversion: speed => (speed / C * 100).toFixed(2)
-    },
     C: {
         label: 'c',
         conversion: speed => (speed / C).toFixed(2)
