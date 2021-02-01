@@ -7,7 +7,7 @@ const Progress = ({ style = {}, value = 0, max = 100, critical = 40, className =
         ...style
     };
 
-    const size = value / max * 100;
+    const size = Math.min(value / max * 100, 100);
     const barStyles = {
         backgroundColor: size < critical ? RED : GREEN,
         height: style.height,

@@ -42,6 +42,7 @@ export const Angle = {
         return Math.floor(angle);
     },
     normalised(deg) {
+        if (deg === null) return null;
         return (deg + ANGLES.DEG_360) % ANGLES.DEG_360;
     }
 
