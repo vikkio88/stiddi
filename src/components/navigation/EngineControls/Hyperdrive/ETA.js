@@ -13,8 +13,9 @@ const ETA = ({ distance, speed }) => {
     // const displayDistance = 
     return (
         <div className="f-1 p-10">
+            <h2>Target</h2>
             <h3>Distance: {distance.toFixed(2)} Ls</h3>
-            <h3>ETA: {eta && <>{eta.value.toFixed(2)} {METRICS_SYMBOLS[eta.unit]}</>}</h3>
+            <h3>ETA (current speed): {eta ? (<>{eta.value.toFixed(2)} {METRICS_SYMBOLS[eta.unit]}</>) : '-'}</h3>
         </div>
     );
 };
