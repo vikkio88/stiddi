@@ -8,6 +8,7 @@ const Navigation = () => {
     const {
         dispatch, navigation,
         player: {
+            inHyperdrive,
             fuel,
             position,
             route,
@@ -20,6 +21,7 @@ const Navigation = () => {
     const { speed, heading, direction, navigationLock, selectedEngineType } = navigation;
     const settings = {
         ...navigation.settings,
+        inHyperdrive,
         heading,
         direction,
         speed,

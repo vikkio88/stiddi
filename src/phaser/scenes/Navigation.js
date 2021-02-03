@@ -119,6 +119,10 @@ class Navigation extends Phaser.Scene {
         if (action === HYPERDRIVE_ACTIONS.ENGAGED) {
             this.state.hyperdrive.locked = false;
             this.state.hyperdrive.engaged = true;
+            // if in hyperdrive we need to stop hearthbeat
+            this.ship.stopHeartBeat();
+            // if we jump out hyperdrive we need to start it again
+            // maybe with a small speed left
             this.updateLockedRoute();
 
             this.engageHyperdrive();

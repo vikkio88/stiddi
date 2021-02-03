@@ -1,6 +1,7 @@
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
+import { C } from "libs/math";
 
 const initialState = {
     heading: 0,
@@ -15,7 +16,10 @@ const initialState = {
             throttle: 20,
             burnTime: 3
         },
-        [ENGINE_TYPES.HYPER_DRIVE]: {},
+        [ENGINE_TYPES.HYPER_DRIVE]: {
+            hdTargetSpeed: 1,
+            startingPosition: null
+        },
         [ENGINE_TYPES.WARP_DRIVE]: {},
     }
 };
@@ -110,10 +114,31 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:engageHyperdrive', ({ navigation }) => {
+    store.on('navigation:engageHyperdrive', ({ navigation }, { startingPosition }) => {
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
+        store.dispatch('player:toggleHyperdrive', { inHyperdrive: true });
         // here we need to report that it is engaged
         // and lock navigation so we cannot turn/burn
+        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+
+        console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed });
+        // I need to trigger here a timed event that will move the space through hyperspace
+        // update the position on the map also
+        return {
+            navigation: {
+                ...navigation,
+                navigationLock: true,
+                //
+                speed: hdSettings.hdTargetSpeed * C,
+                settings: {
+                    ...navigation.settings,
+                    [ENGINE_TYPES.HYPER_DRIVE]: {
+                        ...hdSettings,
+                        startingPosition
+                    }
+                }
+            }
+        };
     });
 
     store.on('navigation:hyperdriveAction', (_, { action, payload }) => {

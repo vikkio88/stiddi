@@ -1,15 +1,18 @@
-import { useState } from "react";
 import { Geom } from "libs/math";
 import { Slider } from "components/common";
+import { ENGINE_TYPES } from "enums/navigation";
 
 import ETA from "./ETA";
 import EngageControls from "./EngageControls";
 
 import "./styles/Hyperdrive.css";
 
+const type = ENGINE_TYPES.HYPER_DRIVE;
+
 const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
-    const [hdSpeed, setHDSpeed] = useState(1);
-    const { direction, speed } = settings;
+    const { set, direction, speed, inHyperdrive } = settings;
+    const { hdTargetSpeed } = settings[type];
+    const setTargetSpeed = hdTargetSpeed => set({ hdTargetSpeed }, type);
     const { target } = route;
     const targetPos = target.position;
     // this also has orbiting:bool
@@ -18,43 +21,52 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
 
     return (
         <div className="w-full flex f-row f-ac f-jsb">
-            <div className="HyperDrive-speed f-1 flex f-col f-ac f-jc">
-                <h2>Target Speed</h2>
-                <h1>
-                    <span className="speed">{hdSpeed}</span> c
+            { !inHyperdrive && (
+                <div
+                    // this needs to be moved to its own component
+                    className="HyperDrive-speed f-1 flex f-col f-ac f-jc"
+                >
+                    <h2>Target Speed</h2>
+                    <h1>
+                        <span className="speed">{hdTargetSpeed}</span> c
                 </h1>
-                <Slider
-                    onChange={e => setHDSpeed(e.target.value)}
-                    value={hdSpeed}
-                    min={1}
-                    step={1}
-                    max={200}
-                    className="w-full"
-                />
-                <div className="Calculations">
-                    <span className="label">Travel Time: </span>
-                    <h3>
-                        <span className="value">
-                            ~{(distance / hdSpeed).toFixed(2)}
-                        </span> s
+                    <Slider
+                        onChange={e => setTargetSpeed(e.target.value)}
+                        value={hdTargetSpeed}
+                        min={1}
+                        step={1}
+                        max={200}
+                        className="w-full"
+                    />
+                    <div className="Calculations">
+                        <span className="label">Travel Time: </span>
+                        <h3>
+                            <span className="value">
+                                ~{(distance / hdTargetSpeed).toFixed(2)}
+                            </span> s
                     </h3>
-                </div>
-                <div className="Calculations">
-                    <span className="label">Fuel: </span>
-                    <h3>
-                        <span className="value">
-                            ~{(hdSpeed / 10).toFixed(2)}
-                        </span> units
+                    </div>
+                    <div className="Calculations">
+                        <span className="label">Fuel: </span>
+                        <h3>
+                            <span className="value">
+                                ~{(hdTargetSpeed / 10).toFixed(2)}
+                            </span> units
                     </h3>
-                </div>
+                    </div>
 
-            </div>
+                </div>
+            )}
             <div className="f-1">
-                <ETA distance={distance} speed={speed} />
+                <ETA distance={distance} speed={speed} inHyperdrive={inHyperdrive} />
                 <EngageControls
                     status={{ speed, direction, target }}
                     isLocked={lock}
-                    onEngage={() => dispatch('navigation:engageHyperdrive', { targetSpeed: hdSpeed })}
+                    inHyperdrive={inHyperdrive}
+                    onEngage={() => dispatch(
+                        'navigation:engageHyperdrive',
+                        { startingPosition: playerPos }
+                    )}
                 />
             </div>
         </div>

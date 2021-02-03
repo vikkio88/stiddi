@@ -2,6 +2,7 @@ import { Geom } from "libs/math";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 
 const initialState = {
+    inHyperdrive: false,
     fuel: {
         max: 80,
         current: 80
@@ -124,6 +125,14 @@ const player = store => {
         };
     });
 
+    store.on('player:toggleHyperdrive', ({ player }, { inHyperdrive }) => {
+        return {
+            player: {
+                ...player,
+                inHyperdrive
+            }
+        };
+    });
 
 };
 
