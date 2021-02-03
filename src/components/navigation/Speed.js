@@ -1,29 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "components/common";
-import { C } from "libs/math";
+import { C, Numbers } from "libs/math";
 import "./styles/Speed.css";
 
 const UNITS = {
     MS: {
         label: 'm/s',
-        conversion: speed => speed.toFixed(2)
+        conversion: speed => Numbers.kFormat(speed)
     },
     KH: {
         label: 'Km/h',
-        conversion: speed => (speed * 3.6).toFixed(2)
+        conversion: speed => Numbers.kFormat(speed * 3.6)
     },
     MH: {
         label: 'Mm/h',
-        conversion: speed => (speed * .0036).toFixed(2)
+        conversion: speed => Numbers.kFormat(speed * .0036)
     },
     C: {
         label: 'c',
-        conversion: speed => (speed / C).toFixed(2)
+        conversion: speed => Numbers.kFormat(speed / C)
     },
 };
 
+// speed is always m/s
 const Speed = ({ speed = 0 }) => {
-    const [unitIndex, setUnit] = useState(0);
+    const fallbackUnitIndex = speed > (C / 3) ? 3 : 0;
+    const [unitIndex, setUnit] = useState(fallbackUnitIndex);
+    useEffect(() => setUnit(fallbackUnitIndex), [fallbackUnitIndex]);
     const unit = UNITS[Object.keys(UNITS)[unitIndex]];
 
     const toggle = () => {
@@ -38,7 +41,7 @@ const Speed = ({ speed = 0 }) => {
                 <span className="speed">{unit.conversion(speed)}</span> {unit.label}
             </h1>
             <div className="speed-actions">
-                <Button style={{ width: '30px', height: '30px' }} onClick={() => setUnit(0)} variant={Button.Variants.GREEN} />
+                <Button style={{ width: '30px', height: '30px' }} onClick={() => setUnit(fallbackUnitIndex)} variant={Button.Variants.GREEN} />
                 <Button style={{ width: '30px', height: '30px' }} onClick={toggle} variant={Button.Variants.RED} />
             </div>
         </div>
