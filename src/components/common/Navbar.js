@@ -20,16 +20,20 @@ const TabLink = ({ onClick, children, isActive, isDisabled = false }) => {
 const Navbar = ({ current = null, onChange = () => { }, tabs = [], className = "", disabled = [] }) => {
     return (
         <div className={`Navbar flex ui-section mb-5 p-5 ${className}`}>
-            {tabs.map(t => (
-                <TabLink
-                    key={t}
-                    isDisabled={disabled.includes(t)}
-                    isActive={current === t}
-                    onClick={() => onChange(t)}
-                >
-                    {t}
-                </TabLink>
-            ))}
+            {tabs.map(t => {
+                const isDisabled = disabled.includes(t);
+                const onClick = isDisabled ? () => { } : () => onChange(t);
+                return (
+                    <TabLink
+                        key={t}
+                        isDisabled={isDisabled}
+                        isActive={current === t}
+                        onClick={onClick}
+                    >
+                        {t}
+                    </TabLink>
+                );
+            })}
         </div>
     );
 };
