@@ -44,6 +44,7 @@ const navigation = store => {
     });
 
     store.on('navigation:engineTabChange', ({ navigation }, { type }) => {
+        // Need to check why tab wont change on exiting from hyperspace
         return {
             navigation: {
                 ...navigation,
@@ -124,6 +125,12 @@ const navigation = store => {
         console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed });
         // I need to trigger here a timed event that will move the space through hyperspace
         // update the position on the map also
+
+
+        // faking exit
+        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 3000);
+        //
+
         return {
             navigation: {
                 ...navigation,
@@ -135,6 +142,24 @@ const navigation = store => {
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         ...hdSettings,
                         startingPosition
+                    }
+                }
+            }
+        };
+    });
+
+    store.on('navigation:exitHyperdrive', ({ navigation }) => {
+        store.dispatch('player:exitHyperdrive');
+        return {
+            navigation: {
+                ...navigation,
+                navigationLock: false,
+                speed: 0,
+                settings: {
+                    ...navigation.settings,
+                    [ENGINE_TYPES.HYPER_DRIVE]: {
+                        hdTargetSpeed: 1,
+                        startingPosition: null
                     }
                 }
             }

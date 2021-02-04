@@ -9,4 +9,5 @@ export const HYPERDRIVE_ACTIONS = {
     LOCKED: 'HD_locked',
     UNLOCKED: 'HD_unlocked',
     ENGAGED: 'HD_engaged',
+    EXITED: 'HD_exited',
 };

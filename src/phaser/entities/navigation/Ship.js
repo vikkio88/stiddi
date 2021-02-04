@@ -95,6 +95,11 @@ export default class Ship extends Phaser.GameObjects.Sprite {
         eventBridge.dispatchFromPhaser('unlock:navigation');
     }
 
+    fullStop() {
+        this.body.setAcceleration(0, 0);
+        this.body.setVelocity(0, 0);
+    }
+
     rotateTo(targetAngle) {
         const currentAngle = this.angle;
         let angle = targetAngle;

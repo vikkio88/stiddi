@@ -30,7 +30,8 @@ const BodyInfo = (
         onLock,
         onClear,
         //
-        route = {}
+        route = {},
+        inHyperdrive= false
     }
 ) => {
     if (!object) return <EmptySelection />;
@@ -100,6 +101,7 @@ const BodyInfo = (
                         <Button
                             variant={Button.Variants.RED}
                             onClick={onClear}
+                            disabled={inHyperdrive}
                         >
                             X
                         </Button>

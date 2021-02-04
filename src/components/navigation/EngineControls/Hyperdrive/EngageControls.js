@@ -11,7 +11,7 @@ const EngageControls = ({ status = {}, isLocked = false, onEngage, inHyperdrive 
     const angleError = 100 - (angleDifference / ANGLES.DEG_360 * 100);
 
     const canEngage = !isLocked && (
-        speed >= 50 &&
+        speed >= 49 &&
         (angleDifference <= ANGLE_SENSITIVITY)
     );
 

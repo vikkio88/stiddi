@@ -9,7 +9,7 @@ import "./styles/Bodies.css";
 
 
 const Bodies = ({ system = {}, onFocus, onPlot }) => {
-    const { dispatch, player: { position, target = {}, route } } = useStoreon('player');
+    const { dispatch, player: { inHyperdrive, position, target = {}, route } } = useStoreon('player');
 
     const select = target => {
         dispatch("player:targetSystem", { target });
@@ -30,6 +30,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         onPlot={onPlot}
                         onLock={() => dispatch('player:lockRouteSystem')}
                         onClear={() => dispatch('player:clearRouteSystem')}
+                        inHyperdrive={inHyperdrive}
                         route={route}
                     />
                     <Button

@@ -134,6 +134,42 @@ const player = store => {
         };
     });
 
+    store.on('player:exitHyperdrive', ({ player }) => {
+        const { x, y } = player.target.position;
+        const playerSystemPos = player.position.system;
+        store.dispatch('maps:clearPlotSystem');
+        store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+        // Need to add the setting position on maps so we can see the player there if exiting from 
+        // hyperdrive while on the Maps 
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
+        return {
+            player: {
+                ...player,
+                inHyperdrive: false,
+                position: {
+                    system: {
+                        ...playerSystemPos,
+                        x, y
+                    }
+                },
+                route: {
+                    ...initialState.route,
+                }
+            }
+        };
+    });
+
+    // this can be used to show the player moving through hyperspace
+    store.on('player:setSystemPosition', ({ player }, { position }) => {
+        return {
+            ...player,
+            position: {
+                ...player.position,
+                ...position
+            }
+        };
+    });
+
 };
 
 export default player;

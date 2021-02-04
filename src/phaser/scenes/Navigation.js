@@ -39,8 +39,7 @@ class Navigation extends Phaser.Scene {
 
         eventBridge.on(EVENTS.GAME.ACTIONS.FULL_STOP, () => {
             console.log('[phaser] FULL STOP RECEIVED');
-            this.ship.body.setAcceleration(0, 0);
-            this.ship.body.setVelocity(0, 0);
+            this.ship.fullStop();
         });
 
         eventBridge.on(EVENTS.GAME.ACTIONS.HYPERDRIVE, ({ action, payload }) => {
@@ -121,11 +120,22 @@ class Navigation extends Phaser.Scene {
             this.state.hyperdrive.engaged = true;
             // if in hyperdrive we need to stop hearthbeat
             this.ship.stopHeartBeat();
+            // stop current speed
+            this.ship.fullStop();
             // if we jump out hyperdrive we need to start it again
             // maybe with a small speed left
             this.updateLockedRoute();
 
             this.engageHyperdrive();
+            return;
+        }
+
+        if (action === HYPERDRIVE_ACTIONS.EXITED) {
+            this.state.hyperdrive.locked = false;
+            this.state.hyperdrive.engaged = false;
+            // if in hyperdrive we need to stop hearthbeat
+            this.ship.body.setVelocity(25);
+            this.ship.startHeartBeat();
             return;
         }
     }
