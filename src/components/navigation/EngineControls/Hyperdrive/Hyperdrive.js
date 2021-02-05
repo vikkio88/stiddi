@@ -12,7 +12,7 @@ const type = ENGINE_TYPES.HYPER_DRIVE;
 const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
     const { set, direction, speed, inHyperdrive } = settings;
     // exiting hyperdrive
-    if (!route) return null;
+    if (!route) return <h1>Hyperdrive Disengaged</h1>;
 
     const { hdTargetSpeed } = settings[type];
     const setTargetSpeed = hdTargetSpeed => set({ hdTargetSpeed }, type);

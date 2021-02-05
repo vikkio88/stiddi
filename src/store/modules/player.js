@@ -137,11 +137,18 @@ const player = store => {
     store.on('player:exitHyperdrive', ({ player }) => {
         const { x, y } = player.target.position;
         const playerSystemPos = player.position.system;
+        // this piece of dirty shit is because the hook rerenders the 
+        // hyperdrive after exiting and is empty, so I switch to thermal/clearup
+        // after a bit
         store.dispatch('maps:clearPlotSystem');
-        store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+        store.dispatch('maps:updatePlayerPosSystem', { x, y });
+        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
+        setTimeout(() => {
+            store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+        }, 1000);
+
         // Need to add the setting position on maps so we can see the player there if exiting from 
         // hyperdrive while on the Maps 
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
         return {
             player: {
                 ...player,

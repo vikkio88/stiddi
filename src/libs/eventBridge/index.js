@@ -16,7 +16,7 @@ export const EVENTS = {
             PLOTROUTE_SYSTEM: 'game:maps:plot_route_system',
             CLEAR_PLOTROUTE_SYSTEM: 'game:maps:clear_plot_route_system',
             CLEAR_SYSTEM: 'game:maps:clear_system',
-            UPDATE_SELF: 'game:maps:update_self'
+            UPDATE_PLAYER: 'game:maps:update_player'
         }
     },
 

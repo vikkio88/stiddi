@@ -128,7 +128,7 @@ const navigation = store => {
 
 
         // faking exit
-        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 3000);
+        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 5000);
         //
 
         return {

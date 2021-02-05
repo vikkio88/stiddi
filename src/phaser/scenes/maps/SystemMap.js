@@ -84,12 +84,18 @@ class SystemMap extends Phaser.Scene {
         });
 
         eventBridge.on(EVENTS.GAME.MAPS.CLEAR_PLOTROUTE_SYSTEM, () => {
+            console.log('[PHASER] Clearing Route');
             this.clearRoute();
         });
 
         eventBridge.on(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, ({ object, index }) => {
             console.log('[phaser] PLOT ROUTE SYSTEM', { object, index });
             this.addRoute({ object, index });
+        });
+
+        eventBridge.on(EVENTS.GAME.MAPS.UPDATE_PLAYER, ({ x, y }) => {
+            console.log('[phaser] UPDATE PLAYER POSITION MAP', { x, y });
+            this.addPlayer({ x, y });
         });
     }
 
@@ -101,6 +107,7 @@ class SystemMap extends Phaser.Scene {
     }
 
     addPlayer(params) {
+        if (this.objects.player) this.objects.player.destroy();
         const { x, y } = params;
         const { x: cx, y: cy } = this.getCenter();
         this.objects.player = new Ship(this, cx + x, cy + y);

@@ -3,6 +3,7 @@ import eventBridge, { EVENTS } from "libs/eventBridge";
 import { Ship, LockedRoute } from "phaser/entities/navigation";
 
 import { HYPERDRIVE_ACTIONS } from "enums/navigation";
+import { randomizer } from "libs/random";
 
 class Navigation extends Phaser.Scene {
     constructor() {
@@ -134,7 +135,15 @@ class Navigation extends Phaser.Scene {
             this.state.hyperdrive.locked = false;
             this.state.hyperdrive.engaged = false;
             // if in hyperdrive we need to stop hearthbeat
-            this.ship.body.setVelocity(25);
+            // out of hyperdrive we come in a random direction/speed
+            const angle = randomizer.int(0, 350);
+            const velocityX = randomizer.int(0, 100);
+            const velocityY = randomizer.int(0, 100);
+
+            console.log('[PHASER] Exited Hyperdrive with', { angle, vel: { velocityX, velocityY } });
+            this.ship.setAngle(angle);
+            this.ship.body.setVelocityX(velocityX);
+            this.ship.body.setVelocityY(velocityY);
             this.ship.startHeartBeat();
             return;
         }
