@@ -4,6 +4,8 @@ import { Ship, LockedRoute } from "phaser/entities/navigation";
 
 import { HYPERDRIVE_ACTIONS } from "enums/navigation";
 import { randomizer } from "libs/random";
+import { Geom } from "libs/math";
+import sceneHelper from "phaser/helpers/sceneHelper";
 
 class Navigation extends Phaser.Scene {
     constructor() {
@@ -64,6 +66,9 @@ class Navigation extends Phaser.Scene {
         this.eventsSubscribe();
         // using a small loop that can be react based on speed
         this.uiUpdate();
+
+        // Hyperdrive Animation
+        this.hyperdrive = null;
     }
 
     uiUpdate() {
@@ -123,11 +128,12 @@ class Navigation extends Phaser.Scene {
             this.ship.stopHeartBeat();
             // stop current speed
             this.ship.fullStop();
+            this.mainCamera.stopFollow();
             // if we jump out hyperdrive we need to start it again
             // maybe with a small speed left
             this.updateLockedRoute();
 
-            this.engageHyperdrive();
+            this.hyperdriveAnimationToggle();
             return;
         }
 
@@ -137,10 +143,12 @@ class Navigation extends Phaser.Scene {
             // if in hyperdrive we need to stop hearthbeat
             // out of hyperdrive we come in a random direction/speed
             const angle = randomizer.int(0, 350);
-            const velocityX = randomizer.int(0, 100);
-            const velocityY = randomizer.int(0, 100);
+            const velocityX = randomizer.int(0, 50);
+            const velocityY = randomizer.int(0, 50);
 
             console.log('[PHASER] Exited Hyperdrive with', { angle, vel: { velocityX, velocityY } });
+            this.hyperdriveAnimationToggle();
+            this.mainCamera.startFollow(this.ship);
             this.ship.setAngle(angle);
             this.ship.body.setVelocityX(velocityX);
             this.ship.body.setVelocityY(velocityY);
@@ -149,8 +157,65 @@ class Navigation extends Phaser.Scene {
         }
     }
 
-    engageHyperdrive() {
-        console.log('[PHASER] ENGAGED ANIMATION');
+    hyperdriveAnimationToggle() {
+        console.log('[PHASER] ENGAGED HD ANIMATION');
+        if (this.hyperdrive !== null) {
+            this.hyperdrive.coma.comaEmitter.stop();
+            this.hyperdrive.coma.comaEmitter.killAll();
+            this.hyperdrive.coma.shipComa.destroy();
+            this.hyperdrive.stars.randomStarsEmitter.stop();
+            this.hyperdrive.stars.randomStarsEmitter.killAll();
+            this.hyperdrive.stars.randomStars.destroy();
+            this.mainCamera.shake(2000, 0.0009);
+            this.hyperdrive = null;
+            return;
+        }
+
+        this.mainCamera.shake(2000, 0.0009);
+        const { x, y } = sceneHelper.getCenter(this);
+        const shipComa = this.add.particles('tipCross');
+
+        const { x: dx, y: dy } = this.ship.getDirections();
+        const accelerationX = -400 * dx;
+        const accelerationY = -400 * dy;
+        const comaEmitter = shipComa.createEmitter({
+            alpha: { start: 1, end: 0 },
+            scale: { start: 0.3, end: 4.5 },
+            tint: 0x0000ff,
+            speed: 20,
+            accelerationY,
+            accelerationX,
+            angle: { min: -85, max: -95 },
+            rotate: { min: -180, max: 180 },
+            lifespan: { min: 1000, max: 1100 },
+            blendMode: 'ADD',
+            frequency: 60,
+            maxParticles: 50,
+            x,
+            y
+        });
+
+        const randomStars = this.add.particles('tipCross');
+        const { x: cx1, y: cy1 } = Geom.pointOnCircumference({ cx: x, cy: y }, 600, this.ship.angle - 40);
+        const { x: cx2, y: cy2 } = Geom.pointOnCircumference({ cx: x, cy: y }, 600, this.ship.angle + 40);
+        const randomStarsEmitter = randomStars.createEmitter({
+            x: { min: cx1, max: cx2 },
+            y: { min: cy1, max: cy2 },
+            alpha: { start: 1, end: 0 },
+            scale: { start: 0.3, end: 0.5 },
+            speedX: 40 * dx,
+            speedY: 40 * dy,
+            accelerationX, accelerationY,
+            lifespan: { min: 0, max: 3000 },
+            blendMode: 'ADD',
+            frequency: 10,
+            maxParticles: 300
+        });
+
+        this.hyperdrive = {
+            coma: { shipComa, comaEmitter },
+            stars: { randomStars, randomStarsEmitter }
+        };
     }
 }
 

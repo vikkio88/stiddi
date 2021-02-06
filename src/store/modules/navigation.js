@@ -131,6 +131,9 @@ const navigation = store => {
         setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 5000);
         //
 
+        // little shake on jumping
+        store.dispatch('effects:shake', { duration: 1500 });
+
         return {
             navigation: {
                 ...navigation,
@@ -149,6 +152,9 @@ const navigation = store => {
     });
 
     store.on('navigation:exitHyperdrive', ({ navigation }) => {
+        // little shake on back
+        store.dispatch('effects:shake', { duration: 1500 });
+
         store.dispatch('player:exitHyperdrive');
         return {
             navigation: {

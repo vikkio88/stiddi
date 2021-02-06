@@ -75,6 +75,14 @@ export default class Ship extends Phaser.GameObjects.Sprite {
         return this.rotation - INITIAL_ROTATION;
     }
 
+    getDirections() {
+        const heading = this.getRotation();
+        return {
+            x: Math.cos(heading),
+            y: Math.sin(heading)
+        };
+    }
+
     burn(timeout, throttle) {
         const heading = this.getRotation();
         this.body.setAcceleration(

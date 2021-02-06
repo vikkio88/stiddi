@@ -7,7 +7,6 @@ import store from "./store";
 
 import phaserInit from "./phaser";
 
-import "csshake/dist/csshake.min.css";
 import "./index.css";
 import Main from "./Main";
 import { SCENES } from "enums/ui";
