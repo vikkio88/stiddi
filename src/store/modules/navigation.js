@@ -1,8 +1,8 @@
-//import dayjs from "dayjs";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
-import { C } from "libs/math";
+import { C, Geom } from "libs/math";
+import { Time } from "libs/time";
 
 const COOLDOWN_TIMEOUT = 4000;
 const CHARGE_TIMEOUT = 4000;
@@ -23,6 +23,7 @@ const initialState = {
         [ENGINE_TYPES.HYPER_DRIVE]: {
             hdTargetSpeed: 1,
             startingPosition: null,
+            times: {},
             charge: { isCharged: false, isCharging: false },
             cooldown: { hasCooledDown: false, isCoolingDown: false },
         },
@@ -156,25 +157,26 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:engageHyperdrive', ({ navigation }, { startingPosition }) => {
+    store.on('navigation:engageHyperdrive', ({ navigation }, { startingPosition, targetPos }) => {
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
         store.dispatch('player:toggleHyperdrive', { inHyperdrive: true });
         // here we need to report that it is engaged
         // and lock navigation so we cannot turn/burn
         const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
 
-        console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed });
         // I need to trigger here a timed event that will move the space through hyperspace
         // update the position on the map also
 
 
-        // faking exit
-        
-        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 5000);
-        //
+        // Calculating timeout
+        const distance = Geom.distancePoints(startingPosition, targetPos);
+        const jumpDuration = distance / hdSettings.hdTargetSpeed * 1000;
 
-        // little shake on jumping
-        store.dispatch('effects:shake', { duration: 1500 });
+        //TODO:
+        // add fuel consumption
+        console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed, jumpDuration });
+        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), jumpDuration);
+        
 
         return {
             navigation: {
@@ -186,7 +188,11 @@ const navigation = store => {
                     ...navigation.settings,
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         ...hdSettings,
-                        startingPosition
+                        startingPosition,
+                        times: {
+                            engagedAt: Time.now(),
+                            duration: jumpDuration
+                        }
                     }
                 }
             }
@@ -209,6 +215,7 @@ const navigation = store => {
                         hdTargetSpeed: 1,
                         startingPosition: null,
                         charge: { isCharged: false, isCharging: false },
+                        times: {}
                         // TODO: implement Cooldown
                         //cooldownStart: dayjs.unix()
                     }

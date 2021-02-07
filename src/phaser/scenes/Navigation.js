@@ -134,6 +134,7 @@ class Navigation extends Phaser.Scene {
             this.updateLockedRoute();
 
             this.hyperdriveAnimationToggle();
+            this.fadeInOut(3000);
             return;
         }
 
@@ -148,7 +149,7 @@ class Navigation extends Phaser.Scene {
 
             console.log('[PHASER] Exited Hyperdrive with', { angle, vel: { velocityX, velocityY } });
             this.hyperdriveAnimationToggle();
-            this.mainCamera.fadeIn(2500, 0, 0, 0);
+            this.fadeInOut(3000);
             this.mainCamera.startFollow(this.ship);
             this.ship.setAngle(angle);
             this.ship.body.setVelocityX(velocityX);
@@ -217,6 +218,12 @@ class Navigation extends Phaser.Scene {
             coma: { shipComa, comaEmitter },
             stars: { randomStars, randomStarsEmitter }
         };
+    }
+
+    fadeInOut(duration) {
+        this.mainCamera.flash(duration / 2, 0, 0, 255, () => {
+            this.mainCamera.fadeIn(duration / 2, 0, 0, 0);
+        });
     }
 }
 
