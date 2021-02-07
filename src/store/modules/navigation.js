@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
@@ -169,6 +169,7 @@ const navigation = store => {
 
 
         // faking exit
+        
         setTimeout(() => store.dispatch('navigation:exitHyperdrive'), 5000);
         //
 
@@ -207,8 +208,9 @@ const navigation = store => {
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         hdTargetSpeed: 1,
                         startingPosition: null,
-                        chargedStart: null,
-                        cooldownStart: dayjs.unix()
+                        charge: { isCharged: false, isCharging: false },
+                        // TODO: implement Cooldown
+                        //cooldownStart: dayjs.unix()
                     }
                 }
             }
