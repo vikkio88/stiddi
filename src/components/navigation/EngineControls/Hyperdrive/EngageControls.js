@@ -1,8 +1,15 @@
 import { Angle, ANGLES } from "libs/math";
-import { Button, Progress } from "components/common";
+import { Button, Progress, Spinner } from "components/common";
 
 // this might be moved to config too?
 const ANGLE_SENSITIVITY = 5;
+
+const Charging = () => (
+    <div className="flex f-col f-ac f-jc">
+        <span>Charging...</span>
+        <Spinner />
+    </div>
+);
 
 const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, onEngage }) => {
 
@@ -14,7 +21,7 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, 
             variant={Button.Variants.EMPTY_GREEN}
             style={{ width: "150px", height: "100px" }}
         >
-            {isCharging ? 'Charging...' : 'Charge'}
+            {isCharging ? <Charging /> : 'INIT SEQUENCE'}
         </Button>
     );
 
@@ -33,7 +40,11 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, 
     return null;
 };
 
-const EngageControls = ({ status = {}, isLocked = false, onEngage, onCharge, inHyperdrive = false, cooldown = {}, charge = {} }) => {
+const EngageControls = ({
+    status = {}, isLocked = false,
+    inHyperdrive = false, cooldown = {}, charge = {},
+    onEngage, onCharge,
+}) => {
     const { direction, speed, target } = status;
     const normalisedDirection = Angle.normalised(direction) || 0;
     const angleDifference = (Math.abs(normalisedDirection - target.angle) % ANGLES.DEG_360);
