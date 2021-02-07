@@ -143,11 +143,12 @@ class Navigation extends Phaser.Scene {
             // if in hyperdrive we need to stop hearthbeat
             // out of hyperdrive we come in a random direction/speed
             const angle = randomizer.int(0, 350);
-            const velocityX = randomizer.int(0, 50);
-            const velocityY = randomizer.int(0, 50);
+            const velocityX = (randomizer.chance(50) ? 1 : -1) * randomizer.int(0, 50);
+            const velocityY = (randomizer.chance(50) ? 1 : -1) * randomizer.int(0, 50);
 
             console.log('[PHASER] Exited Hyperdrive with', { angle, vel: { velocityX, velocityY } });
             this.hyperdriveAnimationToggle();
+            this.mainCamera.fadeIn(2500, 0, 0, 0);
             this.mainCamera.startFollow(this.ship);
             this.ship.setAngle(angle);
             this.ship.body.setVelocityX(velocityX);

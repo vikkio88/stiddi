@@ -53,6 +53,15 @@ div#porthole {
 
 }
 
+@keyframes blink{
+  50% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink 1.5s linear infinite;
+}
+
 /* Scrollbar */
 * {
   scrollbar-width: thin;

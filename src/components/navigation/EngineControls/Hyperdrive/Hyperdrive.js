@@ -14,7 +14,7 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
     // exiting hyperdrive
     if (!route) return <h1>Hyperdrive Disengaged</h1>;
 
-    const { hdTargetSpeed } = settings[type];
+    const { hdTargetSpeed, charge, cooldown } = settings[type];
     const setTargetSpeed = hdTargetSpeed => set({ hdTargetSpeed }, type);
     const { target } = route;
     const targetPos = target.position;
@@ -66,6 +66,9 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
                     status={{ speed, direction, target }}
                     isLocked={lock}
                     inHyperdrive={inHyperdrive}
+                    charge={charge}
+                    cooldown={cooldown}
+                    onCharge={() => dispatch('navigation:chargeHyperdrive')}
                     onEngage={() => dispatch(
                         'navigation:engageHyperdrive',
                         { startingPosition: playerPos }

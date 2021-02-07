@@ -1,7 +1,11 @@
+import dayjs from "dayjs";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
 import { C } from "libs/math";
+
+const COOLDOWN_TIMEOUT = 4000;
+const CHARGE_TIMEOUT = 4000;
 
 const initialState = {
     heading: 0,
@@ -18,7 +22,9 @@ const initialState = {
         },
         [ENGINE_TYPES.HYPER_DRIVE]: {
             hdTargetSpeed: 1,
-            startingPosition: null
+            startingPosition: null,
+            charge: { isCharged: false, isCharging: false },
+            cooldown: { hasCooledDown: false, isCoolingDown: false },
         },
         [ENGINE_TYPES.WARP_DRIVE]: {},
     }
@@ -115,6 +121,41 @@ const navigation = store => {
         };
     });
 
+    store.on('navigation:chargeHyperdrive', ({ navigation }) => {
+        setTimeout(() => {
+            store.dispatch('nagivation:hyperdriveCharged');
+        }, CHARGE_TIMEOUT);
+        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+        return {
+            navigation: {
+                ...navigation,
+                settings: {
+                    ...navigation.settings,
+                    [ENGINE_TYPES.HYPER_DRIVE]: {
+                        ...hdSettings,
+                        charge: { isCharged: false, isCharging: true }
+                    }
+                }
+            }
+        };
+    });
+
+    store.on('nagivation:hyperdriveCharged', ({ navigation }) => {
+        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+        return {
+            navigation: {
+                ...navigation,
+                settings: {
+                    ...navigation.settings,
+                    [ENGINE_TYPES.HYPER_DRIVE]: {
+                        ...hdSettings,
+                        charge: { isCharged: true, isCharging: false }
+                    }
+                }
+            }
+        };
+    });
+
     store.on('navigation:engageHyperdrive', ({ navigation }, { startingPosition }) => {
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
         store.dispatch('player:toggleHyperdrive', { inHyperdrive: true });
@@ -165,7 +206,9 @@ const navigation = store => {
                     ...navigation.settings,
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         hdTargetSpeed: 1,
-                        startingPosition: null
+                        startingPosition: null,
+                        chargedStart: null,
+                        cooldownStart: dayjs.unix()
                     }
                 }
             }
