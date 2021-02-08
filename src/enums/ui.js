@@ -7,6 +7,8 @@ export const SCENES = {
 
 export const TABS = {
     NAVIGATION: 'navigation',
+    SYSTEMS: 'systems',
+    COMMS: 'comms',
     MAPS: 'maps',
 };
 

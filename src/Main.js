@@ -1,12 +1,14 @@
 import { useStoreon } from "storeon/react";
-import { Navigation, Maps } from "components/tabs";
+import { Navigation, Maps, Systems, Comms } from "components/tabs";
 import { Navbar } from "components/common";
 
 import { TABS } from "enums/ui";
 
 const TABS_MAPPING = {
   [TABS.NAVIGATION]: <Navigation />,
-  [TABS.MAPS]: <Maps />
+  [TABS.MAPS]: <Maps />,
+  [TABS.SYSTEMS]: <Systems />,
+  [TABS.COMMS]: <Comms />,
 };
 
 function Main() {

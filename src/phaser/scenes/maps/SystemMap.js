@@ -177,8 +177,8 @@ class SystemMap extends Phaser.Scene {
 
         const { x, y } = sceneHelper.getCenter(this);
         this.center = { x, y };
-        this.add.text(x, y - 100, "SYSTEM MAP").setOrigin(.5);
         this.eventsSubscribe();
+        
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             // avoid clicking away if route is plotted
             if (this.route) return;

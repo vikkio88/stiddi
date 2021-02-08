@@ -4,7 +4,7 @@ import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigatio
 import { C, Geom } from "libs/math";
 import { Time } from "libs/time";
 
-const COOLDOWN_TIMEOUT = 4000;
+const COOLDOWN_TIMEOUT = 15000;
 const CHARGE_TIMEOUT = 4000;
 
 const initialState = {
@@ -25,7 +25,7 @@ const initialState = {
             startingPosition: null,
             times: {},
             charge: { isCharged: false, isCharging: false },
-            cooldown: { hasCooledDown: false, isCoolingDown: false },
+            cooldown: { hasCooledDown: true, isCoolingDown: false, startedAt: null, duration: COOLDOWN_TIMEOUT },
         },
         [ENGINE_TYPES.WARP_DRIVE]: {},
     }
@@ -176,7 +176,7 @@ const navigation = store => {
         // add fuel consumption
         console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed, jumpDuration });
         setTimeout(() => store.dispatch('navigation:exitHyperdrive'), jumpDuration);
-        
+
 
         return {
             navigation: {
@@ -204,6 +204,10 @@ const navigation = store => {
         store.dispatch('effects:shake', { duration: 1500 });
 
         store.dispatch('player:exitHyperdrive');
+
+        // starting cooldown
+        setTimeout(() => store.dispatch('navigation:cooldownFinished'), COOLDOWN_TIMEOUT);
+
         return {
             navigation: {
                 ...navigation,
@@ -215,15 +219,38 @@ const navigation = store => {
                         hdTargetSpeed: 1,
                         startingPosition: null,
                         charge: { isCharged: false, isCharging: false },
+                        cooldown: {
+                            hasCooledDown: false, isCoolingDown: true,
+                            startedAt: Time.now(), duration: COOLDOWN_TIMEOUT
+                        },
                         times: {}
-                        // TODO: implement Cooldown
-                        //cooldownStart: dayjs.unix()
                     }
                 }
             }
         };
     });
 
+    store.on('navigation:cooldownFinished', ({ navigation }) => {
+        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+        return {
+            navigation: {
+                ...navigation,
+                navigationLock: false,
+                speed: 0,
+                settings: {
+                    ...navigation.settings,
+                    [ENGINE_TYPES.HYPER_DRIVE]: {
+                        ...hdSettings,
+                        cooldown: {
+                            hasCooledDown: true, isCoolingDown: false,
+                            startedAt: null, duration: 0
+                        },
+                    }
+                }
+            }
+        };
+
+    });
     store.on('navigation:hyperdriveAction', (_, { action, payload }) => {
         eBridge.emit(EVENTS.GAME.ACTIONS.HYPERDRIVE, { action, payload });
     });

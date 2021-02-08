@@ -18,6 +18,7 @@ const ui = store => {
         if (SCENES_MAP[tab]) {
             eBridge.emit(EVENTS.PHASER.SWAP_SCENE, { scene: SCENES_MAP[tab] });
         }
+        
         return {
             ui: {
                 ...ui,
