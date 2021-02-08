@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useStoreon } from "storeon/react";
-
 const Comms = () => {
     return (
         <>
