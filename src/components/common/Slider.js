@@ -1,6 +1,6 @@
 import "./styles/Slider.css";
 
-const Slider = ({ min = 1, max = 10, step = 1, value = 1, onChange = () => { }, style = {}, className = '' }) => {
+const Slider = ({ min = 1, max = 10, step = 1, value = 1, onChange = () => { }, style = {}, className = '', disabled = false }) => {
     return (
         <input
             style={style}
@@ -11,6 +11,7 @@ const Slider = ({ min = 1, max = 10, step = 1, value = 1, onChange = () => { }, 
             step={step}
             onChange={onChange}
             value={value}
+            disabled={disabled}
         />
     );
 };

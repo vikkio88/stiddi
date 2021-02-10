@@ -81,3 +81,9 @@ input[type=range].slider {
     }
   }
   
+input.slider:disabled,
+input.slider[disabled]
+{
+    opacity: 0.2;
+    cursor: not-allowed;
+}
