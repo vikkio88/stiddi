@@ -1,3 +1,14 @@
 .HyperDrive-speed h1 span.speed{ font-size: 1.5em;}
 .HyperDrive-speed h1{ font-size: 1.6em;}
 .HyperDrive-speed .Calculations{ margin-top: 20px;}
+
+.Calculations-HD  {width: 100%;}
+.Calculations-HD > div {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: white 3px solid;
+}

@@ -7,6 +7,7 @@ import ETA from "./ETA";
 import EngageControls from "./EngageControls";
 
 import "./styles/Hyperdrive.css";
+import { calculateChargeTimeHD, calculateCooldownTimeHD, calculateFuelCostHD } from "libs/game/navigation";
 
 const type = ENGINE_TYPES.HYPER_DRIVE;
 
@@ -48,22 +49,39 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
                             max={200}
                             className="w-full"
                         />
-                        <div className="Calculations">
-                            <span className="label">Travel Time: </span>
-                            <h3>
-                                <span className="value">
-                                    {Time.intervalDurationSecs(distance / hdTargetSpeed)}
-                                </span>
-                            </h3>
-                        </div>
-                        <div className="Calculations">
-                            <span className="label">Fuel: </span>
-                            <h3>
-                                <span className="value">
-                                    {/*TODO: Need to make this more precise of course */}
-                                ~{(hdTargetSpeed / 10).toFixed(2)}
-                                </span> units
-                    </h3>
+                        <div className="Calculations Calculations-HD">
+                            <div>
+                                <span className="label">Travel Time: </span>
+                                <h3>
+                                    <span className="value">
+                                        {Time.intervalDurationSecs(distance / hdTargetSpeed)}
+                                    </span>
+                                </h3>
+                            </div>
+                            <div>
+                                <span className="label">Fuel: </span>
+                                <h3>
+                                    <span className="value">
+                                        ~{(calculateFuelCostHD(distance, hdTargetSpeed, true)).toFixed(2)}
+                                    </span> units
+                                </h3>
+                            </div>
+                            <div>
+                                <span className="label">Charge Time: </span>
+                                <h3>
+                                    <span className="value">
+                                        ~{(calculateChargeTimeHD(distance, hdTargetSpeed, true)).toFixed(2)}
+                                    </span> seconds
+                                </h3>
+                            </div>
+                            <div>
+                                <span className="label">Cooldown Time: </span>
+                                <h3>
+                                    <span className="value">
+                                        ~{(calculateCooldownTimeHD(distance, hdTargetSpeed, true)).toFixed(2)}
+                                    </span> seconds
+                                </h3>
+                            </div>
                         </div>
 
                     </>
