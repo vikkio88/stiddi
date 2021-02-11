@@ -1,6 +1,13 @@
-import { Button, RoundIndicator, Slider } from "components/common";
+import { Button, RoundIndicator, Slider, Spinner } from "components/common";
 import Calculations from "./Calculations";
 import { ENGINE_TYPES } from "enums/navigation";
+
+const Burning = () => (
+    <div className="flex f-col f-ac f-jc">
+        <span>Locked</span>
+        <Spinner />
+    </div>
+);
 
 
 const Thermal = ({ lock, settings, dispatch }) => {
@@ -58,22 +65,31 @@ const Thermal = ({ lock, settings, dispatch }) => {
                     />
                 </div>
                 <div className="f-1 flex f-col f-ae f-jc">
+                    <div>
+                        <Button
+                            disabled={burnTime >= 10 && throttle >= 100}
+                            onClick={() => set({ burnTime: 10, throttle: 100 })}
+                            className="mr-5"
+                        >
+                            Full Burn
+                        </Button>
+                        <Button
+                            onClick={onFullStop}
+                            variant={Button.Variants.RED}
+                            className="mr-5"
+                            disabled={!canFullStop}
+                        >
+                            Auto-Stop
+                        </Button>
+                    </div>
                     <Button
                         onClick={() => onBurn(burnTime, throttle)}
                         variant={Button.Variants.EMPTY_GREEN}
-                        className="mr-5"
-                        style={{ width: "150px", height: "100px" }}
+                        className="mr-5 mt-5 flex f-ac f-jc"
+                        style={{ width: "150px", height: "80px" }}
                         disabled={!canBurn}
                     >
-                        BURN
-                    </Button>
-                    <Button
-                        onClick={onFullStop}
-                        variant={Button.Variants.RED}
-                        className="mr-5"
-                        disabled={!canFullStop}
-                    >
-                        Full Stop
+                        {canBurn ? `BURN` : <Burning />}
                     </Button>
                 </div>
             </div>

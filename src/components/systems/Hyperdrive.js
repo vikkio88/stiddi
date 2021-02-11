@@ -8,7 +8,7 @@ const Hyperdrive = ({ settings }) => {
         <div className="ui-section p-10">
             <h3>Hyperdrive</h3>
             <StatusLabel label="STATUS" status={status}>
-                {cooldown.startedAt ? <Countdown start={cooldown.startedAt} duration={cooldown.duration / 1000} /> : null}
+                {cooldown.startedAt ? <>Cooling down: <Countdown start={cooldown.startedAt} duration={cooldown.duration / 1000} /></> : null}
             </StatusLabel>
         </div>
     );

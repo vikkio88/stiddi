@@ -13,7 +13,7 @@ const Calculations = ({ burnTime = 0, throttle = 0 }) => {
             <div className="w-full flex f-col f-ac mr-5">
                 <h2>Selected Burn:</h2>
             </div>
-            <div className="w-full flex f-row f-ac f-js">
+            <div>
                 <span className="label">δV: </span>
                 <h3>
                     <span className="value">
@@ -22,7 +22,7 @@ const Calculations = ({ burnTime = 0, throttle = 0 }) => {
                 </h3>
             </div>
 
-            <div className="w-full flex f-row f-ac f-js">
+            <div>
                 <span className="label">fuel: </span>
                 <h3>
                     <span className="value">
