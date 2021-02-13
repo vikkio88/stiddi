@@ -29,7 +29,7 @@ const Navigation = () => {
     };
     return (
         <div className="NavigationTab-wrapper">
-            <div className="NavigationTab-top ui-section">
+            <div className="NavigationTab-top">
                 <div className="NavigationTab-top-row">
                     <Speed speed={speed} />
                     <Heading
@@ -39,6 +39,7 @@ const Navigation = () => {
                         routeSetting={routeSetting}
                     />
                 </div>
+                <Fuel value={fuel.current} max={fuel.max} minimal />
                 <Engine
                     dispatch={dispatch}
                     engineType={selectedEngineType}
@@ -47,9 +48,6 @@ const Navigation = () => {
                     route={routeSetting}
                     position={position}
                 />
-            </div>
-            <div className="NavigationTab-fuel-wrapper ui-section">
-                <Fuel value={fuel.current} max={fuel.max} />
             </div>
         </div>
     );

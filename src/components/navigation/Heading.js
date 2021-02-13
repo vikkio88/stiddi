@@ -64,13 +64,13 @@ const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetti
         <div className="NavigationTab-heading f-1">
             <div className="f-1 flex f-row f-ae f-jsa">
                 <div className="angleSpacer">
-                    Heading: {currentHeading} °
+                    Head: {currentHeading} °
                 </div>
                 <div className="angleSpacer">
-                    Direction: {direction} °
+                    Dir: {direction} °
                 </div>
                 <div className="angleSpacer" style={{ color: YELLOW }}>
-                    {routeSetting && `Target: ${routeSetting.target.angle} °`}
+                    {routeSetting && `Targ: ${routeSetting.target.angle} °`}
                 </div>
             </div>
             <Compass

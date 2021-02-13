@@ -24,9 +24,3 @@
     justify-content: space-between;
     align-items: center;
 }
-
-.NavigationTab-fuel-wrapper{
-    width: 100%;
-    display: flex;
-    margin-top: 5px;
-}
