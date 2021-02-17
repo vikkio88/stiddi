@@ -49,7 +49,7 @@ const rotationButtonStyle = {
 };
 
 const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetting = null }) => {
-    const { heading: rawHeading, direction: rawDirection, speed, set } = settings;
+    const { heading: rawHeading, direction: rawDirection, speed, set, inHyperdrive } = settings;
     const { heading = 0 } = settings[ENGINE_TYPES.THERMAL];
     const setHeading = heading => set({ heading });
     const direction = Angle.normalised(rawDirection);
@@ -57,9 +57,9 @@ const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetti
     const target = routeSetting ? routeSetting.target.angle : null;
 
 
-    const canRotate = !lock && heading !== currentHeading;
-    const canMatchDirection = !lock && heading !== direction && speed > 0;
-    const canMatchTarget = !lock && target !== null && target !== heading;
+    const canRotate = !inHyperdrive && !lock && heading !== currentHeading;
+    const canMatchDirection = !inHyperdrive && !lock && heading !== direction && speed > 0;
+    const canMatchTarget = !inHyperdrive && !lock && target !== null && target !== heading;
     return (
         <div className="NavigationTab-heading f-1">
             <div className="f-1 flex f-row f-ae f-jsa">

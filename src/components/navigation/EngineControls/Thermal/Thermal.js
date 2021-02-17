@@ -11,7 +11,7 @@ const Burning = () => (
 
 
 const Thermal = ({ lock, settings, dispatch }) => {
-    const { set, speed } = settings;
+    const { set, speed, inHyperdrive } = settings;
     const { burnTime = 1, throttle = 25 } = settings[ENGINE_TYPES.THERMAL];
     const setBurnTime = burnTime => set({ burnTime });
     const setThrottle = throttle => set({ throttle });
@@ -21,10 +21,8 @@ const Thermal = ({ lock, settings, dispatch }) => {
         dispatch('commit:burn', { timeout: time, throttle });
     };
     const onFullStop = () => dispatch('commit:fullstop');
-
-
-    const canBurn = !lock && (burnTime > 0 && throttle > 0);
-    const canFullStop = !lock && speed > 0 && speed < 3;
+    const canBurn = !inHyperdrive && !lock && (burnTime > 0 && throttle > 0);
+    const canFullStop = !inHyperdrive && !lock && speed > 0 && speed < 3;
     return (
         <>
             <div className="w-full flex f-col">
