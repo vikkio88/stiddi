@@ -13,6 +13,8 @@ const Burning = () => (
 const Thermal = ({ lock, settings, dispatch }) => {
     const { set, speed, inHyperdrive } = settings;
     const { burnTime = 1, throttle = 25 } = settings[ENGINE_TYPES.THERMAL];
+    const { charge: { isCharging, isCharged } } = settings[ENGINE_TYPES.HYPER_DRIVE];
+    const isHyperdriveLocked = inHyperdrive || isCharging || isCharged;
     const setBurnTime = burnTime => set({ burnTime });
     const setThrottle = throttle => set({ throttle });
     const onBurn = (time, throttlePercentage = 25) => {
@@ -21,8 +23,8 @@ const Thermal = ({ lock, settings, dispatch }) => {
         dispatch('commit:burn', { timeout: time, throttle });
     };
     const onFullStop = () => dispatch('commit:fullstop');
-    const canBurn = !inHyperdrive && !lock && (burnTime > 0 && throttle > 0);
-    const canFullStop = !inHyperdrive && !lock && speed > 0 && speed < 3;
+    const canBurn = !isHyperdriveLocked && !lock && (burnTime > 0 && throttle > 0);
+    const canFullStop = !isHyperdriveLocked && !lock && speed > 0 && speed < 3;
     return (
         <>
             <div className="w-full flex f-col">
