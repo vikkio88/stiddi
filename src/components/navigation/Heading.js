@@ -51,15 +51,26 @@ const rotationButtonStyle = {
 const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetting = null }) => {
     const { heading: rawHeading, direction: rawDirection, speed, set, inHyperdrive } = settings;
     const { heading = 0 } = settings[ENGINE_TYPES.THERMAL];
+    const { charge: { isCharging, isCharged } } = settings[ENGINE_TYPES.HYPER_DRIVE];
+    const isHyperdriveLocked = inHyperdrive || isCharging || isCharged;
+
     const setHeading = heading => set({ heading });
     const direction = Angle.normalised(rawDirection);
     const currentHeading = Angle.normalised(rawHeading);
     const target = routeSetting ? routeSetting.target.angle : null;
 
 
-    const canRotate = !inHyperdrive && !lock && heading !== currentHeading;
-    const canMatchDirection = !inHyperdrive && !lock && heading !== direction && speed > 0;
-    const canMatchTarget = !inHyperdrive && !lock && target !== null && target !== heading;
+    const canRotate = !isHyperdriveLocked && !lock && heading !== currentHeading;
+    const canMatchDirection = !isHyperdriveLocked && !lock && heading !== direction && speed > 0;
+    const canMatchTarget = !isHyperdriveLocked && !lock && target !== null && target !== heading;
+    const angles = [
+        { label: '-45', angle: Angle.normalised(heading - ANGLES.DEG_45) },
+        { label: '-', angle: Angle.normalised(heading - 1) },
+        { label: '+', angle: Angle.normalised(heading + 1) },
+        { label: '-180', angle: Angle.normalised(heading + ANGLES.DEG_180) },
+        { label: '0', angle: 0 },
+        { label: '+45', angle: Angle.normalised(heading + ANGLES.DEG_45) },
+    ];
     return (
         <div className="NavigationTab-heading f-1">
             <div className="f-1 flex f-row f-ae f-jsa">
@@ -80,12 +91,15 @@ const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetti
                 target={target}
             />
             <div className="flex w-full">
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - ANGLES.DEG_45 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-45</Button>
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading - 1 + ANGLES.DEG_360) % ANGLES.DEG_360)}>-</Button>
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + 1) % ANGLES.DEG_360)}>+</Button>
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_180) % ANGLES.DEG_360)}>-180</Button>
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading(0)}>0</Button>
-                <Button className="f-1" style={rotationButtonStyle} onClick={() => setHeading((heading + ANGLES.DEG_45) % ANGLES.DEG_360)}>+45</Button>
+                {angles.map(({ label, angle }) => (
+                    <Button
+                        className="f-1"
+                        style={rotationButtonStyle}
+                        onClick={() => setHeading(angle)}
+                    >
+                        {label}
+                    </Button>
+                ))}
             </div>
             <div className="w-full flex">
                 <Button
