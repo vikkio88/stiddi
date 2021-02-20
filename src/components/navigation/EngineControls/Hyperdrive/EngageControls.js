@@ -61,7 +61,7 @@ const EngageControls = ({
             speed >= 49 &&
             (angleDifference <= ANGLE_SENSITIVITY)
         );
-    const lockedReason = !hasEnoughFuel ? 'No Fuel' : ((!hasCooledDown && isCoolingDown) ? 'Cooling down' : null);
+    const lockedReason = !hasEnoughFuel ? 'Not Enough Fuel' : ((!hasCooledDown && isCoolingDown) ? 'Cooling down' : null);
 
     return (
         <div className="f-1 flex f-col">
@@ -80,7 +80,7 @@ const EngageControls = ({
                 isCharging={isCharging}
                 canEngage={canEngage}
                 inHyperdrive={inHyperdrive}
-                reason={lockedReason}
+                lockedReason={lockedReason}
                 onCharge={onCharge}
                 onEngage={onEngage}
             />

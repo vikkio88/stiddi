@@ -1,10 +1,9 @@
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
-import { calculateFuelCost, calculateFullStopTimeout } from "libs/game/navigation";
+import { calculateCooldownTimeHD, calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout } from "libs/game/navigation";
 import { C, Geom } from "libs/math";
 import { Time } from "libs/time";
 
-const COOLDOWN_TIMEOUT = 15000;
 const CHARGE_TIMEOUT = 4000;
 
 const initialState = {
@@ -25,7 +24,7 @@ const initialState = {
             startingPosition: null,
             times: {},
             charge: { isCharged: false, isCharging: false },
-            cooldown: { hasCooledDown: true, isCoolingDown: false, startedAt: null, duration: COOLDOWN_TIMEOUT },
+            cooldown: { hasCooledDown: true, isCoolingDown: false, startedAt: null, duration: 0 },
         },
         [ENGINE_TYPES.WARP_DRIVE]: {},
     }
@@ -123,6 +122,7 @@ const navigation = store => {
     });
 
     store.on('navigation:chargeHyperdrive', ({ navigation }) => {
+        // need to wire the CHARGE TIME
         setTimeout(() => {
             store.dispatch('nagivation:hyperdriveCharged');
         }, CHARGE_TIMEOUT);
@@ -169,13 +169,15 @@ const navigation = store => {
 
 
         // Calculating timeout
+        const speed = hdSettings.hdTargetSpeed;
         const distance = Geom.distancePoints(startingPosition, targetPos);
-        const jumpDuration = distance / hdSettings.hdTargetSpeed * 1000;
+        const jumpDuration = distance / speed * 1000;
 
         //TODO:
-        // add fuel consumption
-        console.log('HD Engaged', { startingPosition, speed: hdSettings.hdTargetSpeed, jumpDuration });
-        setTimeout(() => store.dispatch('navigation:exitHyperdrive'), jumpDuration);
+        const fuel = calculateFuelCostHD(distance, speed);
+        console.log('HD Engaged', { startingPosition, speed, jumpDuration, fuel });
+        store.dispatch('player:burnFuel', { fuel });
+        setTimeout(() => store.dispatch('navigation:exitHyperdrive', { speed, distance }), jumpDuration);
 
 
         return {
@@ -199,14 +201,15 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:exitHyperdrive', ({ navigation }) => {
+    store.on('navigation:exitHyperdrive', ({ navigation }, { speed, distance }) => {
         // little shake on back
         store.dispatch('effects:shake', { duration: 1500 });
 
         store.dispatch('player:exitHyperdrive');
 
         // starting cooldown
-        setTimeout(() => store.dispatch('navigation:cooldownFinished'), COOLDOWN_TIMEOUT);
+        const cooldownTimeout = calculateCooldownTimeHD(distance, speed) * 1000;
+        setTimeout(() => store.dispatch('navigation:cooldownFinished'), cooldownTimeout);
 
         return {
             navigation: {
@@ -221,7 +224,7 @@ const navigation = store => {
                         charge: { isCharged: false, isCharging: false },
                         cooldown: {
                             hasCooledDown: false, isCoolingDown: true,
-                            startedAt: Time.now(), duration: COOLDOWN_TIMEOUT
+                            startedAt: Time.now(), duration: cooldownTimeout
                         },
                         times: {}
                     }
