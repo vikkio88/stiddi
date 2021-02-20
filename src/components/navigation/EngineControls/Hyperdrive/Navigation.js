@@ -1,12 +1,12 @@
 import { Time } from "libs/time";
-import { calculateChargeTimeHD, calculateCooldownTimeHD, calculateFuelCostHD } from "libs/game/navigation";
+import { calculateChargeTimeHD, calculateCooldownTimeHD } from "libs/game/navigation";
 import { Countdown, Slider } from "components/common";
 
 import "./styles/Navigation.css";
 
 const Navigation = ({
     inHyperdrive, times,
-    hdTargetSpeed, setTargetSpeed, distance, charge
+    hdTargetSpeed, setTargetSpeed, distance, charge, fuelCost
 }) => {
     const isDisabled = charge.isCharging || charge.isCharged;
     return (
@@ -44,7 +44,7 @@ const Navigation = ({
                             <span className="label">Fuel: </span>
                             <h3>
                                 <span className="value">
-                                    ~{(calculateFuelCostHD(distance, hdTargetSpeed, true)).toFixed(2)}
+                                    ~{fuelCost ? fuelCost.toFixed(2) : '-'}
                                 </span> units
                                 </h3>
                         </div>

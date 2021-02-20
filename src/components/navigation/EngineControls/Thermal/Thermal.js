@@ -1,17 +1,18 @@
 import { Button, RoundIndicator, Slider, Spinner } from "components/common";
 import Calculations from "./Calculations";
 import { ENGINE_TYPES } from "enums/navigation";
+import { calculateFuelCost } from "libs/game/navigation";
 
-const Burning = () => (
+const Burning = ({ reason = null }) => (
     <div className="flex f-col f-ac f-jc">
-        <span>Locked</span>
+        <span>{reason ? reason : 'Locked'}</span>
         <Spinner />
     </div>
 );
 
 
 const Thermal = ({ lock, settings, dispatch }) => {
-    const { set, speed, inHyperdrive } = settings;
+    const { set, speed, inHyperdrive, fuel } = settings;
     const { burnTime = 1, throttle = 25 } = settings[ENGINE_TYPES.THERMAL];
     const { charge: { isCharging, isCharged } } = settings[ENGINE_TYPES.HYPER_DRIVE];
     const isHyperdriveLocked = inHyperdrive || isCharging || isCharged;
@@ -23,8 +24,12 @@ const Thermal = ({ lock, settings, dispatch }) => {
         dispatch('commit:burn', { timeout: time, throttle });
     };
     const onFullStop = () => dispatch('commit:fullstop');
-    const canBurn = !isHyperdriveLocked && !lock && (burnTime > 0 && throttle > 0);
-    const canFullStop = !isHyperdriveLocked && !lock && speed > 0 && speed < 3;
+
+    const fuelCost = calculateFuelCost(burnTime, throttle, true);
+    const hasEnoughFuel = fuel.current - fuelCost >= 1;
+    const lockReason = !hasEnoughFuel ? 'No Fuel' : (isHyperdriveLocked ? 'Hyperdrive Locked' : null);
+    const canBurn = hasEnoughFuel && !isHyperdriveLocked && !lock && (burnTime > 0 && throttle > 0);
+    const canFullStop = hasEnoughFuel && !isHyperdriveLocked && !lock && speed > 0 && speed < 3;
     return (
         <>
             <div className="w-full flex f-col">
@@ -62,6 +67,7 @@ const Thermal = ({ lock, settings, dispatch }) => {
                     <Calculations
                         burnTime={burnTime}
                         throttle={throttle / 100}
+                        fuelCost={fuelCost}
                     />
                 </div>
                 <div className="f-1 flex f-col f-ae f-jc">
@@ -89,7 +95,7 @@ const Thermal = ({ lock, settings, dispatch }) => {
                         style={{ width: "150px", height: "80px" }}
                         disabled={!canBurn}
                     >
-                        {canBurn ? `BURN` : <Burning />}
+                        {canBurn ? `BURN` : <Burning reason={lockReason} />}
                     </Button>
                 </div>
             </div>

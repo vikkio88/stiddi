@@ -22,6 +22,7 @@ const Navigation = () => {
     const settings = {
         ...navigation.settings,
         inHyperdrive,
+        fuel,
         heading,
         direction,
         speed,

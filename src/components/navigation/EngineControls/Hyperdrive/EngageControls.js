@@ -11,7 +11,7 @@ const Charging = () => (
     </div>
 );
 
-const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, onEngage }) => {
+const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, lockedReason, onCharge, onEngage }) => {
 
     if (!isCharged) return (
         <Button
@@ -21,7 +21,7 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, 
             variant={Button.Variants.EMPTY_GREEN}
             style={{ width: "150px", height: "100px" }}
         >
-            {isCharging ? <Charging /> : 'INIT SEQUENCE'}
+            {isCharging ? <Charging /> : (lockedReason ? lockedReason : `INIT SEQUENCE`)}
         </Button>
     );
 
@@ -33,7 +33,7 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, 
             variant={Button.Variants.GREEN}
             style={{ width: "150px", height: "100px" }}
         >
-            ENGAGE
+            {lockedReason ? lockedReason : `ENGAGE`}
         </Button>
     );
 
@@ -42,7 +42,10 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, onCharge, 
 
 const EngageControls = ({
     status = {}, isLocked = false,
-    inHyperdrive = false, cooldown = {}, charge = {},
+    inHyperdrive = false,
+    cooldown = {},
+    charge = {},
+    hasEnoughFuel = true,
     onEngage, onCharge,
 }) => {
     const { direction, speed, target } = status;
@@ -51,13 +54,14 @@ const EngageControls = ({
     const angleError = 100 - (angleDifference / ANGLES.DEG_360 * 100);
 
     const { isCharging, isCharged } = charge;
-    const { hasCooledDown, isCoolingDown } = charge;
+    const { hasCooledDown, isCoolingDown } = cooldown;
 
-    const canEngage = !isLocked &&
+    const canEngage = !isLocked && hasEnoughFuel &&
         (!isCoolingDown || hasCooledDown) && (
             speed >= 49 &&
             (angleDifference <= ANGLE_SENSITIVITY)
         );
+    const lockedReason = !hasEnoughFuel ? 'No Fuel' : ((!hasCooledDown && isCoolingDown) ? 'Cooling down' : null);
 
     return (
         <div className="f-1 flex f-col">
@@ -76,6 +80,7 @@ const EngageControls = ({
                 isCharging={isCharging}
                 canEngage={canEngage}
                 inHyperdrive={inHyperdrive}
+                reason={lockedReason}
                 onCharge={onCharge}
                 onEngage={onEngage}
             />
