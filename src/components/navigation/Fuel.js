@@ -13,6 +13,7 @@ const Fuel = ({ value, max, minimal = false }) => {
             )}
             {minimal && <h3 className="mr-5">Fuel</h3>}
             <Progress className="w-full" max={max} value={value} critical={20} />
+            {minimal && <span className="ml-5">{`${value.toFixed(2)}/${max}`}</span>}
         </div>
     );
 };
