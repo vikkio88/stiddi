@@ -1,10 +1,8 @@
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
-import { calculateCooldownTimeHD, calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout } from "libs/game/navigation";
+import { calculateChargeTimeHD, calculateCooldownTimeHD, calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout } from "libs/game/navigation";
 import { C, Geom } from "libs/math";
 import { Time } from "libs/time";
-
-const CHARGE_TIMEOUT = 4000;
 
 const initialState = {
     heading: 0,
@@ -123,10 +121,11 @@ const navigation = store => {
 
     store.on('navigation:chargeHyperdrive', ({ navigation }) => {
         // need to wire the CHARGE TIME
+        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+        const chargeTimeout = calculateChargeTimeHD(0, hdSettings.hdTargetSpeed) * 1000;
         setTimeout(() => {
             store.dispatch('nagivation:hyperdriveCharged');
-        }, CHARGE_TIMEOUT);
-        const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
+        }, chargeTimeout);
         return {
             navigation: {
                 ...navigation,
