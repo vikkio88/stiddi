@@ -18,7 +18,7 @@ const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, lockedReas
             className="mt-10 as-e"
             disabled={isCharging || !canEngage}
             onClick={onCharge}
-            variant={Button.Variants.EMPTY_GREEN}
+            variant={!canEngage ? Button.Variants.RED : Button.Variants.EMPTY_GREEN}
             style={{ width: "150px", height: "100px" }}
         >
             {isCharging ? <Charging /> : (lockedReason ? lockedReason : `INIT SEQUENCE`)}
@@ -75,15 +75,22 @@ const EngageControls = ({
                     </>
                 )}
             </div>
-            <HDControls
-                isCharged={isCharged}
-                isCharging={isCharging}
-                canEngage={canEngage}
-                inHyperdrive={inHyperdrive}
-                lockedReason={lockedReason}
-                onCharge={onCharge}
-                onEngage={onEngage}
-            />
+            <div className="flex f-row w-full">
+                {/* Maybe move this to a component to */}
+                {!isCoolingDown && <h3 className="f-1" />}
+                {isCoolingDown && <h3 className="blink t-red f-1 flex f-ac f-jc">HD Cooling down...</h3>}
+                {/* Maybe move this to a component to */}
+                <HDControls
+                    isCharged={isCharged}
+                    isCharging={isCharging}
+                    canEngage={canEngage}
+                    inHyperdrive={inHyperdrive}
+                    lockedReason={lockedReason}
+                    onCharge={onCharge}
+                    onEngage={onEngage}
+                />
+            </div>
+
         </div>
     );
 };

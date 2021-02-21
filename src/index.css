@@ -126,6 +126,13 @@ span.label {
 h3.valueHeader span{ font-size: 1.3em;}
 h3.valueHeader { font-size: 1.4em;}
 
+.t-orange {
+  color: #e36209;
+}
+.t-red {
+  color: #af4e4c;
+}
+
 /* UTILS */
 .w-full {
   width: 100%;
