@@ -85,7 +85,7 @@ const Thermal = ({ lock, settings, dispatch }) => {
                             className="mr-5"
                             disabled={!canFullStop}
                         >
-                            Auto-Stop
+                            Full Stop
                         </Button>
                     </div>
                     <Button
