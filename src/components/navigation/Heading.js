@@ -93,6 +93,7 @@ const Heading = ({ onRotate = () => { }, lock = false, settings = {}, routeSetti
             <div className="flex w-full">
                 {angles.map(({ label, angle }) => (
                     <Button
+                        key={label}
                         className="f-1"
                         style={rotationButtonStyle}
                         onClick={() => setHeading(angle)}

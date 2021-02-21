@@ -77,7 +77,7 @@ const EngageControls = ({
             </div>
             <div className="flex f-row w-full">
                 {/* Maybe move this to a component to */}
-                {!isCoolingDown && <h3 className="f-1" />}
+                {!isCoolingDown && <div className="f-1" />}
                 {isCoolingDown && <h3 className="blink t-red f-1 flex f-ac f-jc">HD Cooling down...</h3>}
                 {/* Maybe move this to a component to */}
                 <HDControls
