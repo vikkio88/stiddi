@@ -113,6 +113,28 @@ button {
   border-radius: 5px;
 }
 
+
+/* Borders */
+.bb {
+  border: solid 1px black;
+}
+
+.btb {
+  border-top: 1px solid black;
+}
+
+.blb {
+  border-left: 1px solid black;
+}
+
+.brb {
+  border-left: 1px solid black;
+}
+
+.bbb {
+  border-left: 1px solid black;
+}
+
 /* Typography */
 h3 {
   margin:0;
