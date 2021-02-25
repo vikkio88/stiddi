@@ -7,3 +7,5 @@ export { default as Spinner } from './Spinner';
 export { default as Progress } from './Progress';
 export { default as RoundIndicator } from './RoundIndicator';
 export { default as Navbar } from './Navbar';
+export { default as Row } from './Row';
+export { default as Col } from './Col';
