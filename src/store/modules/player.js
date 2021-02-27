@@ -167,12 +167,18 @@ const player = store => {
     });
 
     // this can be used to show the player moving through hyperspace
-    store.on('player:setSystemPosition', ({ player }, { position }) => {
+    store.on('player:updateSystemPosition', ({ player }, payload) => {
+        store.dispatch('maps:updatePlayerPosSystem', payload);
         return {
-            ...player,
-            position: {
-                ...player.position,
-                ...position
+            player: {
+                ...player,
+                position: {
+                    ...player.position,
+                    system: {
+                        ...player.position.system,
+                        ...payload
+                    }
+                }
             }
         };
     });

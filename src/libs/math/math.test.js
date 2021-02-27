@@ -1,5 +1,5 @@
 import "jest-canvas-mock";
-import { Angle, C, C_kmh, METRICS, Physics, Scalar } from 'libs/math';
+import { Angle, C, C_kmh, Geom, METRICS, Physics, Scalar } from 'libs/math';
 
 describe('Angle helper', () => {
     const ROTATIONS = [
@@ -26,6 +26,19 @@ describe('Angle helper', () => {
                 currentNegative
             });
         });
+    });
+});
+
+
+describe('Geom helper', () => {
+    const POINTS = [
+        { p1: { x: 0, y: 0 }, p2: { x: 0, y: 2 }, perc: 1, expected: { x: 0, y: 2 } },
+        { p1: { x: 0, y: 0 }, p2: { x: 0, y: 2 }, perc: .5, expected: { x: 0, y: 1 } },
+        { p1: { x: 0, y: 1 }, p2: { x: 0, y: 2 }, perc: 0, expected: { x: 0, y: 1 } },
+    ];
+
+    describe.each(POINTS)('point on line by percentage', ({ p1, p2, perc, expected }) => {
+        expect(Geom.pointOnLine(p1, p2, perc)).toEqual(expected);
     });
 });
 

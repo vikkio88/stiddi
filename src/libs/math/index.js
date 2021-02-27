@@ -83,12 +83,11 @@ export const Geom = {
     angleBetween(p1, p2) {
         return Angle.headingAngleFromRad(Phaser.Math.Angle.BetweenPoints(p1, p2));
     },
-    pointOnLine({ x: x1, y: y1 }, { x: x2, y: y2 }, d, D = 1) {
-        const x = x1 + ((d / D) * (x2 - x1));
-        const y = y1 + ((d / D) * (y2 - y1));
-
+    pointOnLine(p1, p2, perc = 0) {
+        const { x, y } = Phaser.Geom.Line.GetPoint({ x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }, perc);
         return { x, y };
     }
+
 };
 
 export const Coords = {

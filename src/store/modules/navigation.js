@@ -170,13 +170,22 @@ const navigation = store => {
         // Calculating timeout
         const speed = hdSettings.hdTargetSpeed;
         const distance = Geom.distancePoints(startingPosition, targetPos);
-        const jumpDuration = distance / speed * 1000;
+        const jumpDuration = distance / speed;
 
         //TODO:
         const fuel = calculateFuelCostHD(distance, speed);
         console.log('HD Engaged', { startingPosition, speed, jumpDuration, fuel });
         store.dispatch('player:burnFuel', { fuel });
-        setTimeout(() => store.dispatch('navigation:exitHyperdrive', { speed, distance }), jumpDuration);
+        let intervals = 0;
+        const travelStep = setInterval(() => {
+            const { x, y } = Geom.pointOnLine(startingPosition, targetPos, intervals++ / jumpDuration);
+            store.dispatch('player:updateSystemPosition', { x, y });
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(travelStep);
+            store.dispatch('navigation:exitHyperdrive', { speed, distance });
+        }, jumpDuration * 1000);
 
 
         return {
@@ -192,7 +201,7 @@ const navigation = store => {
                         startingPosition,
                         times: {
                             engagedAt: Time.now(),
-                            duration: jumpDuration
+                            duration: jumpDuration * 1000
                         }
                     }
                 }
