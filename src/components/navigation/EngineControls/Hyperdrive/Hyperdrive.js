@@ -2,7 +2,6 @@ import { Geom } from "libs/math";
 import { calculateFuelCostHD } from "libs/game/navigation";
 
 import { ENGINE_TYPES } from "enums/navigation";
-
 import ETA from "./ETA";
 import Navigation from "./Navigation";
 import EngageControls from "./EngageControls";
@@ -25,30 +24,33 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
     const hasEnoughFuel = fuel.current - fuelCost >= 1;
 
     const navigationProps = {
-        inHyperdrive, times,
+        inHyperdrive,
         hdTargetSpeed, setTargetSpeed, distance,
         charge, fuelCost
     };
     return (
-        <div className="w-full flex f-row f-ac f-jsb">
-            <Navigation {...navigationProps} />
-            <div className="f-1">
-                <ETA distance={distance} speed={speed} inHyperdrive={inHyperdrive} />
-                <EngageControls
-                    status={{ speed, direction, target }}
-                    isLocked={lock}
-                    hasEnoughFuel={hasEnoughFuel}
-                    inHyperdrive={inHyperdrive}
-                    charge={charge}
-                    cooldown={cooldown}
-                    onCharge={() => dispatch('navigation:chargeHyperdrive')}
-                    onEngage={() => dispatch(
-                        'navigation:engageHyperdrive',
-                        { startingPosition: playerPos, targetPos }
-                    )}
-                />
+        <>
+            <div className="w-full flex f-row f-ac f-jsb">
+                {!inHyperdrive && <Navigation {...navigationProps} />}
+                <div className="f-1">
+                    <ETA distance={distance} speed={speed} inHyperdrive={inHyperdrive} times={times} />
+                    <EngageControls
+                        status={{ speed, direction, target }}
+                        isLocked={lock}
+                        hasEnoughFuel={hasEnoughFuel}
+                        inHyperdrive={inHyperdrive}
+                        charge={charge}
+                        cooldown={cooldown}
+                        onCharge={() => dispatch('navigation:chargeHyperdrive')}
+                        onEngage={() => dispatch(
+                            'navigation:engageHyperdrive',
+                            { startingPosition: playerPos, targetPos }
+                        )}
+                    />
+                </div>
             </div>
-        </div>
+            {/* Add a slider to show progress of ship during the trip */}
+        </>
     );
 };
 
