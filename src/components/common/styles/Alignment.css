@@ -1,0 +1,26 @@
+.Alignment {
+    border: 2px solid white;
+    height: 20px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.Alignment.variant-green {
+    background-color: green;
+}
+
+.Alignment.variant-red {
+    background-color: red;
+}
+
+.Alignment.variant-red {
+    background-color: orange;
+}
+
+.Alignment-indicator {
+    border-radius: 50px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+}

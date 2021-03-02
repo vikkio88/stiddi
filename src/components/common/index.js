@@ -1,3 +1,4 @@
+export { default as Alignment } from './Alignment';
 export { default as Circle } from './Circle';
 export { default as Countdown } from './Countdown';
 export { default as Star } from './Star';

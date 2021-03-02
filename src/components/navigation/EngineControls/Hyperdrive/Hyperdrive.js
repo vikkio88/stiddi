@@ -2,9 +2,11 @@ import { Geom } from "libs/math";
 import { calculateFuelCostHD } from "libs/game/navigation";
 
 import { ENGINE_TYPES } from "enums/navigation";
+
 import ETA from "./ETA";
 import Navigation from "./Navigation";
 import EngageControls from "./EngageControls";
+import TripIndicator from "./TripIndicator";
 
 const type = ENGINE_TYPES.HYPER_DRIVE;
 
@@ -13,7 +15,7 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
     // exiting hyperdrive
     if (!route) return <h1>Hyperdrive Disengaged</h1>;
 
-    const { hdTargetSpeed, charge, cooldown, times } = settings[type];
+    const { hdTargetSpeed, charge, cooldown, times, startingPosition = null } = settings[type];
     const setTargetSpeed = hdTargetSpeed => set({ hdTargetSpeed }, type);
     const { target } = route;
     const targetPos = target.position;
@@ -49,7 +51,13 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
                     />
                 </div>
             </div>
-            {/* Add a slider to show progress of ship during the trip */}
+            {(inHyperdrive && startingPosition) && (
+                <TripIndicator
+                    distance={distance}
+                    targetPos={targetPos}
+                    startingPosition={startingPosition}
+                />
+            )}
         </>
     );
 };
