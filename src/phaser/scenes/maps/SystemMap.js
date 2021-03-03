@@ -109,7 +109,7 @@ class SystemMap extends Phaser.Scene {
     addPlayer(params) {
         if (this.objects.player) this.objects.player.destroy();
         const { x, y } = params;
-        const { x: cx, y: cy } = this.getCenter();
+        const { x: cx, y: cy } = this.getSystemCenter();
         this.objects.player = new Ship(this, cx + x, cy + y);
     }
 

@@ -36,7 +36,13 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                     <Button
                         className="mb-5"
                         style={{ alignSelf: "flex-end", height: "50px" }}
-                        onClick={() => { onFocus({ object: BODY_TYPES.PLAYER }); select({ object: BODY_TYPES.PLAYER }); }}
+                        onClick={() => {
+                            onFocus({ object: BODY_TYPES.PLAYER });
+                            /* this breaks the target system
+                                as it deselect the plotted target
+                            select({ object: BODY_TYPES.PLAYER });
+                            */
+                        }}
                     >
                         Ship
                 </Button>
