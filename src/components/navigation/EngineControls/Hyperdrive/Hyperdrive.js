@@ -5,7 +5,7 @@ import { ENGINE_TYPES } from "enums/navigation";
 
 import ETA from "./ETA";
 import Navigation from "./Navigation";
-import EngageControls from "./EngageControls";
+import EngageControls from "./EngageControls/EngageControls";
 import TripIndicator from "./TripIndicator";
 
 const type = ENGINE_TYPES.HYPER_DRIVE;

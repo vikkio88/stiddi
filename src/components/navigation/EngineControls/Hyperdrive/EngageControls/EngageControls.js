@@ -1,15 +1,10 @@
 import { Angle, ANGLES } from "libs/math";
-import { Button, Progress, Spinner } from "components/common";
+import { Button, Progress } from "components/common";
+import Charging from "./Charging";
+import Status from "./Status";
 
 // this might be moved to config too?
 const ANGLE_SENSITIVITY = 5;
-
-const Charging = () => (
-    <div className="flex f-col f-ac f-jc">
-        <span>Charging...</span>
-        <Spinner />
-    </div>
-);
 
 const HDControls = ({ isCharged, isCharging, canEngage, inHyperdrive, lockedReason, onCharge, onEngage }) => {
 
@@ -76,10 +71,9 @@ const EngageControls = ({
                 )}
             </div>
             <div className="flex f-row w-full">
-                {/* Maybe move this to a component to */}
-                {!isCoolingDown && <div className="f-1" />}
-                {isCoolingDown && <h3 className="blink t-red f-1 flex f-ac f-jc">HD Cooling down...</h3>}
-                {/* Maybe move this to a component to */}
+                <Status charge={charge} isCoolingDown={isCoolingDown} />
+
+                {/* Need to add here a way to start the count up if Charging */}
                 <HDControls
                     isCharged={isCharged}
                     isCharging={isCharging}

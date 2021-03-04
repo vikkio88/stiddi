@@ -21,7 +21,7 @@ const initialState = {
             hdTargetSpeed: 1,
             startingPosition: null,
             times: {},
-            charge: { isCharged: false, isCharging: false },
+            charge: { isCharged: false, isCharging: false, startedAt: null, duration: 0 },
             cooldown: { hasCooledDown: true, isCoolingDown: false, startedAt: null, duration: 0 },
         },
         [ENGINE_TYPES.WARP_DRIVE]: {},
@@ -133,7 +133,7 @@ const navigation = store => {
                     ...navigation.settings,
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         ...hdSettings,
-                        charge: { isCharged: false, isCharging: true }
+                        charge: { isCharged: false, isCharging: true, startedAt: Time.now(), duration: chargeTimeout }
                     }
                 }
             }
@@ -149,7 +149,7 @@ const navigation = store => {
                     ...navigation.settings,
                     [ENGINE_TYPES.HYPER_DRIVE]: {
                         ...hdSettings,
-                        charge: { isCharged: true, isCharging: false }
+                        charge: { isCharged: true, isCharging: false, startedAt: null, duration: 0 }
                     }
                 }
             }

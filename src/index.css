@@ -154,6 +154,9 @@ h3.valueHeader { font-size: 1.4em;}
 .t-red {
   color: #af4e4c;
 }
+.t-green {
+  color: #4CAF50;
+}
 
 /* UTILS */
 .w-full {
