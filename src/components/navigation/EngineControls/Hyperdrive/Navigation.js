@@ -3,6 +3,7 @@ import { calculateChargeTimeHD, calculateCooldownTimeHD } from "libs/game/naviga
 import { Slider } from "components/common";
 
 import "./styles/Navigation.css";
+import { Numbers } from "libs/math";
 
 const Navigation = ({
     hdTargetSpeed, setTargetSpeed, distance, charge, fuelCost
@@ -36,7 +37,7 @@ const Navigation = ({
                     <span className="label">Fuel: </span>
                     <h3>
                         <span className="value">
-                            ~{fuelCost ? fuelCost.toFixed(2) : '-'}
+                            ~{fuelCost ? Numbers.kFormat(fuelCost) : '-'}
                         </span> units
                                 </h3>
                 </div>
@@ -44,16 +45,16 @@ const Navigation = ({
                     <span className="label">Charge Time: </span>
                     <h3>
                         <span className="value">
-                            ~{(calculateChargeTimeHD(distance, hdTargetSpeed, true)).toFixed(2)}
-                        </span> seconds
+                            ~{Numbers.kFormat(calculateChargeTimeHD(distance, hdTargetSpeed, true))}
+                        </span> sec
                                 </h3>
                 </div>
                 <div>
                     <span className="label">Cooldown Time: </span>
                     <h3>
                         <span className="value">
-                            ~{(calculateCooldownTimeHD(distance, hdTargetSpeed, true)).toFixed(2)}
-                        </span> seconds
+                            ~{Numbers.kFormat(calculateCooldownTimeHD(distance, hdTargetSpeed, true))}
+                        </span> sec
                                 </h3>
                 </div>
             </div>
