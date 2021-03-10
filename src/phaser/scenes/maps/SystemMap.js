@@ -245,7 +245,9 @@ class SystemMap extends Phaser.Scene {
 
 
     panTo(x, y) {
-        this.cameras.main.pan(x, y, CAMERA_ANIMATION_DURATION);
+        const distance = Phaser.Math.Distance.BetweenPoints(this.getCenter(), { x, y });
+        const duration = (distance / 2000) * CAMERA_ANIMATION_DURATION;
+        this.cameras.main.pan(x, y, duration);
     }
 
     handleHyperdrive(action, payload) {
