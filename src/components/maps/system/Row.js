@@ -2,7 +2,7 @@ import { hashHex } from "libs/colours";
 import { BODY_TYPES } from "enums/systemMap";
 import { Button, Circle, Star } from "components/common";
 
-const Row = ({ index, name, colour, offset = 0, body, showInfo, isSelected = false, isLocked = false }) => {
+const Row = ({ index, name, colour, offset = 0, body, showInfo, onFocus, isSelected = false, isLocked = false }) => {
     const hashedCoulour = hashHex(colour);
     const isPlanet = body === BODY_TYPES.PLANET;
     return (
@@ -22,11 +22,18 @@ const Row = ({ index, name, colour, offset = 0, body, showInfo, isSelected = fal
 
             <div className="f-2 flex f-je f-ac pr-5">
                 <Button
-                    style={{ height: "30px" }}
+                    variant={Button.Variants.GREEN}
+                    style={{ height: "30px", width: "30px" }}
+                    onClick={() => onFocus({ object: body, index })}
+                >
+                    F
+                </Button>
+                <Button
+                    style={{ height: "30px", width: "30px" }}
                     onClick={() => showInfo({ object: body, index })}
                     disabled={isLocked && !isSelected}
                 >
-                    Info
+                    I
                 </Button>
             </div>
 

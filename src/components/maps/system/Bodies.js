@@ -54,9 +54,10 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         key={`star_${i}`}
                         {...s}
                         body={BODY_TYPES.STAR}
-                        showInfo={select}
                         isSelected={selectedId === `${BODY_TYPES.STAR}${i}`}
                         isLocked={route.isLocked}
+                        showInfo={select}
+                        onFocus={onFocus}
                     />
                 ))}
                 {system.planets.map((p, i) => (
@@ -64,9 +65,10 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         key={`planet_${i}`}
                         {...p}
                         body={BODY_TYPES.PLANET}
-                        showInfo={select}
                         isSelected={selectedId === `${BODY_TYPES.PLANET}${i}`}
                         isLocked={route.isLocked}
+                        showInfo={select}
+                        onFocus={onFocus}
                     />
                 ))}
             </div>

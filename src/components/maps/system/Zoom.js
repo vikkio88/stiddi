@@ -13,22 +13,19 @@ const Zoom = ({ onZoom }) => {
             <h3>Zoom</h3>
             <div className="w-full flex f-row f-ac f-jsb mb-5">
                 <div className="f-1 flex f-row f-ac f-jc">
-                    <ZoomButton onClick={() => onZoom()}>-</ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ out: false })}>
-                        +
-                    </ZoomButton>
-                </div>
-                <div className="f-1 flex f-row f-ac f-jc">
                     <ZoomButton onClick={() => onZoom({ level: 4 })}>
-                        x4
+                        x5
                     </ZoomButton>
                     <ZoomButton onClick={() => onZoom({ level: 3 })}>
-                        x3
+                        x4
                     </ZoomButton>
                     <ZoomButton onClick={() => onZoom({ level: .9 })}>
+                        x3
+                    </ZoomButton>
+                    <ZoomButton onClick={() => onZoom({ level: .2 })}>
                         x2
                     </ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ level: .3 })}>
+                    <ZoomButton onClick={() => onZoom({ level: .09 })}>
                         x1
                     </ZoomButton>
                 </div>

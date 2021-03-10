@@ -31,7 +31,7 @@ const BodyInfo = (
         onClear,
         //
         route = {},
-        inHyperdrive= false
+        inHyperdrive = false
     }
 ) => {
     if (!object) return <EmptySelection />;
@@ -81,20 +81,13 @@ const BodyInfo = (
 
             <div className="f-1 flex f-ac f-jc">
                 {!isPlotted && (
-                    <>
-                        <Button
-                            disabled={!isCelestialBody}
-                            onClick={() => onFocus({ object, index })}
-                        >
-                            Focus
-                        </Button>
-                        <Button
-                            disabled={isShip}
-                            onClick={() => onPlot({ object, index })}
-                        >
-                            Plot
-                        </Button>
-                    </>
+                    <Button
+                        className="f1"
+                        disabled={isShip}
+                        onClick={() => onPlot({ object, index })}
+                    >
+                        Plot
+                    </Button>
                 )}
                 {isPlotted && (
                     <>
