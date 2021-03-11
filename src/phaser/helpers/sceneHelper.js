@@ -7,6 +7,13 @@ const sceneHelper = {
         const x = scene.cameras.main.worldView.x + scene.cameras.main.width / 2 + offset.x;
         const y = scene.cameras.main.worldView.y + scene.cameras.main.height / 2 + offset.y;
         return { x, y };
+    },
+
+
+    isOnTop(scene) {
+        const scenes = scene.scene.manager.scenes.map(s => s.scene.key);
+        const topScene = scenes.pop();
+        return topScene === scene.scene.key;
     }
 };
 

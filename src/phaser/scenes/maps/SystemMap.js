@@ -9,6 +9,7 @@ import { HYPERDRIVE_ACTIONS } from "enums/navigation";
 
 const CAMERA_ANIMATION_DURATION = 1500;
 const MIN_CAMERA_ANIMATION_DURATION = 900;
+const MAX_CAMERA_ANIMATION_DURATION = 2000;
 
 class SystemMap extends Phaser.Scene {
     constructor() {
@@ -221,7 +222,7 @@ class SystemMap extends Phaser.Scene {
 
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             // avoid clicking away if route is plotted
-            if (this.route) return;
+            if (!sceneHelper.isOnTop(this) || this.route) return;
 
             this.clearIndicator();
             this.indicator = new Indicator(this, x, y);
@@ -252,10 +253,10 @@ class SystemMap extends Phaser.Scene {
     panTo(x, y) {
         const distance = Phaser.Math.Distance.BetweenPoints(this.getCenter(), { x, y });
         // might need to consider the zoom level too
-        const duration = Math.max(
+        const duration = Math.min(Math.max(
             (distance / 2000) * CAMERA_ANIMATION_DURATION,
             MIN_CAMERA_ANIMATION_DURATION
-        );
+        ), MAX_CAMERA_ANIMATION_DURATION);
         this.cameras.main.pan(x, y, duration);
     }
 
