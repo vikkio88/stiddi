@@ -5,11 +5,11 @@ import eventBridge from "libs/eventBridge";
 import { BODY_TYPES } from "enums/systemMap";
 
 class Star extends SystemObject {
-    add({ id, index,name, radius, colour, type }) {
+    add({ id, index, name, radius, colour, type }, { cx, cy } = {}) {
         this.setInfo({
             id, body: 'star', name, radius, type
         });
-        const { cx, cy } = this.getSceneCenter();
+        // if the system is binary we need to change this to a cx + an offset
         const starShape = new Phaser.Geom.Circle(cx, cy, radius);
         const star = this.scene.add.graphics();
         star.fillStyle(colour, 2);
@@ -20,7 +20,7 @@ class Star extends SystemObject {
         star.on("pointerdown", (pointer, x, y, event) => {
             event.stopPropagation();
 
-            this.scene.clearIndicator &&this.scene.clearIndicator();
+            this.scene.clearIndicator && this.scene.clearIndicator();
 
             const position = Coords.relativeCoords(
                 this.getPosition(),

@@ -6,11 +6,9 @@ import { BODY_TYPES } from "enums/systemMap";
 import shapesHelper from "phaser/helpers/shapesHelper";
 
 class Planet extends SystemObject {
-    add({ offset, name, type, radius, colour, id, index, angle = 0 }) {
+    add({ offset, name, type, radius, colour, id, index, angle = 0 }, { cx, cy }) {
         // maybe body can be a enum
         this.setInfo({ id, name, type, body: 'planet', index, offset, radius, colour });
-        const { cx, cy } = this.getSceneCenter();
-
         const { x, y } = Geom.pointOnCircumference({ cx, cy }, offset, angle);
         const orbitOffset = Phaser.Math.Distance.Between(x, y, cx, cy);
         const orbitShape = new Phaser.Geom.Circle(cx, cy, orbitOffset);

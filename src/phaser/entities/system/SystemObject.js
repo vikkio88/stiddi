@@ -3,6 +3,7 @@ import sceneHelper from "phaser/helpers/sceneHelper";
 class SystemObject {
     constructor(scene) {
         this.scene = scene;
+        this.center = {}
         this.objects = [];
         this.shape = null;
 

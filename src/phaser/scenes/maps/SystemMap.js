@@ -8,6 +8,7 @@ import { BODY_TYPES } from "enums/systemMap";
 import { HYPERDRIVE_ACTIONS } from "enums/navigation";
 
 const CAMERA_ANIMATION_DURATION = 1500;
+const MIN_CAMERA_ANIMATION_DURATION = 900;
 
 class SystemMap extends Phaser.Scene {
     constructor() {
@@ -35,6 +36,10 @@ class SystemMap extends Phaser.Scene {
             x: this.center.x,
             y: this.center.y
         };
+    }
+
+    getCentrifiedSystemCenter() {
+        return Coords.centrify(this.getSystemCenter());
     }
 
     eventsSubscribe() {
@@ -117,7 +122,7 @@ class SystemMap extends Phaser.Scene {
         });
 
         eventBridge.on(EVENTS.GAME.MAPS.UPDATE_PLAYER, ({ x, y }) => {
-            //console.log('[phaser] UPDATE PLAYER POSITION MAP', { x, y });
+            //console.log('[phaser] UPDATE PLAYER POSITION MAP', { x, y, isVisible });
             this.addPlayer({ x, y });
         });
 
@@ -138,7 +143,7 @@ class SystemMap extends Phaser.Scene {
     addPlayer(params) {
         if (this.objects.player) this.objects.player.destroy();
         const { x, y } = params;
-        const { x: cx, y: cy } = this.getSystemCenter();
+        const { cx, cy } = this.getCentrifiedSystemCenter();
         this.objects.player = new Ship(this, cx + x, cy + y);
 
         if (this.state.hyperdrive.engaged && !this.state.hyperdrive.dontFollow) {
@@ -150,13 +155,13 @@ class SystemMap extends Phaser.Scene {
 
     addStar(params) {
         const star = new Star(this);
-        star.add(params);
+        star.add(params, this.getCentrifiedSystemCenter());
         this.objects.stars.push(star);
     }
 
     addPlanet(params) {
         const planet = new Planet(this);
-        planet.add(params);
+        planet.add(params, this.getCentrifiedSystemCenter());
         this.objects.planets.push(planet);
     }
 
@@ -246,7 +251,11 @@ class SystemMap extends Phaser.Scene {
 
     panTo(x, y) {
         const distance = Phaser.Math.Distance.BetweenPoints(this.getCenter(), { x, y });
-        const duration = (distance / 2000) * CAMERA_ANIMATION_DURATION;
+        // might need to consider the zoom level too
+        const duration = Math.max(
+            (distance / 2000) * CAMERA_ANIMATION_DURATION,
+            MIN_CAMERA_ANIMATION_DURATION
+        );
         this.cameras.main.pan(x, y, duration);
     }
 
