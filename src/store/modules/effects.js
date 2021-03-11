@@ -11,6 +11,14 @@ const effects = store => {
             document.getElementById('porthole').classList.remove(intensityClass);
         }, duration);
     });
+
+    store.on('effects:squarePorthole', () => {
+        document.getElementById('porthole').classList.add('squared');
+    });
+
+    store.on('effects:roundPorthole', () => {
+        document.getElementById('porthole').classList.remove('squared');
+    });
 };
 
 export default effects;

@@ -15,10 +15,15 @@ const ui = store => {
     });
 
     store.on('ui:tabChange', ({ ui }, { tab }) => {
+
+        (tab === TABS.MAPS) ?
+            store.dispatch('effects:squarePorthole')
+            : store.dispatch('effects:roundPorthole');
+
         if (SCENES_MAP[tab]) {
             eBridge.emit(EVENTS.PHASER.SWAP_SCENE, { scene: SCENES_MAP[tab] });
         }
-        
+
         return {
             ui: {
                 ...ui,
