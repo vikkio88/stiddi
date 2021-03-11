@@ -11,6 +11,13 @@ import "./index.css";
 import Main from "./Main";
 import { SCENES } from "enums/ui";
 
+const clickDisabler = e => {
+  e.stopPropagation();
+  e.preventDefault();
+};
+document.addEventListener("click", clickDisabler, true);
+
+
 initEBridge();
 phaserInit();
 
@@ -18,6 +25,7 @@ phaserInit();
 eventBridge.on(EVENTS.PHASER.READY, () => {
   console.log("PHASER:Ready");
   eventBridge.emit(EVENTS.PHASER.SET_SCENE, { scene: SCENES.NAVIGATION });
+  document.removeEventListener("click", clickDisabler, true);
 });
 
 eventBridge.on(EVENTS.PHASER.HEARTBEAT, payload => {
