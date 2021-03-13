@@ -8,13 +8,11 @@ import shapesHelper from "phaser/helpers/shapesHelper";
 class Planet extends SystemObject {
     add({ offset, name, type, radius, colour, id, index, angle = 0 }, { cx, cy }) {
         // maybe body can be a enum
-        this.setInfo({ id, name, type, body: 'planet', index, offset, radius, colour });
+        this.setInfo({ id, name, type, body: 'planet', index, offset, radius, colour, center: { cx, cy } });
         const { x, y } = Geom.pointOnCircumference({ cx, cy }, offset, angle);
-        const orbitOffset = Phaser.Math.Distance.Between(x, y, cx, cy);
-        const orbitShape = new Phaser.Geom.Circle(cx, cy, orbitOffset);
-        const orbit = this.scene.add.graphics();
-        orbit.lineStyle(1, 0xffffff, .3);
-        orbit.strokeCircleShape(orbitShape);
+        const {
+            circle: orbit
+        } = shapesHelper.drawCircle2Points(this.scene, { cx, cy }, { x, y });
 
         const {
             shape: planetShape,
@@ -51,15 +49,16 @@ class Planet extends SystemObject {
     }
 
     setScale(scale) {
-        //this.destroy();
-        const { radius, colour, position: { x, y } } = this.getInfo();
+        const { radius, colour, position: { x, y }, center: { cx, cy } } = this.getInfo();
+        this.destroy();
         this.shape = null;
-        this.objects[0].destroy();
-        this.objects[0] = null;
-        const { shape, circle } = shapesHelper.drawCircle(this.scene, { x, y, radius: radius * scale, colour });
+
+        const { circle: orbit } = shapesHelper.drawCircle2Points(this.scene, { cx, cy }, { x, y }, { thickness: scale });
+        const { shape, circle: planet } = shapesHelper.drawCircle(this.scene, { x, y, radius: radius * scale, colour });
 
         this.shape = shape;
-        this.objects[0] = circle;
+        this.objects[0] = planet;
+        this.objects[1] = orbit;
     }
 }
 

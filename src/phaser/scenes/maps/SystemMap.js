@@ -60,6 +60,8 @@ class SystemMap extends Phaser.Scene {
             if (this.state.hyperdrive.engaged) {
                 this.state.hyperdrive.dontFollow = false;
             }
+
+            this.focusOnPlayer();
         });
 
 
@@ -68,6 +70,7 @@ class SystemMap extends Phaser.Scene {
             if (payload.reset) {
                 this.cameras.main.zoomTo(1, CAMERA_ANIMATION_DURATION);
                 this.objects.planets.forEach(p => p.setScale(1));
+                this.objects.player.setScale(.3);
                 return;
             }
 
@@ -75,6 +78,7 @@ class SystemMap extends Phaser.Scene {
                 this.cameras.main.zoomTo(payload.level, CAMERA_ANIMATION_DURATION);
                 const scale = Math.max(6 - payload.level, 1);
                 this.objects.planets.forEach(p => p.setScale(scale));
+                this.objects.player.setScale(scale);
                 return;
             }
 
@@ -99,8 +103,7 @@ class SystemMap extends Phaser.Scene {
             this.clearIndicator();
 
             if (payload.object === 'player') {
-                const { x, y } = this.objects.player.getPosition();
-                this.panTo(x, y);
+                this.focusOnPlayer({ pan: true });
                 if (this.state.hyperdrive.engaged) {
                     this.state.hyperdrive.dontFollow = false;
                 }
@@ -252,6 +255,8 @@ class SystemMap extends Phaser.Scene {
 
     panTo(x, y) {
         const distance = Phaser.Math.Distance.BetweenPoints(this.getCenter(), { x, y });
+        //const baseDistance = this.cameras.main.zoom
+
         // might need to consider the zoom level too
         const duration = Math.min(Math.max(
             (distance / 2000) * CAMERA_ANIMATION_DURATION,
@@ -274,6 +279,19 @@ class SystemMap extends Phaser.Scene {
             return;
         }
     }
+
+    focusOnPlayer({ pan = false } = {}) {
+        if (!this.objects.player) return;
+        const { x, y } = this.objects.player.getPosition();
+
+        if (!pan) {
+            this.cameras.main.centerOn(x, y);
+            return;
+        }
+
+        this.panTo(x, y);
+    }
+
 }
 
 export default SystemMap;

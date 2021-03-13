@@ -3,7 +3,6 @@ import sceneHelper from "phaser/helpers/sceneHelper";
 class SystemObject {
     constructor(scene) {
         this.scene = scene;
-        this.center = {}
         this.objects = [];
         this.shape = null;
 
@@ -36,6 +35,8 @@ class SystemObject {
 
     destroy() {
         this.objects.forEach(o => o.destroy());
+
+        this.objects = [];
     }
 
     getPosition() {
