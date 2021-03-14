@@ -4,8 +4,9 @@ import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
 import { Planet, Star, Indicator, Route } from "phaser/entities/system";
 import Ship from "phaser/entities/system/Ship";
-import { BODY_TYPES } from "enums/systemMap";
+import { BODY_TYPES, ZOOM_SCALES } from "enums/systemMap";
 import { HYPERDRIVE_ACTIONS } from "enums/navigation";
+import { zoomHelper } from "phaser/helpers/zoomHelper";
 
 const CAMERA_ANIMATION_DURATION = 1500;
 const MIN_CAMERA_ANIMATION_DURATION = 900;
@@ -69,20 +70,15 @@ class SystemMap extends Phaser.Scene {
             console.log('[phaser] ZOOM', { payload, zoom: this.cameras.main.zoom });
             if (payload.reset) {
                 this.cameras.main.zoomTo(1, CAMERA_ANIMATION_DURATION);
-                this.objects.planets.forEach(p => p.setScale(1));
-                this.objects.player.setScale(.3);
+                this.scaleObjects({ reset: true });
                 return;
             }
 
             if (payload.level) {
                 this.cameras.main.zoomTo(payload.level, CAMERA_ANIMATION_DURATION);
-                const scale = Math.max(6 - payload.level, 1);
-                this.objects.planets.forEach(p => p.setScale(scale));
-                this.objects.player.setScale(scale);
+                this.scaleObjects({ level: payload.level });
                 return;
             }
-
-            this.cameras.main.zoomTo(this.cameras.main.zoom + ((payload.out ? -1 : 1) / 10), 500);
         });
 
 
@@ -290,6 +286,21 @@ class SystemMap extends Phaser.Scene {
         }
 
         this.panTo(x, y);
+    }
+
+    scaleObjects({ reset = false, level = 1 } = {}) {
+
+        if (reset) {
+            this.objects.planets.forEach(p => p.setScale(ZOOM_SCALES.default.planet));
+            this.objects.player.setScale(ZOOM_SCALES.default.ship);
+            return;
+        }
+
+        const planetScale = zoomHelper.scalePlanet(level);
+        const shipScale = zoomHelper.scaleShip(level);
+        this.objects.planets.forEach(p => p.setScale(planetScale));
+        this.objects.player.setScale(shipScale);
+
     }
 
 }

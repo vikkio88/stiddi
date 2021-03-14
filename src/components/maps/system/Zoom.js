@@ -1,4 +1,5 @@
 import { Button } from "components/common";
+import { ZOOM_LEVELS } from "enums/systemMap";
 
 const ZoomButton = props => (
     <Button
@@ -13,25 +14,18 @@ const Zoom = ({ onZoom }) => {
             <h3>Zoom</h3>
             <div className="w-full flex f-row f-ac f-jsb mb-5">
                 <div className="f-1 flex f-row f-ac f-jc">
-                    <ZoomButton onClick={() => onZoom({ level: 4 })}>
-                        x5
-                    </ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ level: 3 })}>
-                        x4
-                    </ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ level: .9 })}>
-                        x3
-                    </ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ level: .2 })}>
-                        x2
-                    </ZoomButton>
-                    <ZoomButton onClick={() => onZoom({ level: .09 })}>
-                        x1
-                    </ZoomButton>
+                    {ZOOM_LEVELS.map(({ label, level }, index) => (
+                        <ZoomButton
+                            key={index}
+                            onClick={() => onZoom({ level })}
+                        >
+                            {label}
+                        </ZoomButton>
+                    ))}
                 </div>
                 <div className="f-1 flex f-row f-ac f-jc">
                     <ZoomButton onClick={() => onZoom({ reset: true })}>
-                        Reset
+                        x1
                     </ZoomButton>
                 </div>
             </div>
