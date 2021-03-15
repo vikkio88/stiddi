@@ -83,7 +83,7 @@ class SystemMap extends Phaser.Scene {
 
 
         eventBridge.on(EVENTS.GAME.MAPS.CLEAR_SYSTEM, payload => {
-            console.log('[phaser] CLEAR SYSTEM', { payload });
+            console.log('[phaser] CLEAR SYSTEM');
 
             if (this.state.hyperdrive.engaged) {
                 this.state.hyperdrive.dontFollow = true;

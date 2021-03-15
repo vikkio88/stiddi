@@ -1,8 +1,17 @@
-export const SCENES = {
-    NAVIGATION: 'Navigation',
+
+export const MAPS = {
+    SECTOR_MAP: 'SectorMap',
     SYSTEM_MAP: 'SystemMap',
     GALAXY_MAP: 'GalaxyMap',
 };
+
+export const SCENES = {
+    NAVIGATION: 'Navigation',
+
+    // Maps
+    ...MAPS
+};
+
 
 
 export const TABS = {
@@ -13,7 +22,5 @@ export const TABS = {
 };
 
 export const SCENES_MAP = {
-    [TABS.NAVIGATION]: SCENES.NAVIGATION,
-    // initial scene for Maps is System
-    [TABS.MAPS]: SCENES.SYSTEM_MAP
+    [TABS.NAVIGATION]: SCENES.NAVIGATION
 };

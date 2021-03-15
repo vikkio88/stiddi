@@ -31,6 +31,12 @@ const ui = store => {
             }
         };
     });
+
+
+    // Might not be needed
+    store.on('ui:swapScene', (_, { scene }) => {
+        eBridge.emit(EVENTS.PHASER.SWAP_SCENE, { scene });
+    });
 };
 
 export default ui;

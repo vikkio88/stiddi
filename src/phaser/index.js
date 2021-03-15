@@ -7,6 +7,7 @@ import {
     Navigation,
 
     // maps
+    SectorMap,
     SystemMap,
     GalaxyMap
 } from "./scenes";
@@ -26,7 +27,7 @@ const config = {
 config.type = Phaser.AUTO;
 config.scene = [
     //maps
-    SystemMap, GalaxyMap,
+    SectorMap, SystemMap, GalaxyMap,
 
     // boot/preload
     Boot,

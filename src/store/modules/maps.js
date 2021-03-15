@@ -1,3 +1,4 @@
+import { MAPS } from 'enums/ui';
 import eBridge, { EVENTS } from 'libs/eventBridge';
 import { SystemGenerator } from 'libs/game/maps';
 import { getSeededRandomizer } from 'libs/random';
@@ -7,6 +8,7 @@ const randomizer = getSeededRandomizer(TEST_SEED);
 const systemGenerator = new SystemGenerator(TEST_SEED);
 
 const initialState = {
+    currentMap: MAPS.SECTOR_MAP,
     system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 16) })
 };
 
@@ -40,13 +42,23 @@ const maps = store => {
     store.on('maps:clearPlotSystem', (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_PLOTROUTE_SYSTEM, payload);
     });
-    
+
     store.on('maps:updatePlayerPosSystem', (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.UPDATE_PLAYER, payload);
     });
 
     store.on('maps:clearSystem', () => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_SYSTEM);
+    });
+
+
+    store.on('maps:mapTabChange', ({ maps }, { tab }) => {
+        return {
+            maps: {
+                ...maps,
+                currentMap: tab
+            }
+        };
     });
 };
 

@@ -17,7 +17,7 @@ const TabLink = ({ onClick, children, isActive, isDisabled = false }) => {
     );
 };
 
-const Navbar = ({ current = null, onChange = () => { }, tabs = [], className = "", disabled = [] }) => {
+const Navbar = ({ current = null, onChange = () => { }, tabs = [], className = "", disabled = [], labels = {} }) => {
     return (
         <div className={`Navbar flex ui-section mb-5 p-5 ${className}`}>
             {tabs.map(t => {
@@ -30,7 +30,7 @@ const Navbar = ({ current = null, onChange = () => { }, tabs = [], className = "
                         isActive={current === t}
                         onClick={onClick}
                     >
-                        {t}
+                        {labels[t] || t}
                     </TabLink>
                 );
             })}

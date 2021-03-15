@@ -1,15 +1,15 @@
 import Phaser from "phaser";
 import sceneHelper from "phaser/helpers/sceneHelper";
 
-class GalaxyMap extends Phaser.Scene {
+class SectorMap extends Phaser.Scene {
     constructor() {
-        super({ key: "GalaxyMap", active: true });
+        super({ key: "SectorMap",active: true });
     }
 
     create() {
         sceneHelper.setBackground(this);
-        this.add.text(400, 400, "GALAXY MAP");
+        this.add.text(400, 400, "Sector MAP");
     }
 }
 
-export default GalaxyMap;
+export default SectorMap;
