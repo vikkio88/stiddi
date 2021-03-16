@@ -1,3 +1,4 @@
+import ACTIONS from "store/actions";
 import eBridge, { EVENTS } from 'libs/eventBridge';
 import { TABS, SCENES_MAP } from "enums/ui";
 
@@ -17,8 +18,8 @@ const ui = store => {
     store.on('ui:tabChange', ({ ui }, { tab }) => {
 
         (tab === TABS.MAPS) ?
-            store.dispatch('effects:squarePorthole')
-            : store.dispatch('effects:roundPorthole');
+            store.dispatch(ACTIONS.EFFECTS.SQUARE_PORTHOLE)
+            : store.dispatch(ACTIONS.EFFECTS.ROUND_PORTHOLE);
 
         if (SCENES_MAP[tab]) {
             eBridge.emit(EVENTS.PHASER.SWAP_SCENE, { scene: SCENES_MAP[tab] });

@@ -1,7 +1,8 @@
 import eBridge, { EVENTS } from 'libs/eventBridge';
+import ACTIONS from "store/actions";
 
 const effects = store => {
-    store.on('effects:shake', (_, { duration = 2000, intensity = 'little' } = {}) => {
+    store.on(ACTIONS.EFFECTS.SHAKE, (_, { duration = 2000, intensity = 'little' } = {}) => {
         const intensityClass = `shake`;
         document.getElementById('ui').classList.add(intensityClass);
         document.getElementById('porthole').classList.add(intensityClass);
@@ -12,11 +13,11 @@ const effects = store => {
         }, duration);
     });
 
-    store.on('effects:squarePorthole', () => {
+    store.on(ACTIONS.EFFECTS.SQUARE_PORTHOLE, () => {
         document.getElementById('porthole').classList.add('squared');
     });
 
-    store.on('effects:roundPorthole', () => {
+    store.on(ACTIONS.EFFECTS.ROUND_PORTHOLE, () => {
         document.getElementById('porthole').classList.remove('squared');
     });
 };

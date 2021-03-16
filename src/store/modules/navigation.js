@@ -1,3 +1,4 @@
+import ACTIONS from "store/actions";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
 import { calculateChargeTimeHD, calculateCooldownTimeHD, calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout } from "libs/game/navigation";
@@ -59,7 +60,7 @@ const navigation = store => {
 
     store.on('commit:burn', (_, { timeout, throttle }) => {
         store.dispatch('lock:navigation');
-        store.dispatch('effects:shake', { duration: timeout });
+        store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: timeout });
         const fuel = calculateFuelCost(timeout, throttle);
         store.dispatch('player:burnFuel', { fuel });
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout, throttle });
@@ -75,7 +76,7 @@ const navigation = store => {
         const { speed } = navigation;
         const timeout = calculateFullStopTimeout(speed);
         const fuel = calculateFuelCost(timeout, .10);
-        store.dispatch('effects:shake', { duration: timeout });
+        store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: timeout });
         store.dispatch('player:burnFuel', { fuel });
         setTimeout(() => {
             eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
@@ -211,7 +212,7 @@ const navigation = store => {
 
     store.on('navigation:exitHyperdrive', ({ navigation }, { speed, distance }) => {
         // little shake on back
-        store.dispatch('effects:shake', { duration: 1500 });
+        store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: 1500 });
 
         store.dispatch('player:exitHyperdrive');
 
