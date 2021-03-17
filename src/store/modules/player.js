@@ -1,5 +1,6 @@
 import { Geom } from "libs/math";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
+import ACTIONS from "store/actions";
 
 const initialState = {
     inHyperdrive: false,
@@ -96,7 +97,7 @@ const player = store => {
     });
 
     store.on('player:clearRouteSystem', ({ player }) => {
-        store.dispatch('maps:clearPlotSystem');
+        store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
         store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.UNLOCKED });
         return {
@@ -140,8 +141,8 @@ const player = store => {
         // this piece of dirty shit is because the hook rerenders the 
         // hyperdrive after exiting and is empty, so I switch to thermal/clearup
         // after a bit
-        store.dispatch('maps:clearPlotSystem');
-        store.dispatch('maps:updatePlayerPosSystem', { x, y });
+        store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
+        store.dispatch(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, { x, y });
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
         setTimeout(() => {
             store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
@@ -168,7 +169,7 @@ const player = store => {
 
     // this can be used to show the player moving through hyperspace
     store.on('player:updateSystemPosition', ({ player }, payload) => {
-        store.dispatch('maps:updatePlayerPosSystem', payload);
+        store.dispatch(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, payload);
         return {
             player: {
                 ...player,

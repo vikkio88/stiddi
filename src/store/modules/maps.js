@@ -1,3 +1,4 @@
+import ACTIONS from "store/actions";
 import { MAPS } from 'enums/ui';
 import eBridge, { EVENTS } from 'libs/eventBridge';
 import { SystemGenerator } from 'libs/game/maps';
@@ -21,33 +22,33 @@ const maps = store => {
         };
     });
 
-    store.on('maps:drawSystem', ({ player, maps }) => {
+    store.on(ACTIONS.MAPS.SYSTEM.DRAW, ({ player, maps }) => {
         const { position: { system: playerPosition }, target, route } = player;
         const { system } = maps;
         eBridge.emit(EVENTS.GAME.MAPS.DRAW_SYSTEM, { system, player: { ...playerPosition }, target, route });
     });
 
-    store.on('maps:zoomSystem', (_, { out = true, reset = false, level = null } = {}) => {
+    store.on(ACTIONS.MAPS.SYSTEM.ZOOM, (_, { out = true, reset = false, level = null } = {}) => {
         eBridge.emit(EVENTS.GAME.MAPS.ZOOM_SYSTEM, { out, reset, level });
     });
 
-    store.on('maps:focusSystem', (_, { object = 'stars', index = 0 } = {}) => {
+    store.on(ACTIONS.MAPS.SYSTEM.FOCUS, (_, { object = 'stars', index = 0 } = {}) => {
         eBridge.emit(EVENTS.GAME.MAPS.FOCUS_SYSTEM, { object, index });
     });
 
-    store.on('maps:plotSystem', (_, payload) => {
+    store.on(ACTIONS.MAPS.SYSTEM.PLOT, (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.PLOTROUTE_SYSTEM, payload);
     });
 
-    store.on('maps:clearPlotSystem', (_, payload) => {
+    store.on(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT, (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_PLOTROUTE_SYSTEM, payload);
     });
 
-    store.on('maps:updatePlayerPosSystem', (_, payload) => {
+    store.on(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, (_, payload) => {
         eBridge.emit(EVENTS.GAME.MAPS.UPDATE_PLAYER, payload);
     });
 
-    store.on('maps:clearSystem', () => {
+    store.on(ACTIONS.MAPS.SYSTEM.CLEAR, () => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_SYSTEM);
     });
 

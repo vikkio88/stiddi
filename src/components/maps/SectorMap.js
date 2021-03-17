@@ -6,7 +6,7 @@ const SectorMap = ({ dispatch }) => {
     useEffect(() => {
         dispatch(ACTIONS.UI.SWAP_SCENE, { scene: MAPS.SECTOR_MAP });
         // no need to clear system, maybe the sector
-        return () => dispatch('maps:clearSystem');
+        return () => dispatch(ACTIONS.MAPS.SYSTEM.CLEAR);
     });
 
     return <h2>Sector Map Controls</h2>;
