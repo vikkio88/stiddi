@@ -15,7 +15,7 @@ const ui = store => {
         };
     });
 
-    store.on('ui:tabChange', ({ ui }, { tab }) => {
+    store.on(ACTIONS.UI.TAB_CHANGE, ({ ui }, { tab }) => {
 
         (tab === TABS.MAPS) ?
             store.dispatch(ACTIONS.EFFECTS.SQUARE_PORTHOLE)
@@ -33,9 +33,7 @@ const ui = store => {
         };
     });
 
-
-    // Might not be needed
-    store.on('ui:swapScene', (_, { scene }) => {
+    store.on(ACTIONS.UI.SWAP_SCENE, (_, { scene }) => {
         eBridge.emit(EVENTS.PHASER.SWAP_SCENE, { scene });
     });
 };

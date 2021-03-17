@@ -1,6 +1,8 @@
 import { useStoreon } from "storeon/react";
+import ACTIONS from "store/actions";
 import { Navigation, Maps, Systems, Comms } from "components/tabs";
 import { Navbar } from "components/common";
+
 
 import { TABS } from "enums/ui";
 
@@ -18,7 +20,7 @@ function Main() {
       <Navbar
         tabs={Object.values(TABS)}
         current={tab}
-        onChange={tab => dispatch('ui:tabChange', { tab })}
+        onChange={tab => dispatch(ACTIONS.UI.TAB_CHANGE, { tab })}
       />
       {TABS_MAPPING[tab]}
     </div>

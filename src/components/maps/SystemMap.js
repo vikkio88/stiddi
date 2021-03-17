@@ -1,11 +1,12 @@
 import { MAPS } from "enums/ui";
+import ACTIONS from "store/actions";
 import { useEffect } from "react";
 import { Zoom, Bodies } from "./system";
 
 const SystemMap = ({ dispatch, system }) => {
     useEffect(() => {
         dispatch('maps:drawSystem');
-        dispatch('ui:swapScene', { scene: MAPS.SYSTEM_MAP });
+        dispatch(ACTIONS.UI.SWAP_SCENE, { scene: MAPS.SYSTEM_MAP });
         return () => dispatch('maps:clearSystem');
     });
 

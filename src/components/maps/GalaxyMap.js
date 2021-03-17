@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import ACTIONS from "store/actions";
 import { MAPS } from "enums/ui";
 
 const GalaxyMap = ({ dispatch }) => {
     useEffect(() => {
-        dispatch('ui:swapScene', { scene: MAPS.GALAXY_MAP });
+        dispatch(ACTIONS.UI.SWAP_SCENE, { scene: MAPS.GALAXY_MAP });
         // no need to clear system, maybe the sector
         return () => dispatch('maps:clearSystem');
     });
