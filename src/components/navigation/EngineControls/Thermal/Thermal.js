@@ -2,6 +2,7 @@ import {
     Button, RoundIndicator,
     Slider, Spinner, Row, Col
 } from "components/common";
+import ACTIONS from "store/actions";
 import { ENGINE_TYPES } from "enums/navigation";
 import { calculateFuelCost } from "libs/game/navigation";
 import Calculations from "./Calculations";
@@ -26,9 +27,9 @@ const Thermal = ({ lock, settings, dispatch }) => {
     const onBurn = (time, throttlePercentage = 25) => {
         time = time * 1000;
         const throttle = throttlePercentage / 100;
-        dispatch('commit:burn', { timeout: time, throttle });
+        dispatch(ACTIONS.NAV.COMMIT.BURN, { timeout: time, throttle });
     };
-    const onFullStop = () => dispatch('commit:fullstop');
+    const onFullStop = () => dispatch(ACTIONS.NAV.COMMIT.FULL_STOP);
 
     const fuelCost = calculateFuelCost(burnTime, throttle, true);
     const hasEnoughFuel = fuel.current - fuelCost >= 1;

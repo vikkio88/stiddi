@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { StoreContext } from "storeon/react";
 import initEBridge from "./ebridge";
 import eventBridge, { EVENTS } from "libs/eventBridge";
+import ACTIONS from "./store/actions";
 import store from "./store";
 
 import phaserInit from "./phaser";
@@ -28,8 +29,9 @@ eventBridge.on(EVENTS.PHASER.READY, () => {
   document.removeEventListener("click", clickDisabler, true);
 });
 
+// maybe no need to be single event? move it to Event one
 eventBridge.on(EVENTS.PHASER.HEARTBEAT, payload => {
-  store.dispatch("phaser:heartbeat", payload);
+  store.dispatch(ACTIONS.NAV.HB, payload);
 });
 
 eventBridge.on(EVENTS.PHASER.EVENT, ({ type, payload }) => {

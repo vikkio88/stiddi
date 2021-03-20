@@ -98,7 +98,7 @@ const player = store => {
 
     store.on('player:clearRouteSystem', ({ player }) => {
         store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
-        store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+        store.dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type: ENGINE_TYPES.THERMAL });
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.UNLOCKED });
         return {
             player: {
@@ -145,7 +145,7 @@ const player = store => {
         store.dispatch(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, { x, y });
         store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
         setTimeout(() => {
-            store.dispatch('navigation:engineTabChange', { type: ENGINE_TYPES.THERMAL });
+            store.dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type: ENGINE_TYPES.THERMAL });
         }, 1000);
 
         // Need to add the setting position on maps so we can see the player there if exiting from 

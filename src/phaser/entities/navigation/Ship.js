@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
+import ACTIONS from "store/actions";
 import { Angle, ANGLES } from "libs/math";
 
 const ACCELERATION_MULTIPLIER = 5;
@@ -100,7 +101,7 @@ export default class Ship extends Phaser.GameObjects.Sprite {
 
     stopBurn() {
         this.body.setAcceleration(0, 0);
-        eventBridge.dispatchFromPhaser('unlock:navigation');
+        eventBridge.dispatchFromPhaser(ACTIONS.NAV.UNLOCK.NAV);
     }
 
     fullStop() {
@@ -122,7 +123,7 @@ export default class Ship extends Phaser.GameObjects.Sprite {
             targets: this,
             angle,
             duration,
-            onComplete: () => eventBridge.dispatchFromPhaser('unlock:navigation')
+            onComplete: () => eventBridge.dispatchFromPhaser(ACTIONS.NAV.UNLOCK.NAV)
         });
     }
 }

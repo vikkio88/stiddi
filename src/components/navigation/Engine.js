@@ -1,5 +1,6 @@
 import { Navbar } from "components/common";
 import { ENGINE_TYPES } from "enums/navigation";
+import ACTIONS from "store/actions";
 
 import { Hyperdrive, Thermal, Warp } from "./EngineControls";
 
@@ -24,7 +25,7 @@ const Engine = ({ lock = false, engineType, settings = {}, route = null, positio
                 className="w-full"
                 current={engineType}
                 tabs={Object.values(ENGINE_TYPES)}
-                onChange={type => dispatch('navigation:engineTabChange', { type })}
+                onChange={type => dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type })}
                 disabled={disabledEngines}
             />
             <EngineControl

@@ -39,7 +39,7 @@ const navigation = store => {
     });
 
     // can move this to proper action-emit-from-phaser
-    store.on('phaser:heartbeat', ({ navigation }, payload) => {
+    store.on(ACTIONS.NAV.HB, ({ navigation }, payload) => {
         return {
             navigation: {
                 ...navigation,
@@ -48,7 +48,7 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:engineTabChange', ({ navigation }, { type }) => {
+    store.on(ACTIONS.NAV.ENGINE.TAB_CHANGE, ({ navigation }, { type }) => {
         // Need to check why tab wont change on exiting from hyperspace
         return {
             navigation: {
@@ -58,21 +58,21 @@ const navigation = store => {
         };
     });
 
-    store.on('commit:burn', (_, { timeout, throttle }) => {
-        store.dispatch('lock:navigation');
+    store.on(ACTIONS.NAV.COMMIT.BURN, (_, { timeout, throttle }) => {
+        store.dispatch(ACTIONS.NAV.LOCK.NAV);
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: timeout });
         const fuel = calculateFuelCost(timeout, throttle);
         store.dispatch('player:burnFuel', { fuel });
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout, throttle });
     });
 
-    store.on('commit:rotate', (_, { angle }) => {
-        store.dispatch('lock:navigation');
+    store.on(ACTIONS.NAV.COMMIT.ROTATE, (_, { angle }) => {
+        store.dispatch(ACTIONS.NAV.LOCK.NAV);
         eBridge.emit(EVENTS.GAME.ACTIONS.ROTATE, { angle });
     });
 
-    store.on('commit:fullstop', ({ navigation }) => {
-        store.dispatch('lock:navigation');
+    store.on(ACTIONS.NAV.COMMIT.FULL_STOP, ({ navigation }) => {
+        store.dispatch(ACTIONS.NAV.LOCK.NAV);
         const { speed } = navigation;
         const timeout = calculateFullStopTimeout(speed);
         const fuel = calculateFuelCost(timeout, .10);
@@ -80,12 +80,12 @@ const navigation = store => {
         store.dispatch('player:burnFuel', { fuel });
         setTimeout(() => {
             eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
-            store.dispatch('unlock:navigation');
+            store.dispatch(ACTIONS.NAV.UNLOCK.NAV);
         }, timeout);
 
     });
 
-    store.on('lock:navigation', ({ navigation }) => {
+    store.on(ACTIONS.NAV.LOCK.NAV, ({ navigation }) => {
         return {
             navigation: {
                 ...navigation,
@@ -94,7 +94,7 @@ const navigation = store => {
         };
     });
 
-    store.on('unlock:navigation', ({ navigation }) => {
+    store.on(ACTIONS.NAV.UNLOCK.NAV, ({ navigation }) => {
         return {
             navigation: {
                 ...navigation,
@@ -103,7 +103,7 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:storeSetting', ({ navigation }, { type, settings }) => {
+    store.on(ACTIONS.NAV.SETTINGS.STORE, ({ navigation }, { type, settings }) => {
         if (!Object.values(ENGINE_TYPES).includes(type)) return;
 
         return {
@@ -120,12 +120,12 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:chargeHyperdrive', ({ navigation }) => {
+    store.on(ACTIONS.NAV.HD.CHARGE, ({ navigation }) => {
         // need to wire the CHARGE TIME
         const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
         const chargeTimeout = calculateChargeTimeHD(0, hdSettings.hdTargetSpeed) * 1000;
         setTimeout(() => {
-            store.dispatch('nagivation:hyperdriveCharged');
+            store.dispatch(ACTIONS.NAV.HD.CHARGED);
         }, chargeTimeout);
         return {
             navigation: {
@@ -141,7 +141,7 @@ const navigation = store => {
         };
     });
 
-    store.on('nagivation:hyperdriveCharged', ({ navigation }) => {
+    store.on(ACTIONS.NAV.HD.CHARGED, ({ navigation }) => {
         const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
         return {
             navigation: {

@@ -23,6 +23,42 @@ const ACTIONS = {
             CLEAR_PLOT: 'maps:clearPlotSystem',
             UPDATE_PLAYER_POS: 'maps:updatePlayerPosSystem'
         }
+    },
+
+    // Navigation actions
+    NAV: {
+        // this will update player position/speed
+        // weird naming? yeah sure
+        HB: 'phaser:heartbeat',
+
+        SETTINGS: {
+            STORE: 'navigation:storeSetting'
+        },
+
+        ENGINE: {
+            TAB_CHANGE: 'navigation:engineTabChange'
+        },
+        COMMIT: {
+            BURN: 'commit:burn',
+            ROTATE: 'commit:rotate',
+            FULL_STOP: 'commit:fullstop',
+        },
+
+        LOCK: {
+            NAV: 'lock:navigation'
+        },
+        UNLOCK: {
+            NAV: 'unlock:navigation'
+        },
+
+        //HyperDrive
+        HD: {
+            CHARGE: 'navigation:chargeHyperdrive',
+            CHARGED: 'navigation:hyperdriveCharged',
+
+        }
+
+
     }
 
 

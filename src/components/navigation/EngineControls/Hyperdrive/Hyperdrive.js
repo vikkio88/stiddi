@@ -1,5 +1,6 @@
 import { Geom } from "libs/math";
 import { calculateFuelCostHD } from "libs/game/navigation";
+import ACTIONS from "store/actions";
 
 import { ENGINE_TYPES } from "enums/navigation";
 
@@ -43,7 +44,7 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
                         inHyperdrive={inHyperdrive}
                         charge={charge}
                         cooldown={cooldown}
-                        onCharge={() => dispatch('navigation:chargeHyperdrive')}
+                        onCharge={() => dispatch(ACTIONS.NAV.HD.CHARGE)}
                         onEngage={() => dispatch(
                             'navigation:engageHyperdrive',
                             { startingPosition: playerPos, targetPos }

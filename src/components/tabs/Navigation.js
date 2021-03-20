@@ -1,4 +1,5 @@
 import { useStoreon } from "storeon/react";
+import ACTIONS from "store/actions";
 import { ENGINE_TYPES } from 'enums/navigation';
 import { Heading, Speed, Engine, Fuel } from 'components/navigation';
 
@@ -26,7 +27,7 @@ const Navigation = () => {
         heading,
         direction,
         speed,
-        set: (settings, type = ENGINE_TYPES.THERMAL) => dispatch('navigation:storeSetting', { type, settings })
+        set: (settings, type = ENGINE_TYPES.THERMAL) => dispatch(ACTIONS.NAV.SETTINGS.STORE, { type, settings })
     };
     return (
         <div className="NavigationTab-wrapper">
@@ -35,7 +36,7 @@ const Navigation = () => {
                     <Speed speed={speed} />
                     <Heading
                         lock={navigationLock}
-                        onRotate={angle => dispatch('commit:rotate', { angle })}
+                        onRotate={angle => dispatch(ACTIONS.NAV.COMMIT.ROTATE, { angle })}
                         settings={settings}
                         routeSetting={routeSetting}
                     />
