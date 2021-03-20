@@ -157,8 +157,8 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:engageHyperdrive', ({ navigation }, { startingPosition, targetPos }) => {
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
+    store.on(ACTIONS.NAV.HD.ENGAGE, ({ navigation }, { startingPosition, targetPos }) => {
+        store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
         store.dispatch('player:toggleHyperdrive', { inHyperdrive: true });
         // here we need to report that it is engaged
         // and lock navigation so we cannot turn/burn
@@ -185,7 +185,7 @@ const navigation = store => {
 
         setTimeout(() => {
             clearInterval(travelStep);
-            store.dispatch('navigation:exitHyperdrive', { speed, distance });
+            store.dispatch(ACTIONS.NAV.HD.EXIT, { speed, distance });
         }, jumpDuration * 1000);
 
 
@@ -210,7 +210,7 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:exitHyperdrive', ({ navigation }, { speed, distance }) => {
+    store.on(ACTIONS.NAV.HD.EXIT, ({ navigation }, { speed, distance }) => {
         // little shake on back
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: 1500 });
 
@@ -218,7 +218,7 @@ const navigation = store => {
 
         // starting cooldown
         const cooldownTimeout = calculateCooldownTimeHD(distance, speed) * 1000;
-        setTimeout(() => store.dispatch('navigation:cooldownFinished'), cooldownTimeout);
+        setTimeout(() => store.dispatch(ACTIONS.NAV.HD.COOLDOWN_FINISHED), cooldownTimeout);
 
         return {
             navigation: {
@@ -242,7 +242,7 @@ const navigation = store => {
         };
     });
 
-    store.on('navigation:cooldownFinished', ({ navigation }) => {
+    store.on(ACTIONS.NAV.HD.COOLDOWN_FINISHED, ({ navigation }) => {
         const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
         return {
             navigation: {
@@ -263,7 +263,7 @@ const navigation = store => {
         };
 
     });
-    store.on('navigation:hyperdriveAction', (_, { action, payload }) => {
+    store.on(ACTIONS.NAV.HD.ACTION, (_, { action, payload }) => {
         eBridge.emit(EVENTS.GAME.ACTIONS.HYPERDRIVE, { action, payload });
     });
 };

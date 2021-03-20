@@ -53,8 +53,15 @@ const ACTIONS = {
 
         //HyperDrive
         HD: {
+            ACTION: 'navigation:hyperdriveAction',
+            
             CHARGE: 'navigation:chargeHyperdrive',
             CHARGED: 'navigation:hyperdriveCharged',
+
+            ENGAGE: 'navigation:engageHyperdrive',
+            EXIT: 'navigation:exitHyperdrive',
+
+            COOLDOWN_FINISHED: 'navigation:cooldownFinished',
 
         }
 

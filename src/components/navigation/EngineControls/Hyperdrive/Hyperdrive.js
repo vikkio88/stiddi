@@ -46,7 +46,7 @@ const Hyperdrive = ({ lock, settings, position, dispatch, route }) => {
                         cooldown={cooldown}
                         onCharge={() => dispatch(ACTIONS.NAV.HD.CHARGE)}
                         onEngage={() => dispatch(
-                            'navigation:engageHyperdrive',
+                            ACTIONS.NAV.HD.ENGAGE,
                             { startingPosition: playerPos, targetPos }
                         )}
                     />

@@ -99,7 +99,7 @@ const player = store => {
     store.on('player:clearRouteSystem', ({ player }) => {
         store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
         store.dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type: ENGINE_TYPES.THERMAL });
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.UNLOCKED });
+        store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.UNLOCKED });
         return {
             player: {
                 ...player,
@@ -112,7 +112,7 @@ const player = store => {
 
     store.on('player:lockRouteSystem', ({ player }) => {
         // show in the Radar the direction of the locked plot
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle: player.target.angle } });
+        store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle: player.target.angle } });
         //
 
         return {
@@ -143,7 +143,7 @@ const player = store => {
         // after a bit
         store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
         store.dispatch(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, { x, y });
-        store.dispatch('navigation:hyperdriveAction', { action: HYPERDRIVE_ACTIONS.EXITED });
+        store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.EXITED });
         setTimeout(() => {
             store.dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type: ENGINE_TYPES.THERMAL });
         }, 1000);
