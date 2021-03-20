@@ -54,7 +54,7 @@ const ACTIONS = {
         //HyperDrive
         HD: {
             ACTION: 'navigation:hyperdriveAction',
-            
+
             CHARGE: 'navigation:chargeHyperdrive',
             CHARGED: 'navigation:hyperdriveCharged',
 
@@ -64,12 +64,34 @@ const ACTIONS = {
             COOLDOWN_FINISHED: 'navigation:cooldownFinished',
 
         }
+    },
 
+
+    // Player Actions
+    PLAYER: {
+        FUEL: {
+            BURN: 'player:burnFuel',
+            // this is not used yet
+            LOAD: 'player:loadFuel',
+        },
+
+        SYSTEM: {
+            TARGET: 'player:targetSystem',
+            PLOT: 'player:plotSuccessSystem',
+            CLEAR: 'player:clearRouteSystem',
+            POS_UPDATE: 'player:updateSystemPosition',
+        },
+
+        LOCK: {
+            ROUTE_SYSTEM: 'player:lockRouteSystem',
+        },
+
+        HD: {
+            TOGGLE: 'player:toggleHyperdrive',
+            EXIT: 'player:exitHyperdrive',
+        },
 
     }
-
-
-
 };
 
 export default ACTIONS;

@@ -36,7 +36,7 @@ const player = store => {
         };
     });
 
-    store.on('player:burnFuel', ({ player }, { fuel }) => {
+    store.on(ACTIONS.PLAYER.FUEL.BURN, ({ player }, { fuel }) => {
         const current = Math.max((player.fuel.current - fuel), 0);
         console.log(`burned ${current} units`);
         return {
@@ -50,7 +50,7 @@ const player = store => {
         };
     });
 
-    store.on('player:loadFuel', ({ player }, { fuel }) => {
+    store.on(ACTIONS.PLAYER.FUEL.LOAD, ({ player }, { fuel }) => {
         const current = Math.min((player.fuel.current + fuel), player.fuel.max);
         return {
             player: {
@@ -64,7 +64,7 @@ const player = store => {
     });
 
     // make sure x,y are relative to 0,0 center of the system
-    store.on('player:targetSystem', ({ player }, { target }) => {
+    store.on(ACTIONS.PLAYER.SYSTEM.TARGET, ({ player }, { target }) => {
         // we need avoiding replacing the route if is locked
         return {
             player: {
@@ -74,7 +74,7 @@ const player = store => {
         };
     });
 
-    store.on('player:plotSuccessSystem', ({ player }, { target }) => {
+    store.on(ACTIONS.PLAYER.SYSTEM.PLOT, ({ player }, { target }) => {
         console.log('PLOT SUCCESS', target);
         const playerPos = player.position.system;
         const targetPos = target.position;
@@ -96,7 +96,7 @@ const player = store => {
         };
     });
 
-    store.on('player:clearRouteSystem', ({ player }) => {
+    store.on(ACTIONS.PLAYER.SYSTEM.CLEAR, ({ player }) => {
         store.dispatch(ACTIONS.MAPS.SYSTEM.CLEAR_PLOT);
         store.dispatch(ACTIONS.NAV.ENGINE.TAB_CHANGE, { type: ENGINE_TYPES.THERMAL });
         store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.UNLOCKED });
@@ -110,7 +110,7 @@ const player = store => {
         };
     });
 
-    store.on('player:lockRouteSystem', ({ player }) => {
+    store.on(ACTIONS.PLAYER.LOCK.ROUTE_SYSTEM, ({ player }) => {
         // show in the Radar the direction of the locked plot
         store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.LOCKED, payload: { angle: player.target.angle } });
         //
@@ -126,7 +126,7 @@ const player = store => {
         };
     });
 
-    store.on('player:toggleHyperdrive', ({ player }, { inHyperdrive }) => {
+    store.on(ACTIONS.PLAYER.HD.TOGGLE, ({ player }, { inHyperdrive }) => {
         return {
             player: {
                 ...player,
@@ -135,7 +135,7 @@ const player = store => {
         };
     });
 
-    store.on('player:exitHyperdrive', ({ player }) => {
+    store.on(ACTIONS.PLAYER.HD.EXIT, ({ player }) => {
         const { x, y } = player.target.position;
         const playerSystemPos = player.position.system;
         // this piece of dirty shit is because the hook rerenders the 
@@ -168,7 +168,7 @@ const player = store => {
     });
 
     // this can be used to show the player moving through hyperspace
-    store.on('player:updateSystemPosition', ({ player }, payload) => {
+    store.on(ACTIONS.PLAYER.SYSTEM.POS_UPDATE, ({ player }, payload) => {
         store.dispatch(ACTIONS.MAPS.SYSTEM.UPDATE_PLAYER_POS, payload);
         return {
             player: {

@@ -62,7 +62,7 @@ const navigation = store => {
         store.dispatch(ACTIONS.NAV.LOCK.NAV);
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: timeout });
         const fuel = calculateFuelCost(timeout, throttle);
-        store.dispatch('player:burnFuel', { fuel });
+        store.dispatch(ACTIONS.PLAYER.FUEL.BURN, { fuel });
         eBridge.emit(EVENTS.GAME.ACTIONS.BURN, { timeout, throttle });
     });
 
@@ -77,7 +77,7 @@ const navigation = store => {
         const timeout = calculateFullStopTimeout(speed);
         const fuel = calculateFuelCost(timeout, .10);
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: timeout });
-        store.dispatch('player:burnFuel', { fuel });
+        store.dispatch(ACTIONS.PLAYER.FUEL.BURN, { fuel });
         setTimeout(() => {
             eBridge.emit(EVENTS.GAME.ACTIONS.FULL_STOP);
             store.dispatch(ACTIONS.NAV.UNLOCK.NAV);
@@ -159,7 +159,7 @@ const navigation = store => {
 
     store.on(ACTIONS.NAV.HD.ENGAGE, ({ navigation }, { startingPosition, targetPos }) => {
         store.dispatch(ACTIONS.NAV.HD.ACTION, { action: HYPERDRIVE_ACTIONS.ENGAGED, payload: {} });
-        store.dispatch('player:toggleHyperdrive', { inHyperdrive: true });
+        store.dispatch(ACTIONS.PLAYER.HD.TOGGLE, { inHyperdrive: true });
         // here we need to report that it is engaged
         // and lock navigation so we cannot turn/burn
         const hdSettings = navigation.settings[ENGINE_TYPES.HYPER_DRIVE];
@@ -176,11 +176,11 @@ const navigation = store => {
         //TODO:
         const fuel = calculateFuelCostHD(distance, speed);
         console.log('HD Engaged', { startingPosition, speed, jumpDuration, fuel });
-        store.dispatch('player:burnFuel', { fuel });
+        store.dispatch(ACTIONS.PLAYER.FUEL.BURN, { fuel });
         let intervals = 0;
         const travelStep = setInterval(() => {
             const { x, y } = Geom.pointOnLine(startingPosition, targetPos, intervals++ / jumpDuration);
-            store.dispatch('player:updateSystemPosition', { x, y });
+            store.dispatch(ACTIONS.PLAYER.SYSTEM.POS_UPDATE, { x, y });
         }, 1000);
 
         setTimeout(() => {
@@ -214,7 +214,7 @@ const navigation = store => {
         // little shake on back
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: 1500 });
 
-        store.dispatch('player:exitHyperdrive');
+        store.dispatch(ACTIONS.PLAYER.HD.EXIT);
 
         // starting cooldown
         const cooldownTimeout = calculateCooldownTimeHD(distance, speed) * 1000;

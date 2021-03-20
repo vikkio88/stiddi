@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import ACTIONS from "store/actions";
 import { Coords } from "libs/math";
 import SystemObject from "./SystemObject";
 import eventBridge from "libs/eventBridge";
@@ -29,7 +30,7 @@ class Star extends SystemObject {
                 )
             );
             eventBridge.dispatchFromPhaser(
-                'player:targetSystem',
+                ACTIONS.PLAYER.SYSTEM.TARGET,
                 { target: { object: BODY_TYPES.STAR, index, position } }
             );
 

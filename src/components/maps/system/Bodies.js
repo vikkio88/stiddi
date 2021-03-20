@@ -1,5 +1,5 @@
 import { useStoreon } from "storeon/react";
-
+import ACTIONS from "store/actions";
 import { BODY_TYPES } from "enums/systemMap";
 import Row from "./Row";
 import BodyInfo from "./BodyInfo";
@@ -12,7 +12,7 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
     const { dispatch, player: { inHyperdrive, position, target = {}, route } } = useStoreon('player');
 
     const select = target => {
-        dispatch("player:targetSystem", { target });
+        dispatch(ACTIONS.PLAYER.SYSTEM.TARGET, { target });
     };
 
     const bodiesCount = system.stars.length + system.planets.length;
@@ -28,8 +28,8 @@ const Bodies = ({ system = {}, onFocus, onPlot }) => {
                         playerPosition={position.system}
                         onFocus={onFocus}
                         onPlot={onPlot}
-                        onLock={() => dispatch('player:lockRouteSystem')}
-                        onClear={() => dispatch('player:clearRouteSystem')}
+                        onLock={() => dispatch(ACTIONS.PLAYER.LOCK.ROUTE_SYSTEM)}
+                        onClear={() => dispatch(ACTIONS.PLAYER.SYSTEM.CLEAR)}
                         inHyperdrive={inHyperdrive}
                         route={route}
                     />

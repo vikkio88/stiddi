@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import ACTIONS from "store/actions";
 import { Geom, Coords } from "libs/math";
 import SystemObject from "./SystemObject";
 import eventBridge from "libs/eventBridge";
@@ -35,7 +36,7 @@ class Planet extends SystemObject {
                 )
             );
             eventBridge.dispatchFromPhaser(
-                'player:targetSystem',
+                ACTIONS.PLAYER.SYSTEM.TARGET,
                 { target: { object: BODY_TYPES.PLANET, index, position } }
             );
 

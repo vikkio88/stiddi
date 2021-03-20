@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import ACTIONS from "store/actions";
 import { Coords } from "libs/math";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import sceneHelper from "phaser/helpers/sceneHelper";
@@ -189,7 +190,7 @@ class SystemMap extends Phaser.Scene {
         this.route = new Route(this, initial, position);
         const relativeCoords = this.getRelativeCoords(position);
         eventBridge.dispatchFromPhaser(
-            'player:plotSuccessSystem',
+            ACTIONS.PLAYER.SYSTEM.PLOT,
             {
                 target: {
                     object, index,
@@ -227,7 +228,7 @@ class SystemMap extends Phaser.Scene {
             this.indicator = new Indicator(this, x, y);
             const position = Coords.relativeCoords({ x, y }, Coords.zerify(this.center));
             eventBridge.dispatchFromPhaser(
-                'player:targetSystem',
+                ACTIONS.PLAYER.SYSTEM.TARGET,
                 { target: { object: BODY_TYPES.MAP_INDICATOR, position } }
             );
             this.panTo(x, y);
