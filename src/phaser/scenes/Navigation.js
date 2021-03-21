@@ -69,6 +69,14 @@ class Navigation extends Phaser.Scene {
 
         // Hyperdrive Animation
         this.hyperdrive = null;
+
+        this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
+            if (!sceneHelper.isOnTop(this) || this.route) return;
+
+            this.ship.toggleTrace();
+            console.log(`Toggled DROP to ${this.ship.state.trace.drop ? 'TRUE' : 'FALSE'}`);
+
+        });
     }
 
     uiUpdate() {
@@ -77,6 +85,7 @@ class Navigation extends Phaser.Scene {
 
         if (speed > 0) {
             this.updateLockedRoute(position.x, position.y);
+            this.ship.triggeredUpdate();
             //this.castRadar(position.x, position.y, 250);
         }
         const timeout = speed < 50 ? 3000 : 1500;

@@ -2,12 +2,15 @@ import Phaser from "phaser";
 import eventBridge, { EVENTS } from "libs/eventBridge";
 import ACTIONS from "store/actions";
 import { Angle, ANGLES } from "libs/math";
+import shapesHelper from "phaser/helpers/shapesHelper";
 
 const ACCELERATION_MULTIPLIER = 5;
 const HEARTBEAT_TIMEOUT = 1500;
 
 const INITIAL_ANGLE = ANGLES.DEG_90;
 const INITIAL_ROTATION = (Math.PI / 2);
+
+const MAX_DROPLETS = 10;
 
 
 export default class Ship extends Phaser.GameObjects.Sprite {
@@ -20,6 +23,13 @@ export default class Ship extends Phaser.GameObjects.Sprite {
             timeout: HEARTBEAT_TIMEOUT
         };
         this.depth = 100;
+
+        this.state = {
+            trace: {
+                drop: false,
+                droplets: []
+            }
+        };
     }
 
     startHeartBeat() {
@@ -42,6 +52,10 @@ export default class Ship extends Phaser.GameObjects.Sprite {
         }
 
         setTimeout(() => this.beat(), this.heartBeat.timeout);
+    }
+
+    triggeredUpdate() {
+        this.trace();
     }
 
     getNavigation() {
@@ -125,5 +139,32 @@ export default class Ship extends Phaser.GameObjects.Sprite {
             duration,
             onComplete: () => eventBridge.dispatchFromPhaser(ACTIONS.NAV.UNLOCK.NAV)
         });
+    }
+
+    trace() {
+        const { trace } = this.state;
+        if (!trace.drop) return;
+
+        const { circle: droplet } = shapesHelper.drawCircle(
+            this.scene,
+            { x: this.x, y: this.y, radius: 2, colour: 0xffffff }
+        );
+        if (trace.droplets.length === MAX_DROPLETS) {
+            const first = trace.droplets[0];
+            first && first.destroy();
+            trace.droplets.shift();
+        }
+
+        trace.droplets.push(droplet);
+    }
+
+    toggleTrace() {
+        const { trace } = this.state;
+        const newValue = !trace.drop;
+        trace.drop = newValue;
+
+        if (!newValue) {
+            trace.droplets.map(d => d.destroy());
+        }
     }
 }
