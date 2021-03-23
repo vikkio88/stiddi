@@ -13,13 +13,19 @@ class SectorMap extends Phaser.Scene {
         this.add.text(400, 400, "Sector MAP");
 
         this.addGrid();
+        this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
+            if (!sceneHelper.isOnTop(this) || this.route) return;
+
+            console.log(`[Sector Click]`, { x, y });
+
+        });
     }
 
     addGrid() {
         const { centerX: x, centerY: y } = this.cameras.main;
         this.grid = this.add.grid(
             x, y,
-            CELL_SIZE * CELL_NUMBERS ,
+            CELL_SIZE * CELL_NUMBERS,
             CELL_SIZE * CELL_NUMBERS,
             CELL_SIZE, CELL_SIZE,
             0xffffff, 0, 0xffffff, 0.3
