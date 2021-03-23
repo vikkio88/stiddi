@@ -53,11 +53,11 @@ class Navigation extends Phaser.Scene {
 
     create() {
         this.mainCamera = this.cameras.main;
-        this.mainCamera.setBackgroundColor(0x000000);
-        const { centerX, centerY } = this.mainCamera;
+        const { x, y } = sceneHelper.getCenter(this);
+        this.center = { x, y };
+        sceneHelper.setBackground(this);
 
-        //this.grid = this.add.grid(centerX, centerY, 64 * 5, 64 * 5, 64, 64, 0xffffff, 0, 0xffffff, 0.3);
-        this.ship = new Ship(this, centerX, centerY);
+        this.ship = new Ship(this, x, y);
         this.physics.world.enable(this.ship);
         this.ship.startHeartBeat();
         // will move init of physics and HB inside player
@@ -103,9 +103,6 @@ class Navigation extends Phaser.Scene {
         //this.radar.fillCirle(radarEdge);
 
         //this.radar = this.radar.createGeometryMask()
-        //this.grid.setPosition(x,y);
-        //this.grid.setMask(this.radar);
-
     }
 
     updateLockedRoute(x, y) {
