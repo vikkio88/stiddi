@@ -1,8 +1,7 @@
 import Phaser from "phaser";
+import { CELL_SIZE, CELL_NUMBERS } from "enums/sectorMap";
+import { coordsToSector } from "libs/game/sector";
 import sceneHelper from "phaser/helpers/sceneHelper";
-
-const CELL_SIZE = 150;
-const CELL_NUMBERS = 6;
 class SectorMap extends Phaser.Scene {
     constructor() {
         super({ key: "SectorMap", active: true });
@@ -10,14 +9,15 @@ class SectorMap extends Phaser.Scene {
 
     create() {
         sceneHelper.setBackground(this);
-        this.add.text(400, 400, "Sector MAP");
+        this.text = this.add.text(400, 400, "Sector MAP");
 
         this.addGrid();
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             if (!sceneHelper.isOnTop(this) || this.route) return;
 
             console.log(`[Sector Click]`, { x, y });
-
+            const clickedSector = coordsToSector(x, y);
+            this.text.text = `{ ${clickedSector.il} , ${clickedSector.jl} }`;
         });
     }
 
