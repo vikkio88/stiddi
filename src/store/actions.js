@@ -22,7 +22,10 @@ const ACTIONS = {
             PLOT: 'maps:plotSystem',
             CLEAR_PLOT: 'maps:clearPlotSystem',
             UPDATE_PLAYER_POS: 'maps:updatePlayerPosSystem'
-        }
+        },
+        MAP: {
+            TAB_CHANGE: 'maps:mapTabChange'
+        },
     },
 
     // Navigation actions

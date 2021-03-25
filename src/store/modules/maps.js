@@ -53,7 +53,7 @@ const maps = store => {
     });
 
 
-    store.on('maps:mapTabChange', ({ maps }, { tab }) => {
+    store.on(ACTIONS.MAPS.MAP.TAB_CHANGE, ({ maps }, { tab }) => {
         return {
             maps: {
                 ...maps,

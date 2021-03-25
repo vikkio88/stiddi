@@ -1,4 +1,5 @@
 import { useStoreon } from "storeon/react";
+import ACTIONS from "store/actions";
 import { Navbar } from "components/common";
 import { SectorMap, SystemMap, GalaxyMap } from "components/maps";
 import { MAPS } from "enums/ui";
@@ -30,7 +31,7 @@ const Maps = () => {
             <Navbar
                 current={currentMap}
                 tabs={Object.values(MAPS)}
-                onChange={tab => dispatch('maps:mapTabChange', { tab })}
+                onChange={tab => dispatch(ACTIONS.MAPS.MAP.TAB_CHANGE, { tab })}
                 labels={MAPS_LABELS}
             />
 
