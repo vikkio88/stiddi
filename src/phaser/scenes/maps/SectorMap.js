@@ -5,6 +5,12 @@ import sceneHelper from "phaser/helpers/sceneHelper";
 class SectorMap extends Phaser.Scene {
     constructor() {
         super({ key: "SectorMap", active: true });
+        this.state = {
+            cell: {
+                clicked: null,
+                selected: false
+            }
+        };
     }
 
     create() {
@@ -15,9 +21,12 @@ class SectorMap extends Phaser.Scene {
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             if (!sceneHelper.isOnTop(this) || this.route) return;
 
-            console.log(`[Sector Click]`, { x, y });
             const clickedSector = coordsToSector(x, y);
+            this.state.cell.selected = this.state.cell.clicked === clickedSector.id;
+            this.state.cell.clicked = clickedSector.id;
+            console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
             this.text.text = `{ ${clickedSector.il} , ${clickedSector.jl} }`;
+            this.text.setColor(this.state.cell.selected ? '#00ff00' : '#ffffff');
         });
     }
 
