@@ -21,6 +21,13 @@ const shapesHelper = {
 
         return { shape, circle };
 
+    },
+
+    drawRect(scene, { x = 0, y = 0, h = 64, w = 64, colour = 0xffffff } = {}) {
+        const shape = new Phaser.Geom.Rectangle(x, y, w, h);
+        const rect = scene.add.rectangle(x, y, w, h, colour);
+        rect.setStrokeStyle(colour, 2);
+        return { shape, rect };
     }
 };
 

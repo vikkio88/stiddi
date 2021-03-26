@@ -1,14 +1,32 @@
 import Phaser from "phaser";
 import { CELL_SIZE, CELL_NUMBERS, CELL_MAP } from "enums/sectorMap";
-import { coordsToSector } from "libs/game/sector";
+import { coordsToSector } from "libs/game/mapGrid";
 import sceneHelper from "phaser/helpers/sceneHelper";
+
+const getTextProps = (props = {}) => ({
+    font: '15px monospace',
+    fill: '#fff',
+    align: 'center',
+    fontStyle: 'strong',
+    strokeThickness: 2,
+    stroke: '#000',
+    ...props
+});
 class SectorMap extends Phaser.Scene {
     constructor() {
         super({ key: "SectorMap", active: true });
         this.grid = {
             grid: null,
-            labels: []
+            isActive: true,
+            labels: [],
+            floatText: null,
         };
+
+        this.sector = {
+            objects: [],
+            isActive: false,
+        };
+
         this.state = {
             cell: {
                 clicked: null,
@@ -19,18 +37,26 @@ class SectorMap extends Phaser.Scene {
 
     create() {
         sceneHelper.setBackground(this);
-
+        const { centerX: x, centerY: y } = this.cameras.main;
+        this.sceneCenter = { x, y };
         this.addGrid();
+        this.addSector();
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
+            // TODO: also skip if Sector is zoomed
             if (!sceneHelper.isOnTop(this) || this.route) return;
 
             const clickedSector = coordsToSector(x, y);
-            this.reportClickedSector({ x, y, clickedSector });
+            if (this.grid.isActive) {
+                this.reportClickedSector({ x, y, clickedSector });
+            } else {
+                // at the moment toggling sector
+                this.toggleSector();
+            }
         });
     }
 
     addGrid() {
-        const { centerX: x, centerY: y } = this.cameras.main;
+        const { x, y } = this.sceneCenter;
         this.grid.grid = this.add.grid(
             x, y,
             CELL_SIZE * CELL_NUMBERS,
@@ -56,34 +82,56 @@ class SectorMap extends Phaser.Scene {
     reportClickedSector({ x, y, clickedSector } = {}) {
         console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
         const isSelected = this.state.cell.clicked === clickedSector.id;
-        // dont report twice if it was selected
-        if (this.state.cell.selected && isSelected) return;
-
         this.state.cell.clicked = clickedSector.id;
         this.state.cell.selected = isSelected;
-        const fill = isSelected ? '#00ff00' : '#fff';
-        const stroke = isSelected ? '#fff' : '#000';
-        const text = this.add.text(
+        // dont report if selected
+        if (isSelected) {
+            this.toggleSector(clickedSector);
+            return;
+        }
+
+        if (this.grid.floatText) this.grid.floatText.destroy();
+        this.grid.floatText = this.add.text(
             x - 50, y - 30,
             `{ ${clickedSector.il} , ${clickedSector.jl} }`,
-            {
-                font: '15px monospace',
-                fill, align: 'center',
-                fontStyle: 'strong',
-                strokeThickness: 2,
-                stroke
-            }
+            getTextProps()
         );
         this.tweens.add({
-            targets: text,
-            x: text.x, y: text.y - 30,
+            targets: this.grid.floatText,
+            x: this.grid.floatText.x,
+            y: this.grid.floatText.y - 30,
             alpha: { from: 1, to: .3 },
             duration: 1600,
             ease: 'circular.easeInOut',
-            onComplete: () => text.destroy(),
+            onComplete: () => Boolean(this.grid.floatText) && this.grid.floatText.destroy(),
             loop: false,
         });
 
+    }
+
+    toggleGrid() {
+        const newValue = !this.grid.isActive;
+        this.grid.isActive = newValue;
+        if (this.grid.floatText) this.grid.floatText.destroy();
+        this.grid.floatText = null;
+        this.grid.grid.setVisible(newValue);
+        this.grid.labels.forEach(l => l.setVisible(newValue));
+    }
+
+    addSector() {
+        // Add objects to the sector
+        const { x, y } = this.sceneCenter;
+        const sectorTitle = this.add.text(x - 20, 10, "", getTextProps({ font: '25px monospace' }));
+        sectorTitle.setVisible(false);
+        this.sector.title = sectorTitle;
+    }
+
+    toggleSector({ il, jl } = {}) {
+        this.toggleGrid();
+        const newValue = !this.sector.isActive;
+        this.sector.isActive = newValue;
+        this.sector.title.text = `{ ${il} , ${jl} }`;
+        this.sector.title.setVisible(newValue);
     }
 }
 
