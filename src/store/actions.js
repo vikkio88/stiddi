@@ -23,6 +23,10 @@ const ACTIONS = {
             CLEAR_PLOT: 'maps:clearPlotSystem',
             UPDATE_PLAYER_POS: 'maps:updatePlayerPosSystem'
         },
+        SECTOR: {
+            UPDATE: 'maps:sector:update',
+            SELECT: 'maps:sector:select'
+        },
         MAP: {
             TAB_CHANGE: 'maps:mapTabChange'
         },

@@ -10,7 +10,8 @@ const systemGenerator = new SystemGenerator(TEST_SEED);
 
 const initialState = {
     currentMap: MAPS.SECTOR_MAP,
-    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 16) })
+    system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 16) }),
+    sector: { someStuff: 'stuff' },
 };
 
 const maps = store => {
@@ -22,6 +23,7 @@ const maps = store => {
         };
     });
 
+    // System Map 
     store.on(ACTIONS.MAPS.SYSTEM.DRAW, ({ player, maps }) => {
         const { position: { system: playerPosition }, target, route } = player;
         const { system } = maps;
@@ -50,6 +52,14 @@ const maps = store => {
 
     store.on(ACTIONS.MAPS.SYSTEM.CLEAR, () => {
         eBridge.emit(EVENTS.GAME.MAPS.CLEAR_SYSTEM);
+    });
+
+    // Sector Map
+    store.on(ACTIONS.MAPS.SECTOR.UPDATE, ({ navigation, maps }) => {
+        const { position } = navigation;
+        const { sector } = maps;
+
+        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { position, sector });
     });
 
 

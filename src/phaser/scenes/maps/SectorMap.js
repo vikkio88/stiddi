@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import eventBridge, { EVENTS } from "libs/eventBridge";
+import ACTIONS from "store/actions";
 import { CELL_SIZE, CELL_NUMBERS, CELL_MAP } from "enums/sectorMap";
 import { coordsToSector } from "libs/game/mapGrid";
 import sceneHelper from "phaser/helpers/sceneHelper";
@@ -25,6 +27,8 @@ class SectorMap extends Phaser.Scene {
         this.sector = {
             objects: [],
             isActive: false,
+            title: null,
+            buttons: []
         };
 
         this.state = {
@@ -45,15 +49,27 @@ class SectorMap extends Phaser.Scene {
             // TODO: also skip if Sector is zoomed
             if (!sceneHelper.isOnTop(this) || this.route) return;
 
-            const clickedSector = coordsToSector(x, y);
             if (this.grid.isActive) {
+                const clickedSector = coordsToSector(x, y);
                 this.reportClickedSector({ x, y, clickedSector });
-            } else {
-                // at the moment toggling sector
-                this.toggleSector();
+                return;
             }
         });
+
+        this.eventsSubscribe();
     }
+
+    eventsSubscribe() {
+        eventBridge.on(EVENTS.GAME.MAPS.SECTOR.SET, payload => {
+            console.log('[PHASER] sector setup', { payload });
+            this.setUpSector();
+        });
+    }
+
+    setUpSector() {
+
+    }
+
 
     addGrid() {
         const { x, y } = this.sceneCenter;
@@ -87,6 +103,10 @@ class SectorMap extends Phaser.Scene {
         // dont report if selected
         if (isSelected) {
             this.toggleSector(clickedSector);
+            eventBridge.dispatchFromPhaser(
+                ACTIONS.MAPS.SECTOR.SELECT,
+                { selected: clickedSector }
+            );
             return;
         }
 
@@ -120,10 +140,20 @@ class SectorMap extends Phaser.Scene {
 
     addSector() {
         // Add objects to the sector
-        const { x, y } = this.sceneCenter;
-        const sectorTitle = this.add.text(x - 20, 10, "", getTextProps({ font: '25px monospace' }));
+        const { x } = this.sceneCenter;
+        const sectorTitle = this.add.text(x - 40, 10, "", getTextProps({ font: '25px monospace' }));
         sectorTitle.setVisible(false);
         this.sector.title = sectorTitle;
+
+        const backBtn = this.add.text(x - 450, 10, "< Back", getTextProps({ font: '20px monospace' }));
+        backBtn.setInteractive().on('pointerdown', (_1, _2, _3, event) => {
+            event.stopPropagation();
+            this.toggleSector();
+        });
+        backBtn.disableInteractive();
+        backBtn.setVisible(false);
+        this.sector.buttons.push(backBtn);
+
     }
 
     toggleSector({ il, jl } = {}) {
@@ -132,6 +162,22 @@ class SectorMap extends Phaser.Scene {
         this.sector.isActive = newValue;
         this.sector.title.text = `{ ${il} , ${jl} }`;
         this.sector.title.setVisible(newValue);
+
+        this.sector.buttons.forEach(b => {
+            b.setVisible(newValue);
+            newValue ? b.setInteractive() : b.disableInteractive();
+        });
+
+
+        // emit unsetSector
+        if (!newValue) eventBridge.dispatchFromPhaser(
+            ACTIONS.MAPS.SECTOR.SELECT,
+            { selected: null }
+        );
+
+        //reset grid
+        this.state.cell.clicked = null;
+        this.state.cell.selected = false;
     }
 }
 
