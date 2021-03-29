@@ -64,14 +64,17 @@ export const Angle = {
 };
 
 export const Geom = {
-    pointOnCircumference(center, radius, angle, offset = -90) {
-        angle = Phaser.Math.DegToRad(angle + offset);
+    pointOnCircumferenceRad(center, radius, angleRad) {
         const { cx, cy } = center;
 
         return {
-            x: (cx + radius * Math.cos(angle)),
-            y: (cy + radius * Math.sin(angle)),
+            x: (cx + radius * Math.cos(angleRad)),
+            y: (cy + radius * Math.sin(angleRad)),
         };
+    },
+    pointOnCircumference(center, radius, angle, offset = -90) {
+        angle = Phaser.Math.DegToRad(angle + offset);
+        return this.pointOnCircumferenceRad(center, radius, angle);
     },
     distance(angle, radius, p2) {
         const point = this.pointOnCircumference({ cx: 0, cy: 0 }, radius, angle);

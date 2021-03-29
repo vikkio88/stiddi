@@ -4,6 +4,7 @@ import ACTIONS from "store/actions";
 import { CELL_SIZE, CELL_NUMBERS, CELL_MAP } from "enums/sectorMap";
 import { coordsToSector } from "libs/game/mapGrid";
 import sceneHelper from "phaser/helpers/sceneHelper";
+import { Asteroid } from "phaser/entities/sector";
 
 const getTextProps = (props = {}) => ({
     font: '15px monospace',
@@ -43,6 +44,17 @@ class SectorMap extends Phaser.Scene {
         sceneHelper.setBackground(this);
         const { centerX: x, centerY: y } = this.cameras.main;
         this.sceneCenter = { x, y };
+
+        // Testing bodies
+        const asteroid = new Asteroid(this, { x, y });
+        //const asteroid1 = new Asteroid(this, { x, y, scale: .5 });
+        //const asteroid2 = new Asteroid(this, { x, y, scale: 1.5 });
+        //const asteroid3 = new Asteroid(this, { x, y, scale: 2 });
+        const asteroid4 = new Asteroid(this, { x: x - 60, y: y - 60, scale: 5, fill: true });
+        const asteroid5 = new Asteroid(this, { x: x + 100, y: y + 100, scale: 10, seed: 'manzomma' });
+        //
+
+
         this.addGrid();
         this.addSector();
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
