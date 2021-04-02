@@ -6,11 +6,12 @@ export const getSeededRandomizer = seed => {
         random = seedrandom(seed);
     }
 
-    return getRandomizer(random);
+    return getRandomizer(random, seed || null);
 };
 
-export const getRandomizer = (random = Math.random) => {
+export const getRandomizer = (random = Math.random, seed = null) => {
     return {
+        seed,
         pickOne(array) {
             return array[this.int(0, array.length - 1)];
         },

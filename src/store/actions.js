@@ -25,7 +25,8 @@ const ACTIONS = {
         },
         SECTOR: {
             UPDATE: 'maps:sector:update',
-            SELECT: 'maps:sector:select'
+            SELECT: 'maps:sector:select',
+            GENERATE: 'maps:sector:generate',
         },
         MAP: {
             TAB_CHANGE: 'maps:mapTabChange'

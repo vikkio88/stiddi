@@ -3,8 +3,14 @@ import { Geom } from 'libs/math';
 import { getSeededRandomizer } from 'libs/random';
 
 class Asteroid {
+
     constructor(scene, { x, y, seed = 'test', scale = 1, fill = false, colour = 0xffffff, alpha = .9 } = {}) {
         this.scene = scene;
+        this.style = {
+            colour,
+            alpha,
+            fill
+        };
         const rng = getSeededRandomizer(`${seed}`);
         const points = [];
         const maxPoints = 20 - rng.int(0, 5) + rng.int(0, 5);
@@ -20,12 +26,26 @@ class Asteroid {
 
         this.shape = new Phaser.Geom.Polygon(points);
 
-        this.body = this.scene.add.graphics();
-        this.body.lineStyle(2, colour, alpha);
-        this.body.fillStyle(colour, alpha);
-        this.body.strokePoints(this.shape.points, true);
+        const body = this.scene.add.graphics();
+        body.lineStyle(2, colour, alpha);
+        body.fillStyle(colour, alpha);
+        body.strokePoints(this.shape.points, true);
 
-        if (fill) this.body.fillPoints(this.shape.points, true);
+        if (fill) body.fillPoints(this.shape.points, true);
+        // TODO: move to a parent class
+        this.body = body;
+        this.isVisible = true;
+    }
+
+    // TODO: move to parent
+    setVisible(visibility = false) {
+        this.isVisible = visibility;
+        this.body.setVisible(this.isVisible);
+    }
+
+    // TODO: move to parent
+    destroy() {
+        this.body.destroy();
     }
 }
 

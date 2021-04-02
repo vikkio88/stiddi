@@ -1,3 +1,4 @@
+import { CELL_NUMBERS, CELL_SIZE } from "enums/sectorMap";
 import { ANGLES } from "libs/math";
 import { getSeededRandomizer } from "libs/random";
 
@@ -262,3 +263,35 @@ export class SystemGenerator {
         return this.randomizer.chance(percentage) ? mainType : fallback;
     }
 }
+
+// maybe move to subclass?
+export const sectorGenerator = (rng, forcedObjects = {}) => {
+
+    const objects = {};
+    for (let i = 0; i < CELL_NUMBERS; i++) {
+        objects[i] = {};
+        for (let j = 0; j < CELL_NUMBERS; j++) {
+            if (!Array.isArray(objects[i][j])) objects[i][j] = [];
+
+            if (forcedObjects[i] && forcedObjects[i][j]) {
+                objects[i][j].push(forcedObjects[i][j]);
+            }
+
+            // TODO: make this a chance
+            // the further the system more likely asteroids
+            objects[i][j].push({
+                type: 'asteroid',
+                pos: {
+                    // those are calculated manually by test
+                    x: rng.int(15, CELL_SIZE - 10),
+                    y: rng.int(5, CELL_SIZE - 23),
+                }
+            });
+        }
+    }
+
+    return {
+        id: rng.seed,
+        objects
+    };
+};

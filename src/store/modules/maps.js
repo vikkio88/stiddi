@@ -1,7 +1,7 @@
 import ACTIONS from "store/actions";
 import { MAPS } from 'enums/ui';
 import eBridge, { EVENTS } from 'libs/eventBridge';
-import { SystemGenerator } from 'libs/game/maps';
+import { SystemGenerator, sectorGenerator } from 'libs/game/maps';
 import { getSeededRandomizer } from 'libs/random';
 
 const TEST_SEED = null;
@@ -11,7 +11,9 @@ const systemGenerator = new SystemGenerator(TEST_SEED);
 const initialState = {
     currentMap: MAPS.SECTOR_MAP,
     system: systemGenerator.generate({ planetsNumber: randomizer.int(0, 16) }),
-    sector: { someStuff: 'stuff' },
+    // make the sector empty on start
+    //sector: {},
+    sector: sectorGenerator(randomizer),
 };
 
 const maps = store => {
@@ -55,6 +57,24 @@ const maps = store => {
     });
 
     // Sector Map
+    store.on(ACTIONS.MAPS.SECTOR.GENERATE, ({ player, maps, navigation, }) => {
+        const { position: { system: playerPos } } = player;
+        const x = Math.floor(playerPos.x / 10);
+        const y = Math.floor(playerPos.y / 10);
+        const sectorSeed = `${TEST_SEED}_s_${x}_${y}`;
+        const rng = getSeededRandomizer(sectorSeed);
+        const sector = sectorGenerator(rng);
+
+        const { position } = navigation;
+        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { position, sector });
+        return {
+            maps: {
+                ...maps,
+                sector
+            }
+        };
+    });
+
     store.on(ACTIONS.MAPS.SECTOR.UPDATE, ({ navigation, maps }) => {
         const { position } = navigation;
         const { sector } = maps;

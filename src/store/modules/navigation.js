@@ -1,7 +1,10 @@
 import ACTIONS from "store/actions";
 import { ENGINE_TYPES, HYPERDRIVE_ACTIONS } from "enums/navigation";
 import eBridge, { EVENTS } from "libs/eventBridge";
-import { calculateChargeTimeHD, calculateCooldownTimeHD, calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout } from "libs/game/navigation";
+import {
+    calculateChargeTimeHD, calculateCooldownTimeHD,
+    calculateFuelCost, calculateFuelCostHD, calculateFullStopTimeout
+} from "libs/game/navigation";
 import { C, Geom } from "libs/math";
 import { Time } from "libs/time";
 
@@ -213,8 +216,9 @@ const navigation = store => {
     store.on(ACTIONS.NAV.HD.EXIT, ({ navigation }, { speed, distance }) => {
         // little shake on back
         store.dispatch(ACTIONS.EFFECTS.SHAKE, { duration: 1500 });
-
         store.dispatch(ACTIONS.PLAYER.HD.EXIT);
+        // Here we generate the sector
+        store.dispatch(ACTIONS.MAPS.SECTOR.GENERATE, {});
 
         // starting cooldown
         const cooldownTimeout = calculateCooldownTimeHD(distance, speed) * 1000;

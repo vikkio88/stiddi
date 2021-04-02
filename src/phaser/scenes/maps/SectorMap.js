@@ -5,6 +5,7 @@ import { CELL_SIZE, CELL_NUMBERS, CELL_MAP } from "enums/sectorMap";
 import { coordsToSector } from "libs/game/mapGrid";
 import sceneHelper from "phaser/helpers/sceneHelper";
 import { Asteroid } from "phaser/entities/sector";
+//import { Asteroid } from "phaser/entities/sector";
 
 const getTextProps = (props = {}) => ({
     font: '15px monospace',
@@ -18,11 +19,14 @@ const getTextProps = (props = {}) => ({
 class SectorMap extends Phaser.Scene {
     constructor() {
         super({ key: "SectorMap", active: true });
+        this.ship = null;
+
         this.grid = {
             grid: null,
             isActive: true,
             labels: [],
             floatText: null,
+            objects: []
         };
 
         this.sector = {
@@ -36,7 +40,10 @@ class SectorMap extends Phaser.Scene {
             cell: {
                 clicked: null,
                 selected: false
-            }
+            },
+            // the setup of the
+            // sector, coming from storeon
+            sector: {}
         };
     }
 
@@ -46,12 +53,7 @@ class SectorMap extends Phaser.Scene {
         this.sceneCenter = { x, y };
 
         // Testing bodies
-        const asteroid = new Asteroid(this, { x, y });
         //const asteroid1 = new Asteroid(this, { x, y, scale: .5 });
-        //const asteroid2 = new Asteroid(this, { x, y, scale: 1.5 });
-        //const asteroid3 = new Asteroid(this, { x, y, scale: 2 });
-        const asteroid4 = new Asteroid(this, { x: x - 60, y: y - 60, scale: 5, fill: true });
-        const asteroid5 = new Asteroid(this, { x: x + 100, y: y + 100, scale: 10, seed: 'manzomma' });
         //
 
 
@@ -74,11 +76,35 @@ class SectorMap extends Phaser.Scene {
     eventsSubscribe() {
         eventBridge.on(EVENTS.GAME.MAPS.SECTOR.SET, payload => {
             console.log('[PHASER] sector setup', { payload });
-            this.setUpSector();
+            this.setUpSector(payload);
         });
     }
 
-    setUpSector() {
+    setUpSector({ position, sector }) {
+        this.state.sector = sector;
+        // need to check whether can 
+        // avoid sending SETUP
+        // if grid is active
+        if (!this.grid.isActive || !Boolean(sector) || !Boolean(sector.objects)) return;
+
+        const secObjs = sector.objects;
+        for (let i = 0; i <= CELL_NUMBERS; i++) {
+            for (let j = 0; j <= CELL_NUMBERS; j++) {
+                if (secObjs[i] && Array.isArray(secObjs[i][j])) {
+                    secObjs[i][j].forEach(o => {
+                        const { pos: { x, y } } = o;
+                        const obj = new Asteroid(this, {
+                            seed: `${sector.id}_${x}_${y}`,
+                            x: i * CELL_SIZE + x,
+                            y: j * CELL_SIZE + y,
+                            fill: false,
+                            scale: .5,
+                        });
+                        this.grid.objects.push(obj);
+                    });
+                }
+            }
+        }
 
     }
 
@@ -96,13 +122,13 @@ class SectorMap extends Phaser.Scene {
         for (let i in CELL_MAP) {
             const rowOffset = (i * CELL_SIZE);
             this.grid.labels.push(
-                this.add.text(10, rowOffset + (CELL_SIZE / 2), CELL_MAP[i])
+                this.add.text(10, rowOffset + (CELL_SIZE / 2), CELL_MAP[i], getTextProps({ fill: '#00ff00' }))
             );
         }
 
         for (let j = 0; j < CELL_NUMBERS; j++) {
             this.grid.labels.push(
-                this.add.text((CELL_SIZE * j) + (CELL_SIZE / 2), 10, `${j + 1}`)
+                this.add.text((CELL_SIZE * j) + (CELL_SIZE / 2), 10, `${j + 1}`, getTextProps({ fill: '#00ff00' }))
             );
         }
     }
@@ -148,6 +174,7 @@ class SectorMap extends Phaser.Scene {
         this.grid.floatText = null;
         this.grid.grid.setVisible(newValue);
         this.grid.labels.forEach(l => l.setVisible(newValue));
+        this.grid.objects.forEach(o => o.setVisible(newValue));
     }
 
     addSector() {
@@ -157,7 +184,7 @@ class SectorMap extends Phaser.Scene {
         sectorTitle.setVisible(false);
         this.sector.title = sectorTitle;
 
-        const backBtn = this.add.text(x - 450, 10, "< Back", getTextProps({ font: '20px monospace' }));
+        const backBtn = this.add.text(x - /*450*/ 200, 10, "< Back", getTextProps({ font: '20px monospace' }));
         backBtn.setInteractive().on('pointerdown', (_1, _2, _3, event) => {
             event.stopPropagation();
             this.toggleSector();
@@ -168,7 +195,7 @@ class SectorMap extends Phaser.Scene {
 
     }
 
-    toggleSector({ il, jl } = {}) {
+    toggleSector({ il, jl, i, j } = {}) {
         this.toggleGrid();
         const newValue = !this.sector.isActive;
         this.sector.isActive = newValue;
@@ -180,12 +207,35 @@ class SectorMap extends Phaser.Scene {
             newValue ? b.setInteractive() : b.disableInteractive();
         });
 
+        // Draw things that ar on this sector
 
-        // emit unsetSector
-        if (!newValue) eventBridge.dispatchFromPhaser(
-            ACTIONS.MAPS.SECTOR.SELECT,
-            { selected: null }
-        );
+        if (newValue
+            && this.state.sector.objects
+            && this.state.sector.objects[i]
+            && Array.isArray(this.state.sector.objects[i][j])
+        ) {
+            this.state.sector.objects[i][j].forEach(o => {
+                const { pos: { x, y } } = o;
+                console.log(`asteroid in sector {${i} , ${j}}`, { x, y });
+                const obj = new Asteroid(this, {
+                    seed: `${this.state.sector.id}_${x}_${y}`,
+                    x: x * CELL_NUMBERS,
+                    y: y * CELL_NUMBERS,
+                    fill: true,
+                    scale: 2,
+                });
+                this.sector.objects.push(obj);
+            });
+        }
+
+        if (!newValue) {
+            this.sector.objects.forEach(o => o.destroy());
+            // emit unsetSector
+            eventBridge.dispatchFromPhaser(
+                ACTIONS.MAPS.SECTOR.SELECT,
+                { selected: null }
+            );
+        }
 
         //reset grid
         this.state.cell.clicked = null;
