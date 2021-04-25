@@ -266,8 +266,11 @@ export class SystemGenerator {
 
 // maybe move to subclass?
 export const sectorGenerator = (rng, forcedObjects = {}) => {
-
     const objects = {};
+    const x_0 = 15;
+    const x_max = CELL_SIZE - 15;
+    const y_0 = CELL_SIZE - 15;
+    const y_max = 15;
     for (let i = 0; i < CELL_NUMBERS; i++) {
         objects[i] = {};
         for (let j = 0; j < CELL_NUMBERS; j++) {
@@ -279,14 +282,15 @@ export const sectorGenerator = (rng, forcedObjects = {}) => {
 
             // TODO: make this a chance
             // the further the system more likely asteroids
-            objects[i][j].push({
-                type: 'asteroid',
-                pos: {
-                    // those are calculated manually by test
-                    x: rng.int(15, CELL_SIZE - 10),
-                    y: rng.int(5, CELL_SIZE - 23),
-                }
-            });
+            if (rng.chance(100)) {
+                objects[i][j].push({
+                    type: 'asteroid',
+                    pos: {
+                        x: x_0 + x_max,
+                        y: y_0 + y_max,
+                    }
+                });
+            }
         }
     }
 

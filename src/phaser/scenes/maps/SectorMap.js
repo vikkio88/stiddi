@@ -81,6 +81,8 @@ class SectorMap extends Phaser.Scene {
     }
 
     setUpSector({ position, sector }) {
+        //position is player position
+
         this.state.sector = sector;
         // need to check whether can 
         // avoid sending SETUP
@@ -93,10 +95,12 @@ class SectorMap extends Phaser.Scene {
                 if (secObjs[i] && Array.isArray(secObjs[i][j])) {
                     secObjs[i][j].forEach(o => {
                         const { pos: { x, y } } = o;
+                        // this could be any object type
+                        // testing only asteroids for now
                         const obj = new Asteroid(this, {
-                            seed: `${sector.id}_${x}_${y}`,
-                            x: i * CELL_SIZE + x,
-                            y: j * CELL_SIZE + y,
+                            seed: `${sector.id}_${x}_${y}_${i}_${j}`,
+                            x: (i * CELL_SIZE) + x,
+                            y: (j * CELL_SIZE) + y,
                             fill: false,
                             scale: .5,
                         });
@@ -134,7 +138,7 @@ class SectorMap extends Phaser.Scene {
     }
 
     reportClickedSector({ x, y, clickedSector } = {}) {
-        console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
+        //console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
         const isSelected = this.state.cell.clicked === clickedSector.id;
         this.state.cell.clicked = clickedSector.id;
         this.state.cell.selected = isSelected;
@@ -147,6 +151,10 @@ class SectorMap extends Phaser.Scene {
             );
             return;
         }
+        //debug pos
+        const isThere = this.state.sector.objects[clickedSector.i][clickedSector.j].length > 0;
+        const p = isThere ? this.state.sector.objects[clickedSector.i][clickedSector.j][0].pos : false;
+        console.log('ON CURRENT CLICKED', { id: clickedSector.id, isThere });
 
         if (this.grid.floatText) this.grid.floatText.destroy();
         this.grid.floatText = this.add.text(
@@ -207,8 +215,7 @@ class SectorMap extends Phaser.Scene {
             newValue ? b.setInteractive() : b.disableInteractive();
         });
 
-        // Draw things that ar on this sector
-
+        // Draw things that zoomed on this sector
         if (newValue
             && this.state.sector.objects
             && this.state.sector.objects[i]
@@ -218,9 +225,9 @@ class SectorMap extends Phaser.Scene {
                 const { pos: { x, y } } = o;
                 console.log(`asteroid in sector {${i} , ${j}}`, { x, y });
                 const obj = new Asteroid(this, {
-                    seed: `${this.state.sector.id}_${x}_${y}`,
-                    x: x * CELL_NUMBERS,
-                    y: y * CELL_NUMBERS,
+                    seed: `${this.state.sector.id}_${x}_${y}_${i}_${j}`,
+                    x: x * CELL_NUMBERS,//- (i / CELL_SIZE),
+                    y: y * CELL_NUMBERS, //- (j / CELL_SIZE),
                     fill: true,
                     scale: 2,
                 });
