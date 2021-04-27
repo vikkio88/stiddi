@@ -43,6 +43,7 @@ const navigation = store => {
 
     // can move this to proper action-emit-from-phaser
     store.on(ACTIONS.NAV.HB, ({ navigation }, payload) => {
+        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.UPDATE_PLAYER, payload);
         return {
             navigation: {
                 ...navigation,
@@ -267,6 +268,7 @@ const navigation = store => {
         };
 
     });
+
     store.on(ACTIONS.NAV.HD.ACTION, (_, { action, payload }) => {
         eBridge.emit(EVENTS.GAME.ACTIONS.HYPERDRIVE, { action, payload });
     });

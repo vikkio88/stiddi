@@ -57,7 +57,7 @@ class Navigation extends Phaser.Scene {
         this.center = { x, y };
         sceneHelper.setBackground(this);
 
-        this.ship = new Ship(this, x, y);
+        this.ship = new Ship(this, 0, 0);
         this.physics.world.enable(this.ship);
         this.ship.startHeartBeat();
         // will move init of physics and HB inside player

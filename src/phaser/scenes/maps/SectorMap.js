@@ -5,7 +5,11 @@ import { CELL_SIZE, CELL_NUMBERS, CELL_MAP } from "enums/sectorMap";
 import { coordsToSector } from "libs/game/mapGrid";
 import sceneHelper from "phaser/helpers/sceneHelper";
 import { Asteroid } from "phaser/entities/sector";
-//import { Asteroid } from "phaser/entities/sector";
+// maybe move to sector one too?
+import Ship from "phaser/entities/system/Ship";
+
+// might move this to 1000
+const SECTOR_SCALE = 100;
 
 const getTextProps = (props = {}) => ({
     font: '15px monospace',
@@ -26,14 +30,8 @@ class SectorMap extends Phaser.Scene {
             isActive: true,
             labels: [],
             floatText: null,
-            objects: []
-        };
-
-        this.sector = {
             objects: [],
-            isActive: false,
-            title: null,
-            buttons: []
+            player: null
         };
 
         this.state = {
@@ -58,10 +56,9 @@ class SectorMap extends Phaser.Scene {
 
 
         this.addGrid();
-        this.addSector();
         this.input.on('pointerdown', ({ worldX: x, worldY: y }) => {
             // TODO: also skip if Sector is zoomed
-            if (!sceneHelper.isOnTop(this) || this.route) return;
+            if (!sceneHelper.isOnTop(this)) return;
 
             if (this.grid.isActive) {
                 const clickedSector = coordsToSector(x, y);
@@ -78,11 +75,17 @@ class SectorMap extends Phaser.Scene {
             console.log('[PHASER] sector setup', { payload });
             this.setUpSector(payload);
         });
+
+        eventBridge.on(EVENTS.GAME.MAPS.SECTOR.UPDATE_PLAYER, payload => {
+            if (!sceneHelper.isOnTop(this)) return;
+            console.log('[PHASER] update player sector', { payload });
+            this.addPlayer(payload);
+        });
     }
 
-    setUpSector({ position, sector }) {
+    setUpSector({ player, sector }) {
         //position is player position
-
+        this.addPlayer(player);
         this.state.sector = sector;
         // need to check whether can 
         // avoid sending SETUP
@@ -90,26 +93,19 @@ class SectorMap extends Phaser.Scene {
         if (!this.grid.isActive || !Boolean(sector) || !Boolean(sector.objects)) return;
 
         const secObjs = sector.objects;
-        for (let i = 0; i <= CELL_NUMBERS; i++) {
-            for (let j = 0; j <= CELL_NUMBERS; j++) {
-                if (secObjs[i] && Array.isArray(secObjs[i][j])) {
-                    secObjs[i][j].forEach(o => {
-                        const { pos: { x, y } } = o;
-                        // this could be any object type
-                        // testing only asteroids for now
-                        const obj = new Asteroid(this, {
-                            seed: `${sector.id}_${x}_${y}_${i}_${j}`,
-                            x: (i * CELL_SIZE) + x,
-                            y: (j * CELL_SIZE) + y,
-                            fill: false,
-                            scale: .5,
-                        });
-                        this.grid.objects.push(obj);
-                    });
-                }
-            }
-        }
-
+        secObjs.forEach(o => {
+            const { pos: { x, y } } = o;
+            // this could be any object type
+            // testing only asteroids for now
+            const obj = new Asteroid(this, {
+                seed: `${sector.id}_${x}_${y}`,
+                x: this.sceneCenter.x + x,
+                y: this.sceneCenter.y + y,
+                fill: false,
+                scale: .5,
+            });
+            this.grid.objects.push(obj);
+        });
     }
 
 
@@ -138,24 +134,22 @@ class SectorMap extends Phaser.Scene {
     }
 
     reportClickedSector({ x, y, clickedSector } = {}) {
-        //console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
+        console.log(`[Sector Click]`, { x, y, clickedId: clickedSector.id });
         const isSelected = this.state.cell.clicked === clickedSector.id;
         this.state.cell.clicked = clickedSector.id;
         this.state.cell.selected = isSelected;
         // dont report if selected
         if (isSelected) {
-            this.toggleSector(clickedSector);
+            /*
+            MAYBE WANT TO ZOOMIN THERE?
+            */
             eventBridge.dispatchFromPhaser(
                 ACTIONS.MAPS.SECTOR.SELECT,
-                { selected: clickedSector }
+                { selected: null }
             );
             return;
         }
         //debug pos
-        const isThere = this.state.sector.objects[clickedSector.i][clickedSector.j].length > 0;
-        const p = isThere ? this.state.sector.objects[clickedSector.i][clickedSector.j][0].pos : false;
-        console.log('ON CURRENT CLICKED', { id: clickedSector.id, isThere });
-
         if (this.grid.floatText) this.grid.floatText.destroy();
         this.grid.floatText = this.add.text(
             x - 50, y - 30,
@@ -175,78 +169,14 @@ class SectorMap extends Phaser.Scene {
 
     }
 
-    toggleGrid() {
-        const newValue = !this.grid.isActive;
-        this.grid.isActive = newValue;
-        if (this.grid.floatText) this.grid.floatText.destroy();
-        this.grid.floatText = null;
-        this.grid.grid.setVisible(newValue);
-        this.grid.labels.forEach(l => l.setVisible(newValue));
-        this.grid.objects.forEach(o => o.setVisible(newValue));
-    }
-
-    addSector() {
-        // Add objects to the sector
-        const { x } = this.sceneCenter;
-        const sectorTitle = this.add.text(x - 40, 10, "", getTextProps({ font: '25px monospace' }));
-        sectorTitle.setVisible(false);
-        this.sector.title = sectorTitle;
-
-        const backBtn = this.add.text(x - /*450*/ 200, 10, "< Back", getTextProps({ font: '20px monospace' }));
-        backBtn.setInteractive().on('pointerdown', (_1, _2, _3, event) => {
-            event.stopPropagation();
-            this.toggleSector();
-        });
-        backBtn.disableInteractive();
-        backBtn.setVisible(false);
-        this.sector.buttons.push(backBtn);
-
-    }
-
-    toggleSector({ il, jl, i, j } = {}) {
-        this.toggleGrid();
-        const newValue = !this.sector.isActive;
-        this.sector.isActive = newValue;
-        this.sector.title.text = `{ ${il} , ${jl} }`;
-        this.sector.title.setVisible(newValue);
-
-        this.sector.buttons.forEach(b => {
-            b.setVisible(newValue);
-            newValue ? b.setInteractive() : b.disableInteractive();
-        });
-
-        // Draw things that zoomed on this sector
-        if (newValue
-            && this.state.sector.objects
-            && this.state.sector.objects[i]
-            && Array.isArray(this.state.sector.objects[i][j])
-        ) {
-            this.state.sector.objects[i][j].forEach(o => {
-                const { pos: { x, y } } = o;
-                console.log(`asteroid in sector {${i} , ${j}}`, { x, y });
-                const obj = new Asteroid(this, {
-                    seed: `${this.state.sector.id}_${x}_${y}_${i}_${j}`,
-                    x: x * CELL_NUMBERS,//- (i / CELL_SIZE),
-                    y: y * CELL_NUMBERS, //- (j / CELL_SIZE),
-                    fill: true,
-                    scale: 2,
-                });
-                this.sector.objects.push(obj);
-            });
-        }
-
-        if (!newValue) {
-            this.sector.objects.forEach(o => o.destroy());
-            // emit unsetSector
-            eventBridge.dispatchFromPhaser(
-                ACTIONS.MAPS.SECTOR.SELECT,
-                { selected: null }
-            );
-        }
-
-        //reset grid
-        this.state.cell.clicked = null;
-        this.state.cell.selected = false;
+    addPlayer({ position, direction }) {
+        if (this.grid.player) this.grid.player.destroy();
+        const { x: cx, y: cy } = this.sceneCenter;
+        const { x, y } = position;
+        const xt = cx + (x / SECTOR_SCALE);
+        const yt = cy + (y / SECTOR_SCALE);
+        this.grid.player = new Ship(this, xt, yt);
+        if (direction) this.grid.player.setAngle(direction);
     }
 }
 

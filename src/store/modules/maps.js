@@ -66,7 +66,7 @@ const maps = store => {
         const sector = sectorGenerator(rng);
 
         const { position } = navigation;
-        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { position, sector });
+        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { position: position, sector });
         return {
             maps: {
                 ...maps,
@@ -76,10 +76,10 @@ const maps = store => {
     });
 
     store.on(ACTIONS.MAPS.SECTOR.UPDATE, ({ navigation, maps }) => {
-        const { position } = navigation;
+        const { position, direction } = navigation;
         const { sector } = maps;
 
-        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { position, sector });
+        eBridge.emit(EVENTS.GAME.MAPS.SECTOR.SET, { player: { position, direction }, sector });
     });
 
 

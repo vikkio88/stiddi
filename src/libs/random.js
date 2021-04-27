@@ -18,6 +18,9 @@ export const getRandomizer = (random = Math.random, seed = null) => {
         int(low, high) {
             return Math.round(random() * (high - low) + low);
         },
+        intZ(low, high, changeOfNegative = 50) {
+            return (this.chance(changeOfNegative) ? -1 : 1) * this.int(low, high);
+        },
         chance(percentage) {
             return this.int(0, 99) < percentage;
         }

@@ -16,9 +16,11 @@ export const EVENTS = {
             PLOTROUTE_SYSTEM: 'game:maps:plot_route_system',
             CLEAR_PLOTROUTE_SYSTEM: 'game:maps:clear_plot_route_system',
             CLEAR_SYSTEM: 'game:maps:clear_system',
+            // this ↓ need to be moved to SYSTEM
             UPDATE_PLAYER: 'game:maps:update_player',
             SECTOR: {
-                SET: 'game:maps:sector:set'
+                SET: 'game:maps:sector:set',
+                UPDATE_PLAYER: 'game:maps:sector:update_player',
             }
         }
     },
